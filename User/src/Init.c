@@ -59,6 +59,8 @@ void Init_all()
   Info_Init();
 
   State_Init();
+
+  myOLED_Init();
   //gpio_init (PTC0, GPO,0);
 
   EnableInterrupts;//中断允许

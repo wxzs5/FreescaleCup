@@ -1,46 +1,46 @@
 /*!
  *     COPYRIGHT NOTICE
- *     Copyright (c) 2013,É½Íâ¿Æ¼¼
+ *     Copyright (c) 2013,å±±å¤–ç§‘æŠ€
  *     All rights reserved.
- *     ¼¼ÊõÌÖÂÛ£ºÉ½ÍâÂÛÌ³ http://www.vcan123.com
+ *     æŠ€æœ¯è®¨è®ºï¼šå±±å¤–è®ºå› http://www.vcan123.com
  *
- *     ³ı×¢Ã÷³ö´¦Íâ£¬ÒÔÏÂËùÓĞÄÚÈİ°æÈ¨¾ùÊôÉ½Íâ¿Æ¼¼ËùÓĞ£¬Î´¾­ÔÊĞí£¬²»µÃÓÃÓÚÉÌÒµÓÃÍ¾£¬
- *     ĞŞ¸ÄÄÚÈİÊ±±ØĞë±£ÁôÉ½Íâ¿Æ¼¼µÄ°æÈ¨ÉùÃ÷¡£
+ *     é™¤æ³¨æ˜å‡ºå¤„å¤–ï¼Œä»¥ä¸‹æ‰€æœ‰å†…å®¹ç‰ˆæƒå‡å±å±±å¤–ç§‘æŠ€æ‰€æœ‰ï¼Œæœªç»å…è®¸ï¼Œä¸å¾—ç”¨äºå•†ä¸šç”¨é€”ï¼Œ
+ *     ä¿®æ”¹å†…å®¹æ—¶å¿…é¡»ä¿ç•™å±±å¤–ç§‘æŠ€çš„ç‰ˆæƒå£°æ˜ã€‚
  *
  * @file       MK60_i2c.h
- * @brief      i2cÇı¶¯Í·ÎÄ¼ş
- * @author     É½Íâ¿Æ¼¼
+ * @brief      i2cé©±åŠ¨å¤´æ–‡ä»¶
+ * @author     å±±å¤–ç§‘æŠ€
  * @version    v5.0
  * @date       2013-07-12
- * @note       Ä¿Ç°½öÊµÏÖÖ÷»ú¶ÁĞ´¼Ä´æÆ÷¹¦ÄÜ£¬ÆäËû¹¦ÄÜ´ıÊµÏÖ
+ * @note       ç›®å‰ä»…å®ç°ä¸»æœºè¯»å†™å¯„å­˜å™¨åŠŸèƒ½ï¼Œå…¶ä»–åŠŸèƒ½å¾…å®ç°
  */
 
 #ifndef     __MK60_I2C_H__
 #define     __MK60_I2C_H__
 /**
- *  @brief I2CÄ£¿é±àºÅ
+ *  @brief I2Cæ¨¡å—ç¼–å·
  */
 typedef enum
 {
-    I2C0  = 0,
-    I2C1  = 1
+  I2C0  = 0,
+  I2C1  = 1
 } I2Cn_e;
 
 /**
- *  @brief Ö÷»ú¶ÁĞ´Ä£Ê½Ñ¡Ôñ
+ *  @brief ä¸»æœºè¯»å†™æ¨¡å¼é€‰æ‹©
  */
 typedef enum MSmode
 {
-    MWSR =   0x00,  /* Ö÷»úĞ´Ä£Ê½  */
-    MRSW =   0x01   /* Ö÷»ú¶ÁÄ£Ê½  */
+  MWSR =   0x00,  /* ä¸»æœºå†™æ¨¡å¼  */
+  MRSW =   0x01   /* ä¸»æœºè¯»æ¨¡å¼  */
 } MSmode;
 
 
-//Ä¿Ç°´úÂë½öÖ§³Ö I2CÖ÷»úÄ£Ê½
-extern uint32  i2c_init(I2Cn_e i2cn, uint32 baud);                               //³õÊ¼»¯I2C
-extern void    i2c_write_reg(I2Cn_e, uint8 SlaveID, uint8 reg, uint8 Data);      //Ğ´ÈëÊı¾İµ½¼Ä´æÆ÷
-extern uint8   i2c_read_reg (I2Cn_e, uint8 SlaveID, uint8 reg);                  //¶ÁÈ¡¼Ä´æÆ÷µÄÊı¾İ
-
+//ç›®å‰ä»£ç ä»…æ”¯æŒ I2Cä¸»æœºæ¨¡å¼
+extern uint32  i2c_init(I2Cn_e i2cn, uint32 baud);                               //åˆå§‹åŒ–I2C
+extern void    i2c_write_reg(I2Cn_e, uint8 SlaveID, uint8 reg, uint8 Data);      //å†™å…¥æ•°æ®åˆ°å¯„å­˜å™¨
+extern uint8   i2c_read_reg (I2Cn_e, uint8 SlaveID, uint8 reg);                  //è¯»å–å¯„å­˜å™¨çš„æ•°æ®
+extern void oled_i2c_write(I2Cn_e i2cn, uint8 Data);
 
 
 #endif  //__MK60_I2C_H__

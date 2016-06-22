@@ -59,6 +59,7 @@
 #include "control.h"
 
 #include "process.h"
+#include "OLED.h"
 
 
 #endif  //__INCLUDE_H__

@@ -2422,6 +2422,9 @@
         <name>$PROJ_DIR$\..\User\inc\motor.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\User\inc\OLED.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\User\inc\PID.h</name>
       </file>
       <file>
@@ -2459,6 +2462,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\User\src\motor.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\User\src\OLED.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\User\src\PID.c</name>

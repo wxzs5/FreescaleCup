@@ -1,15 +1,15 @@
 /*!
  *     COPYRIGHT NOTICE
- *     Copyright (c) 2013,É½Íâ¿Æ¼¼
+ *     Copyright (c) 2013,å±±å¤–ç§‘æŠ€
  *     All rights reserved.
- *     ¼¼ÊõÌÖÂÛ£ºÉ½ÍâÂÛÌ³ http://www.vcan123.com
+ *     æŠ€æœ¯è®¨è®ºï¼šå±±å¤–è®ºå› http://www.vcan123.com
  *
- *     ³ı×¢Ã÷³ö´¦Íâ£¬ÒÔÏÂËùÓĞÄÚÈİ°æÈ¨¾ùÊôÉ½Íâ¿Æ¼¼ËùÓĞ£¬Î´¾­ÔÊĞí£¬²»µÃÓÃÓÚÉÌÒµÓÃÍ¾£¬
- *     ĞŞ¸ÄÄÚÈİÊ±±ØĞë±£ÁôÉ½Íâ¿Æ¼¼µÄ°æÈ¨ÉùÃ÷¡£
+ *     é™¤æ³¨æ˜å‡ºå¤„å¤–ï¼Œä»¥ä¸‹æ‰€æœ‰å†…å®¹ç‰ˆæƒå‡å±å±±å¤–ç§‘æŠ€æ‰€æœ‰ï¼Œæœªç»å…è®¸ï¼Œä¸å¾—ç”¨äºå•†ä¸šç”¨é€”ï¼Œ
+ *     ä¿®æ”¹å†…å®¹æ—¶å¿…é¡»ä¿ç•™å±±å¤–ç§‘æŠ€çš„ç‰ˆæƒå£°æ˜ã€‚
  *
  * @file       MK60_i2c.c
- * @brief      i2cÇı¶¯º¯Êı
- * @author     É½Íâ¿Æ¼¼
+ * @brief      i2cé©±åŠ¨å‡½æ•°
+ * @author     å±±å¤–ç§‘æŠ€
  * @version    v5.0
  * @date       2013-07-12
  */
@@ -21,102 +21,101 @@
 unsigned char MasterTransmission;
 unsigned char SlaveID;
 
-I2C_MemMapPtr I2CN[2] = {I2C0_BASE_PTR, I2C1_BASE_PTR}; //¶¨ÒåÁ½¸öÖ¸ÕëÊı×é±£´æ I2CN µÄµØÖ·
+I2C_MemMapPtr I2CN[2] = {I2C0_BASE_PTR, I2C1_BASE_PTR}; //å®šä¹‰ä¸¤ä¸ªæŒ‡é’ˆæ•°ç»„ä¿å­˜ I2CN çš„åœ°å€
 
 
 /*
- *  °ÑI2CÍ¨ĞÅµÄÃ¿¸öĞ¡²½Öè¶¼ÓÃºê¶¨ÒåÀ´ÊµÏÖ£¬·½±ã±àĞ´¶¥²ãº¯Êı
- *  ´Ëºê¶¨Òå²Î¿¼·ÉË¼¿¨¶û¹«Ë¾Àı³ÌĞŞ¸ÄËùµÃ
+ *  æŠŠI2Cé€šä¿¡çš„æ¯ä¸ªå°æ­¥éª¤éƒ½ç”¨å®å®šä¹‰æ¥å®ç°ï¼Œæ–¹ä¾¿ç¼–å†™é¡¶å±‚å‡½æ•°
+ *  æ­¤å®å®šä¹‰å‚è€ƒé£æ€å¡å°”å…¬å¸ä¾‹ç¨‹ä¿®æ”¹æ‰€å¾—
  */
-//Æô¶¯ĞÅºÅ
-#define i2c_Start(I2Cn)             I2C_C1_REG(I2CN[I2Cn]) |= (I2C_C1_TX_MASK | I2C_C1_MST_MASK)    //MST ÓÉ0±ä1£¬²úÉúÆğÊ¼ĞÅºÅ£¬TX = 1 ½øÈë·¢ËÍÄ£Ê½
+//å¯åŠ¨ä¿¡å·
+#define i2c_Start(I2Cn)             I2C_C1_REG(I2CN[I2Cn]) |= (I2C_C1_TX_MASK | I2C_C1_MST_MASK)    //MST ç”±0å˜1ï¼Œäº§ç”Ÿèµ·å§‹ä¿¡å·ï¼ŒTX = 1 è¿›å…¥å‘é€æ¨¡å¼
 
-//Í£Ö¹ĞÅºÅ
-#define i2c_Stop(I2Cn)              I2C_C1_REG(I2CN[I2Cn]) &= ~(I2C_C1_MST_MASK | I2C_C1_TX_MASK)   //MST ÓÉ1±ä0£¬²úÉúÍ£Ö¹ĞÅºÅ£¬TX = 0 ½øÈë½ÓÊÕÄ£Ê½
+//åœæ­¢ä¿¡å·
+#define i2c_Stop(I2Cn)              I2C_C1_REG(I2CN[I2Cn]) &= ~(I2C_C1_MST_MASK | I2C_C1_TX_MASK)   //MST ç”±1å˜0ï¼Œäº§ç”Ÿåœæ­¢ä¿¡å·ï¼ŒTX = 0 è¿›å…¥æ¥æ”¶æ¨¡å¼
 
-//ÖØ¸´Æô¶¯
+//é‡å¤å¯åŠ¨
 #define i2c_RepeatedStart(I2Cn)     I2C_C1_REG(I2CN[I2Cn]) |= I2C_C1_RSTA_MASK
 
-//½øÈë½ÓÊÕÄ£Ê½(Ó¦´ğ,ĞèÒª½ÓÊÕ¶à¸öÊı¾İ£¬½ÓÊÕ×îºóÒ»¸ö×Ö½ÚÇ°ĞèÒª½ûÓÃÓ¦´ği2c_DisableAck)
+//è¿›å…¥æ¥æ”¶æ¨¡å¼(åº”ç­”,éœ€è¦æ¥æ”¶å¤šä¸ªæ•°æ®ï¼Œæ¥æ”¶æœ€åä¸€ä¸ªå­—èŠ‚å‰éœ€è¦ç¦ç”¨åº”ç­”i2c_DisableAck)
 #define i2c_EnterRxMode(I2Cn)       I2C_C1_REG(I2CN[I2Cn]) &= ~(I2C_C1_TX_MASK | I2C_C1_TXAK_MASK)  //
 
-//½øÈë½ÓÊÕÄ£Ê½(²»Ó¦´ğ,Ö»½ÓÊÕÒ»¸ö×Ö½Ú)
+//è¿›å…¥æ¥æ”¶æ¨¡å¼(ä¸åº”ç­”,åªæ¥æ”¶ä¸€ä¸ªå­—èŠ‚)
 #define i2c_PutinRxMode(I2Cn)       I2C_C1_REG(I2CN[I2Cn]) &= ~I2C_C1_TX_MASK;I2C_C1_REG(I2CN[I2Cn]) |= I2C_C1_TXAK_MASK
 
-//½ûÓÃÓ¦´ğ(½ÓÊÕ×îºóÒ»¸ö×Ö½Ú)
+//ç¦ç”¨åº”ç­”(æ¥æ”¶æœ€åä¸€ä¸ªå­—èŠ‚)
 #define i2c_DisableAck(I2Cn)        I2C_C1_REG(I2CN[I2Cn]) |= I2C_C1_TXAK_MASK
 
-//µÈ´ı I2C_S
+//ç­‰å¾… I2C_S
 #define i2c_Wait(I2Cn)              while(( I2C_S_REG(I2CN[I2Cn]) & I2C_S_IICIF_MASK)==0) {} \
                                     I2C_S_REG(I2CN[I2Cn]) |= I2C_S_IICIF_MASK;
 
-//Ğ´Ò»¸ö×Ö½Ú
+//å†™ä¸€ä¸ªå­—èŠ‚
 #define i2c_write_byte(I2Cn,data)   (I2C_D_REG(I2CN[I2Cn]) = (data));i2c_Wait(I2Cn)
-
 /*!
- *  @brief      I2C³õÊ¼»¯£¬ÉèÖÃ²¨ÌØÂÊ
- *  @param      I2Cn_e      I2CÄ£¿é(I2C0¡¢I2C1)
- *  @param      baud        ÆÚ´ıµÄ²¨ÌØÂÊ
- *  @return                 Êµ¼ÊµÄ²¨ÌØÂÊ
+ *  @brief      I2Cåˆå§‹åŒ–ï¼Œè®¾ç½®æ³¢ç‰¹ç‡
+ *  @param      I2Cn_e      I2Cæ¨¡å—(I2C0ã€I2C1)
+ *  @param      baud        æœŸå¾…çš„æ³¢ç‰¹ç‡
+ *  @return                 å®é™…çš„æ³¢ç‰¹ç‡
  *  @since      v5.0
- *  Sample usage:       i2c_init(I2C0,400*1000);     // ³õÊ¼»¯I2C0£¬ÆÚ´ıµÄ²¨ÌØÂÊÎª400k
+ *  Sample usage:       i2c_init(I2C0,400*1000);     // åˆå§‹åŒ–I2C0ï¼ŒæœŸå¾…çš„æ³¢ç‰¹ç‡ä¸º400k
  */
 uint32 i2c_init(I2Cn_e i2cn, uint32 baud)
 {
-    if(i2cn == I2C0)
+    if (i2cn == I2C0)
     {
-        /* ¿ªÆôÊ±ÖÓ */
+        /* å¼€å¯æ—¶é’Ÿ */
 #if defined(MK60DZ10)
-        SIM_SCGC4 |= SIM_SCGC4_I2C0_MASK;           //¿ªÆô I2C0Ê±ÖÓ
+        SIM_SCGC4 |= SIM_SCGC4_I2C0_MASK;           //å¼€å¯ I2C0æ—¶é’Ÿ
 #elif defined( MK60F15)
-        SIM_SCGC4 |= SIM_SCGC4_IIC0_MASK;           //¿ªÆô I2C0Ê±ÖÓ
+        SIM_SCGC4 |= SIM_SCGC4_IIC0_MASK;           //å¼€å¯ I2C0æ—¶é’Ÿ
 #endif
 
-        /* ÅäÖÃ I2C0¹¦ÄÜµÄ GPIO ½Ó¿Ú */
-        if((I2C0_SCL_PIN == PTB0) || (I2C0_SCL_PIN == PTB2) || (I2C0_SCL_PIN == PTD8) )
+        /* é…ç½® I2C0åŠŸèƒ½çš„ GPIO æ¥å£ */
+        if ((I2C0_SCL_PIN == PTB0) || (I2C0_SCL_PIN == PTB2) || (I2C0_SCL_PIN == PTD8) )
         {
             port_init (I2C0_SCL_PIN, ALT2 | ODO | PULLUP );
         }
         else
-            ASSERT(0);                              //ÉÏËßÌõ¼ş¶¼²»Âú×ã£¬Ö±½Ó¶ÏÑÔÊ§°ÜÁË£¬ÉèÖÃ¹Ü½ÅÓĞÎó£¿
+            ASSERT(0);                              //ä¸Šè¯‰æ¡ä»¶éƒ½ä¸æ»¡è¶³ï¼Œç›´æ¥æ–­è¨€å¤±è´¥äº†ï¼Œè®¾ç½®ç®¡è„šæœ‰è¯¯ï¼Ÿ
 
-        if((I2C0_SDA_PIN == PTB1) || (I2C0_SDA_PIN == PTB3) || (I2C0_SDA_PIN == PTD9) )
-          port_init (I2C0_SDA_PIN, ALT2 | ODO | PULLUP );
+        if ((I2C0_SDA_PIN == PTB1) || (I2C0_SDA_PIN == PTB3) || (I2C0_SDA_PIN == PTD9) )
+            port_init (I2C0_SDA_PIN, ALT2 | ODO | PULLUP );
         else
-            ASSERT(0);                              //ÉÏËßÌõ¼ş¶¼²»Âú×ã£¬Ö±½Ó¶ÏÑÔÊ§°ÜÁË£¬ÉèÖÃ¹Ü½ÅÓĞÎó£¿
+            ASSERT(0);                              //ä¸Šè¯‰æ¡ä»¶éƒ½ä¸æ»¡è¶³ï¼Œç›´æ¥æ–­è¨€å¤±è´¥äº†ï¼Œè®¾ç½®ç®¡è„šæœ‰è¯¯ï¼Ÿ
     }
     else
     {
-        /* ¿ªÆôÊ±ÖÓ */
+        /* å¼€å¯æ—¶é’Ÿ */
 #if defined(MK60DZ10)
-        SIM_SCGC4 |= SIM_SCGC4_I2C1_MASK;           //¿ªÆô I2C1Ê±ÖÓ
+        SIM_SCGC4 |= SIM_SCGC4_I2C1_MASK;           //å¼€å¯ I2C1æ—¶é’Ÿ
 #elif defined(MK60F15)
-        SIM_SCGC4 |= SIM_SCGC4_IIC1_MASK;           //¿ªÆô I2C1Ê±ÖÓ
+        SIM_SCGC4 |= SIM_SCGC4_IIC1_MASK;           //å¼€å¯ I2C1æ—¶é’Ÿ
 #endif
-        /* ÅäÖÃ I2C1¹¦ÄÜµÄ GPIO ½Ó¿Ú */
-        if(I2C1_SCL_PIN == PTE1)
-           port_init (I2C1_SCL_PIN, ALT6 | ODO | PULLUP );
-        else if(I2C1_SCL_PIN == PTC10)
-           port_init (I2C1_SCL_PIN, ALT2 | ODO | PULLUP );
+        /* é…ç½® I2C1åŠŸèƒ½çš„ GPIO æ¥å£ */
+        if (I2C1_SCL_PIN == PTE1)
+            port_init (I2C1_SCL_PIN, ALT6 | ODO | PULLUP );
+        else if (I2C1_SCL_PIN == PTC10)
+            port_init (I2C1_SCL_PIN, ALT2 | ODO | PULLUP );
         else
-            ASSERT(0);                          //ÉÏËßÌõ¼ş¶¼²»Âú×ã£¬Ö±½Ó¶ÏÑÔÊ§°ÜÁË£¬ÉèÖÃ¹Ü½ÅÓĞÎó£¿
+            ASSERT(0);                          //ä¸Šè¯‰æ¡ä»¶éƒ½ä¸æ»¡è¶³ï¼Œç›´æ¥æ–­è¨€å¤±è´¥äº†ï¼Œè®¾ç½®ç®¡è„šæœ‰è¯¯ï¼Ÿ
 
-        if(I2C1_SDA_PIN == PTE0)
-           port_init (I2C1_SDA_PIN, ALT6 | ODO | PULLUP );
+        if (I2C1_SDA_PIN == PTE0)
+            port_init (I2C1_SDA_PIN, ALT6 | ODO | PULLUP );
         else if (I2C1_SDA_PIN == PTC11)
             port_init (I2C1_SDA_PIN, ALT2 | ODO | PULLUP );
         else
-            ASSERT(0);                          //ÉÏËßÌõ¼ş¶¼²»Âú×ã£¬Ö±½Ó¶ÏÑÔÊ§°ÜÁË£¬ÉèÖÃ¹Ü½ÅÓĞÎó£¿
+            ASSERT(0);                          //ä¸Šè¯‰æ¡ä»¶éƒ½ä¸æ»¡è¶³ï¼Œç›´æ¥æ–­è¨€å¤±è´¥äº†ï¼Œè®¾ç½®ç®¡è„šæœ‰è¯¯ï¼Ÿ
     }
 
-    /* ÉèÖÃÆµÂÊ */
+    /* è®¾ç½®é¢‘ç‡ */
 
-    // I2C baud rate = bus speed (Hz)/(mul ¡Á SCL divider)  ¼´ÕâÀï 50MHz/(1 ¡Á128)=390.625kHz
-    // SDA hold time = bus period (s) ¡Á mul ¡Á SDA hold value
-    // SCL start hold time = bus period (s) ¡Á mul ¡Á SCL start hold value
-    // SCL stop hold time = bus period (s) ¡Á mul ¡Á SCL stop hold value
+    // I2C baud rate = bus speed (Hz)/(mul Ã— SCL divider)  å³è¿™é‡Œ 50MHz/(1 Ã—128)=390.625kHz
+    // SDA hold time = bus period (s) Ã— mul Ã— SDA hold value
+    // SCL start hold time = bus period (s) Ã— mul Ã— SCL start hold value
+    // SCL stop hold time = bus period (s) Ã— mul Ã— SCL stop hold value
 
-    //²é±í ICR ¶ÔÓ¦µÄ  SCL_divider £¬¼û ¡¶K60P144M100SF2RM.pdf¡·µÚ1468Ò³µÄ I2C Divider and Hold Values
+    //æŸ¥è¡¨ ICR å¯¹åº”çš„  SCL_divider ï¼Œè§ ã€ŠK60P144M100SF2RM.pdfã€‹ç¬¬1468é¡µçš„ I2C Divider and Hold Values
     uint16 ICR_2_SCL_divider[0x40]  =
     {
         20, 22, 24, 26, 28, 30, 34, 40, 28, 32, 36, 40, 44, 48, 56, 68,
@@ -126,132 +125,142 @@ uint32 i2c_init(I2Cn_e i2cn, uint32 baud)
     };
 
     uint8 mult;
-    if(bus_clk_khz <= 50000)mult = 0;         //bus Ò»·ÖÆµ
-    else  if(bus_clk_khz <= 100000)mult = 1;  //bus ¶ş·ÖÆµ
-    else      mult = 2;                       //bus ËÄ·ÖÆµ
+    if (bus_clk_khz <= 50000)mult = 0;        //bus ä¸€åˆ†é¢‘
+    else  if (bus_clk_khz <= 100000)mult = 1; //bus äºŒåˆ†é¢‘
+    else      mult = 2;                       //bus å››åˆ†é¢‘
 
-    uint16 scldiv =  bus_clk_khz * 1000 / ( (1<<mult) * baud );  //×î¼ÑµÄ·ÖÆµÏµÊı
+    uint16 scldiv =  bus_clk_khz * 1000 / ( (1 << mult) * baud ); //æœ€ä½³çš„åˆ†é¢‘ç³»æ•°
 
-    //ĞèÒª´Ó ICR_2_SCL_divider ÀïÕÒµ½ Óë×î¼Ñ·ÖÆµÏµÊıscldiv×îÏà½üµÄ ·ÖÆµÏµÊı
+    //éœ€è¦ä» ICR_2_SCL_divider é‡Œæ‰¾åˆ° ä¸æœ€ä½³åˆ†é¢‘ç³»æ•°scldivæœ€ç›¸è¿‘çš„ åˆ†é¢‘ç³»æ•°
     uint8 icr, n = 0x40;
     uint16 min_Dvalue = ~0, Dvalue;
 
-    while(n)                                            //Ñ­»·ÀïÖğ¸öÉ¨Ãè£¬ÕÒ³ö×î½Ó½üµÄ ·ÖÆµÏµÊı
+    while (n)                                           //å¾ªç¯é‡Œé€ä¸ªæ‰«æï¼Œæ‰¾å‡ºæœ€æ¥è¿‘çš„ åˆ†é¢‘ç³»æ•°
     {
         n--;
         Dvalue = abs(scldiv - ICR_2_SCL_divider[n]);
-        if(Dvalue == 0)
+        if (Dvalue == 0)
         {
             icr = n;
-            break;                                      //ÍË³öwhileÑ­»·
+            break;                                      //é€€å‡ºwhileå¾ªç¯
         }
 
-        if(Dvalue < min_Dvalue)
+        if (Dvalue < min_Dvalue)
         {
             icr = n;
             min_Dvalue = Dvalue;
         }
     }
 
-    I2C_F_REG(I2CN[i2cn])  = ( 0                        // I2C Frequency Divider register (I2Cx_F)  I2C·ÖÆµ¼Ä´æÆ÷   I2C×î´ó²¨ÌØÂÊÎª 400k
-                               | I2C_F_MULT(mult)        // ³ËÊıÒò×Ó mul =  1<<MULT
-                               | I2C_F_ICR(icr)          // Ê±ÖÓËÙÂÊ = ICR_2_SCL_divider[ICR] £¬²é±í»ñµÃ ICR Óë SCL_divider Ó³Éä¹ØÏµ
+    I2C_F_REG(I2CN[i2cn])  = ( 0                        // I2C Frequency Divider register (I2Cx_F)  I2Cåˆ†é¢‘å¯„å­˜å™¨   I2Cæœ€å¤§æ³¢ç‰¹ç‡ä¸º 400k
+                               | I2C_F_MULT(mult)        // ä¹˜æ•°å› å­ mul =  1<<MULT
+                               | I2C_F_ICR(icr)          // æ—¶é’Ÿé€Ÿç‡ = ICR_2_SCL_divider[ICR] ï¼ŒæŸ¥è¡¨è·å¾— ICR ä¸ SCL_divider æ˜ å°„å…³ç³»
                              );
 
-    /* Ê¹ÄÜ I2C */
+    /* ä½¿èƒ½ I2C */
     I2C_C1_REG(I2CN[i2cn]) = ( 0
-                               | I2C_C1_IICEN_MASK       //Ê¹ÄÜI2C
-                               //| I2C_C1_IICIE_MASK       //Ê¹ÄÜÖĞ¶Ï
+                               | I2C_C1_IICEN_MASK       //ä½¿èƒ½I2C
+                               //| I2C_C1_IICIE_MASK       //ä½¿èƒ½ä¸­æ–­
                              );
 
-    return (  bus_clk_khz * 1000 / ( (1<<mult) * ICR_2_SCL_divider[icr])  );
+    return (  bus_clk_khz * 1000 / ( (1 << mult) * ICR_2_SCL_divider[icr])  );
 }
 
 
 /*!
- *  @brief      I2CÍ¨ĞÅ½áÊøºóĞèÒªµ÷ÓÃµÄº¯Êıº¯Êı
+ *  @brief      I2Cé€šä¿¡ç»“æŸåéœ€è¦è°ƒç”¨çš„å‡½æ•°å‡½æ•°
  *  @since      v5.0
- *  @note       Èç¹ûÍ¨ĞÅÊ§°Ü£¬¿É³¢ÊÔÔö´ó´ËÑÓÊ±Öµ£¬È·ÈÏÊÇ·ñÑÓÊ±µ¼ÖÂµÄ
+ *  @note       å¦‚æœé€šä¿¡å¤±è´¥ï¼Œå¯å°è¯•å¢å¤§æ­¤å»¶æ—¶å€¼ï¼Œç¡®è®¤æ˜¯å¦å»¶æ—¶å¯¼è‡´çš„
  */
 void i2c_delay(void)
 {
-    volatile uint16 n = 80;     //×¢Òâ£¬Õâ¸öÊı¾İÌ«Ğ¡£¬»áµ¼ÖÂ¶ÁÈ¡´íÎó¡£
+    volatile uint16 n = 80;     //æ³¨æ„ï¼Œè¿™ä¸ªæ•°æ®å¤ªå°ï¼Œä¼šå¯¼è‡´è¯»å–é”™è¯¯ã€‚
 
-    while(n--)
+    while (n--)
     {
         asm("nop");
     }
 }
 
 /*!
- *  @brief      ¶ÁÈ¡I2CÉè±¸Ö¸¶¨µØÖ·¼Ä´æÆ÷µÄÊı¾İ
- *  @param      I2Cn_e        I2CÄ£¿é(I2C0¡¢I2C1)
- *  @param      SlaveID     ´Ó»úµØÖ·(7Î»µØÖ·)
- *  @param      reg         ´Ó»ú¼Ä´æÆ÷µØÖ·
- *  @return                 ¶ÁÈ¡µÄ¼Ä´æÆ÷Öµ
+ *  @brief      è¯»å–I2Cè®¾å¤‡æŒ‡å®šåœ°å€å¯„å­˜å™¨çš„æ•°æ®
+ *  @param      I2Cn_e        I2Cæ¨¡å—(I2C0ã€I2C1)
+ *  @param      SlaveID     ä»æœºåœ°å€(7ä½åœ°å€)
+ *  @param      reg         ä»æœºå¯„å­˜å™¨åœ°å€
+ *  @return                 è¯»å–çš„å¯„å­˜å™¨å€¼
  *  @since      v5.0
  *  Sample usage:       uint8 value = i2c_read_reg(I2C0, 0x1D, 1);
  */
 uint8 i2c_read_reg(I2Cn_e i2cn, uint8 SlaveID, uint8 reg)
 {
 
-    //ÏÈĞ´Èë¼Ä´æÆ÷µØÖ·,ÔÙ¶ÁÈ¡Êı¾İ,Òò´Ë´Ë¹ı³ÌÊÇ I2C µÄ¸´ºÏ¸ñÊ½,¸Ä±äÊı¾İ·½ÏòÊ±ĞèÒªÖØĞÂÆô¶¯
+    //å…ˆå†™å…¥å¯„å­˜å™¨åœ°å€,å†è¯»å–æ•°æ®,å› æ­¤æ­¤è¿‡ç¨‹æ˜¯ I2C çš„å¤åˆæ ¼å¼,æ”¹å˜æ•°æ®æ–¹å‘æ—¶éœ€è¦é‡æ–°å¯åŠ¨
     uint8 result;
 
-    ASSERT((SlaveID & 0x80) == 0);                      //¶ÏÑÔ£¬ÎÒÃÇÒªÇóµÄ7Î»µØÖ·µÄÖµ½ö½öÊÇ7bit,²»ÊÇÍ¨ĞÅÊ±ÒªÇóµÄ¸ß7Î»
-    //ÓĞĞ©ÊÖ²á£¬¸ø³öµÄ7Î»µØÖ·Ö¸µÄÊÇ8bitÀïµÄ¸ß7Î»
-    //ÓĞĞ©ÊÖ²á£¬¸ø³öµÄ7Î»µØÖ·Ö¸µÄÊÇ7bit
-    //Çë×ÔĞĞÈ·ÈÏ£¬¿ÉÒÔ³¢ÊÔÊÇ·ñÍ¨ĞÅÕı³£À´È·ÈÏ
+    ASSERT((SlaveID & 0x80) == 0);                      //æ–­è¨€ï¼Œæˆ‘ä»¬è¦æ±‚çš„7ä½åœ°å€çš„å€¼ä»…ä»…æ˜¯7bit,ä¸æ˜¯é€šä¿¡æ—¶è¦æ±‚çš„é«˜7ä½
+    //æœ‰äº›æ‰‹å†Œï¼Œç»™å‡ºçš„7ä½åœ°å€æŒ‡çš„æ˜¯8bité‡Œçš„é«˜7ä½
+    //æœ‰äº›æ‰‹å†Œï¼Œç»™å‡ºçš„7ä½åœ°å€æŒ‡çš„æ˜¯7bit
+    //è¯·è‡ªè¡Œç¡®è®¤ï¼Œå¯ä»¥å°è¯•æ˜¯å¦é€šä¿¡æ­£å¸¸æ¥ç¡®è®¤
 
-    i2c_Start(i2cn);                                    //·¢ËÍÆô¶¯ĞÅºÅ
+    i2c_Start(i2cn);                                    //å‘é€å¯åŠ¨ä¿¡å·
 
-    i2c_write_byte(i2cn, ( SlaveID << 1 ) | MWSR);      //·¢ËÍ´Ó»úµØÖ·ºÍĞ´Î»
+    i2c_write_byte(i2cn, ( SlaveID << 1 ) | MWSR);      //å‘é€ä»æœºåœ°å€å’Œå†™ä½
 
-    i2c_write_byte(i2cn, reg);                          //·¢ËÍ´Ó»úÀïµÄ¼Ä´æÆ÷µØÖ·
+    i2c_write_byte(i2cn, reg);                          //å‘é€ä»æœºé‡Œçš„å¯„å­˜å™¨åœ°å€
 
-    i2c_RepeatedStart(i2cn);                            //¸´ºÏ¸ñÊ½£¬·¢ËÍÖØĞÂÆô¶¯ĞÅºÅ
+    i2c_RepeatedStart(i2cn);                            //å¤åˆæ ¼å¼ï¼Œå‘é€é‡æ–°å¯åŠ¨ä¿¡å·
 
-    i2c_write_byte(i2cn, ( SlaveID << 1) | MRSW );      //·¢ËÍ´Ó»úµØÖ·ºÍ¶ÁÎ»
+    i2c_write_byte(i2cn, ( SlaveID << 1) | MRSW );      //å‘é€ä»æœºåœ°å€å’Œè¯»ä½
 
-    i2c_PutinRxMode(i2cn);                              //½øÈë½ÓÊÕÄ£Ê½(²»Ó¦´ğ,Ö»½ÓÊÕÒ»¸ö×Ö½Ú)
-    result = I2C_D_REG(I2CN[i2cn]);                     //Ğé¼Ù¶ÁÈ¡Ò»´Î£¬Æô¶¯½ÓÊÕÊı¾İ
-    i2c_Wait(i2cn);                                     //µÈ´ı½ÓÊÕÍê³É
+    i2c_PutinRxMode(i2cn);                              //è¿›å…¥æ¥æ”¶æ¨¡å¼(ä¸åº”ç­”,åªæ¥æ”¶ä¸€ä¸ªå­—èŠ‚)
+    result = I2C_D_REG(I2CN[i2cn]);                     //è™šå‡è¯»å–ä¸€æ¬¡ï¼Œå¯åŠ¨æ¥æ”¶æ•°æ®
+    i2c_Wait(i2cn);                                     //ç­‰å¾…æ¥æ”¶å®Œæˆ
 
-    i2c_Stop(i2cn);                                     //·¢ËÍÍ£Ö¹ĞÅºÅ
+    i2c_Stop(i2cn);                                     //å‘é€åœæ­¢ä¿¡å·
 
-    result = I2C_D_REG(I2CN[i2cn]);                     //¶ÁÈ¡Êı¾İ
+    result = I2C_D_REG(I2CN[i2cn]);                     //è¯»å–æ•°æ®
 
-    i2c_delay();                                        //±ØĞëÑÓÊ±Ò»ÏÂ£¬·ñÔò³ö´í
+    i2c_delay();                                        //å¿…é¡»å»¶æ—¶ä¸€ä¸‹ï¼Œå¦åˆ™å‡ºé”™
 
     return result;
 }
 
 
 /*!
- *  @brief      Ğ´ÈëÒ»¸ö×Ö½ÚÊı¾İµ½I2CÉè±¸Ö¸¶¨¼Ä´æÆ÷µØÖ·
- *  @param      I2Cn_e        I2CÄ£¿é(I2C0¡¢I2C1)
- *  @param      SlaveID     ´Ó»úµØÖ·(7Î»µØÖ·)
- *  @param      reg         ´Ó»ú¼Ä´æÆ÷µØÖ·
- *  @param      Data        Êı¾İ
+ *  @brief      å†™å…¥ä¸€ä¸ªå­—èŠ‚æ•°æ®åˆ°I2Cè®¾å¤‡æŒ‡å®šå¯„å­˜å™¨åœ°å€
+ *  @param      I2Cn_e        I2Cæ¨¡å—(I2C0ã€I2C1)
+ *  @param      SlaveID     ä»æœºåœ°å€(7ä½åœ°å€)
+ *  @param      reg         ä»æœºå¯„å­˜å™¨åœ°å€
+ *  @param      Data        æ•°æ®
  *  @since      v5.0
- *  Sample usage:       i2c_write_reg(I2C0, 0x1D, 1,2);     //Ïò´Ó»ú0x1D µÄ¼Ä´æÆ÷ 1 Ğ´ÈëÊı¾İ 2
+ *  Sample usage:       i2c_write_reg(I2C0, 0x1D, 1,2);     //å‘ä»æœº0x1D çš„å¯„å­˜å™¨ 1 å†™å…¥æ•°æ® 2
  */
 
 void i2c_write_reg(I2Cn_e i2cn, uint8 SlaveID, uint8 reg, uint8 Data)
 {
 
-    i2c_Start(i2cn);                                    //·¢ËÍÆô¶¯ĞÅºÅ
+    i2c_Start(i2cn);                                    //å‘é€å¯åŠ¨ä¿¡å·
 
-    i2c_write_byte(i2cn, ( SlaveID << 1 ) | MWSR);      //·¢ËÍ´Ó»úµØÖ·ºÍĞ´Î»
+    i2c_write_byte(i2cn, ( SlaveID << 1 ) | MWSR);      //å‘é€ä»æœºåœ°å€å’Œå†™ä½
 
-    i2c_write_byte(i2cn, reg);                          //·¢ËÍ´Ó»úÀïµÄ¼Ä´æÆ÷µØÖ·
+    i2c_write_byte(i2cn, reg);                          //å‘é€ä»æœºé‡Œçš„å¯„å­˜å™¨åœ°å€
 
-    i2c_write_byte(i2cn, Data);                         //·¢ËÍĞèÒªĞ´ÈëµÄÊı¾İ
+    i2c_write_byte(i2cn, Data);                         //å‘é€éœ€è¦å†™å…¥çš„æ•°æ®
 
     i2c_Stop(i2cn);
 
-    i2c_delay();                                        //ÑÓÊ±Ì«¶ÌµÄ»°£¬¿ÉÄÜĞ´³ö´í
+    i2c_delay();                                        //å»¶æ—¶å¤ªçŸ­çš„è¯ï¼Œå¯èƒ½å†™å‡ºé”™
 }
 
 
+void oled_i2c_write(I2Cn_e i2cn, uint8 Data)
+{
 
+    i2c_Start(i2cn);                                    //å‘é€å¯åŠ¨ä¿¡å·
+
+    i2c_write_byte(i2cn, Data);                         //å‘é€éœ€è¦å†™å…¥çš„æ•°æ®
+
+    i2c_Stop(i2cn);
+
+    i2c_delay();                                        //å»¶æ—¶å¤ªçŸ­çš„è¯ï¼Œå¯èƒ½å†™å‡ºé”™
+}

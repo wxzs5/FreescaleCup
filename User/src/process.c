@@ -84,9 +84,10 @@ void   Motor_Process()
 	Coderval = (int32) ((Speed_Val2_R + Speed_Val1_L) / 2);
 	if (!stop_flag)
 	{
-		Caldiffer = Pid_Calculate_Differ(&PidDSpe, Center_Board_Value, 64);
-		Calspeed = Pid_Calculate_Speed(&PidSpeed, Coderval, Speed_Expect);
-		MotorSpeedOut(Calspeed, Caldiffer);
+		//Caldiffer = Pid_Calculate_Differ(&PidDSpe, Center_Board_Value, 64);
+		//Calspeed = Pid_Calculate_Speed(&PidSpeed, Coderval, Speed_Expect);
+		// MotorSpeedOut(Calspeed, Caldiffer);
+		MotorSpeedOut(3000, 0);
 		if (check_flag < 50) check_flag++;
 		if (reduce_spe_flag < REDUCE_COUNT && ccd1_state.now == Into_Curva)reduce_spe_flag++;
 

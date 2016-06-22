@@ -5,8 +5,8 @@
 Pidsuite PidServo;
 Pidsuite PidSpeed;
 Pidsuite PidDSpe;
-float para_a = 0.013;
-float para_b = 2;
+float para_a = 0.02;
+float para_b = 3.0;
 
 
 float Speed_Expect = 320;
@@ -100,7 +100,7 @@ float Pid_Calculate_Servo(Pidsuite *Pid, int16 Measured, int16 Expect)
   kp = para_a * Pid->ex_error * Pid->ex_error + para_b;
   Pid->outP   = kp * Pid->ex_error;
 
-  Pid->outD = kd * Pid->error_pre;
+  //Pid->outD = kd * Pid->error_pre;
   // if (Pid->ex_error > 15) Pid->outD =  0;
   // if (Pid->ex_error < -15) Pid->outD = 0;
 
@@ -110,6 +110,7 @@ float Pid_Calculate_Servo(Pidsuite *Pid, int16 Measured, int16 Expect)
                + Pid->outI
                + Pid->outD;
 
+  Pid->out = -Pid->out;
   return   MYRANGE(Pid->out, 95, -95);
 }
 
