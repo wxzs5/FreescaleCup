@@ -143,14 +143,14 @@ void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num)
 		// temp = ((uint16) (* (data_buf + 4) << 8) | *(data_buf + 5));
 		// if (temp != 65535)
 		// {
-		// 	PidServo.ex_kp   = 0.001 * (  temp - 30000);
-		// 	if (PidServo.ex_kp < 0)PidServo.ex_kp = -(30 + PidServo.ex_kp);
+		// 	PidServo.kp   = 0.001 * (  temp - 30000);
+		// 	if (PidServo.kp < 0)PidServo.kp = -(30 + PidServo.kp);
 		// }
 		// temp = ((uint16)(*(data_buf + 6) << 8) | *(data_buf + 7));
 		// if (temp != 65535)
 		// {
-		// 	PidServo.ex_ki    = 0.001 * (  temp - 30000);
-		// 	if (PidServo.ex_ki < 0) PidServo.ex_ki = -(30 + PidServo.ex_ki);
+		// 	PidServo.ki    = 0.001 * (  temp - 30000);
+		// 	if (PidServo.ki < 0) PidServo.ki = -(30 + PidServo.ki);
 		// }
 		temp = ((uint16) (* (data_buf + 4) << 8) | *(data_buf + 5));
 		if (temp != 65535)
@@ -167,48 +167,48 @@ void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num)
 		temp = ((uint16)(*(data_buf + 8) << 8) | *(data_buf + 9));
 		if (temp != 65535)
 		{
-			PidServo.ex_kd   = 0.001 * (   temp - 30000);
-			if (PidServo.ex_kd < 0) PidServo.ex_kd = -(30 + PidServo.ex_kd);
+			PidServo.kd   = 0.001 * (   temp - 30000);
+			if (PidServo.kd < 0) PidServo.kd = -(30 + PidServo.kd);
 		}
 
 		//Speed
 		temp = ( (uint16)(*(data_buf + 10) << 8) | *(data_buf + 11) );
 		if (temp != 65535)
 		{
-			PidSpeed.ex_kp  = 0.001 * (  temp - 30000);
-			if (PidSpeed.ex_kp < 0) PidSpeed.ex_kp = -(30 + PidSpeed.ex_kp);
+			PidSpeed.kp  = 0.001 * (  temp - 30000);
+			if (PidSpeed.kp < 0) PidSpeed.kp = -(30 + PidSpeed.kp);
 		}
 		temp = ( (uint16)(*(data_buf + 12) << 8) | *(data_buf + 13) );
 		if (temp != 65535)
 		{
-			PidSpeed.ex_ki    = 0.001 * (  temp - 30000);
-			if (PidSpeed.ex_ki < 0) PidSpeed.ex_ki = -(30 + PidSpeed.ex_ki);
+			PidSpeed.ki    = 0.001 * (  temp - 30000);
+			if (PidSpeed.ki < 0) PidSpeed.ki = -(30 + PidSpeed.ki);
 		}
 		temp = ( (uint16)(*(data_buf + 14) << 8) | *(data_buf + 15) );
 		if (temp != 65535)
 		{
-			PidSpeed.ex_kd  = 0.001 * (  temp - 30000);
-			if (PidSpeed.ex_kd < 0) PidSpeed.ex_kd = -(30 + PidSpeed.ex_kd);
+			PidSpeed.kd  = 0.001 * (  temp - 30000);
+			if (PidSpeed.kd < 0) PidSpeed.kd = -(30 + PidSpeed.kd);
 		}
 
 		//DSpe
 		temp = ( (uint16)(*(data_buf + 16) << 8) | *(data_buf + 17) );
 		if (temp != 65535)
 		{
-			PidDSpe.ex_kp 	   = 0.001 * (  temp - 30000);
-			if (PidDSpe.ex_kp < 0) PidDSpe.ex_kp = -(30 + PidDSpe.ex_kp);
+			PidDSpe.kp 	   = 0.001 * (  temp - 30000);
+			if (PidDSpe.kp < 0) PidDSpe.kp = -(30 + PidDSpe.kp);
 		}
 		temp = ( (uint16)(*(data_buf + 18) << 8) | *(data_buf + 19) );
 		if (temp != 65535)
 		{
-			PidDSpe.ex_ki 	   = 0.001 * (  temp - 30000);
-			if (PidDSpe.ex_ki < 0) PidDSpe.ex_ki = -(30 + PidDSpe.ex_ki);
+			PidDSpe.ki 	   = 0.001 * (  temp - 30000);
+			if (PidDSpe.ki < 0) PidDSpe.ki = -(30 + PidDSpe.ki);
 		}
 		temp = ( (uint16)(*(data_buf + 20) << 8) | *(data_buf + 21) );
 		if (temp != 65535)
 		{
-			PidDSpe.ex_kd 	   = 0.001 * ( temp - 30000);
-			if (PidDSpe.ex_ki < 0) PidDSpe.ex_ki = -(30 + PidDSpe.ex_ki);
+			PidDSpe.kd 	   = 0.001 * ( temp - 30000);
+			if (PidDSpe.ki < 0) PidDSpe.ki = -(30 + PidDSpe.ki);
 		}
 		ANO_DT_Send_Check(*(data_buf + 2), sum);
 	}

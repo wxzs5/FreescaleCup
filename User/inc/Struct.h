@@ -2,7 +2,6 @@
 #ifndef __STRUCT_H__
 #define __STRUCT_H__
 
-#include "include.h"
 
 extern int8 qhead;       //队列头
 
@@ -28,9 +27,30 @@ extern int8 qhead;       //队列头
 #define 	GYRO_LENGTH				(16)		//存储陀螺仪的AD电压值
 
 #define QRANGE(x)       ((x)<(0) ? (Line_SIZE-1) : ( (x)>(Line_SIZE-1) ? (0):(x) ))   //用于限定队列循环指针的值
+#define MYRANGE(x,max,min)      ((x) =((x)<(min) ? (min) : ( (x)>(max) ? (max):(x) )))  //限定范围
+
 
 /*--------------------DMA发送缓冲区大小-------------------------*/
 #define  image_SendBuff_size   (358)//定义缓冲区的大小，单位字节
+
+
+/*--------------------我要过六级-------------------------
+                                 PID结构体
+--------------------------------------------------------*/
+typedef struct
+{
+	float error;     //< 被调量期望值
+	float error_pre;    //< 前一次偏差
+	float error_pre_pre; //前前次偏差
+	float kp;           //< 比例系数
+	float ki;           //< 积分系数
+	float kd;           //< 比例系数
+	float outP;         //< pid比例部分，调试用
+	float outI;         //< pid积分部分，调试用
+	float outD;         //< pid微分部分，调试用
+	float out;
+	float temp;  //留一个临时变量为PID调节过程中打印参数
+} Pidsuite;
 
 
 typedef enum
@@ -191,20 +211,14 @@ typedef struct Speed_Info_//-------------------------------------------------速
 
 typedef struct Steer_Info_//--------------------------------------舵机
 {
-	float KP1;
-	float KP2;
-	float KP3;
-	float KI;
+	Pidsuite Pid;
 
 	uint8 KP_Mult;				//PID放大倍数
 	uint8 KD_Mult;
 	uint8 KI_Mult;
 
 	int32 Steer_Center;
-	int32 Steer_LeftMAX;
-	int32 Steer_RightMAX;
 
-	int32 Steer_PWMOutputDuty;
 	int32 SteerPWM_Error[10];
 
 	uint8 RampUp_SteerBackToCenter_Flag;
@@ -312,10 +326,6 @@ typedef struct Flash_Info_//------------------------------------------------Flas
 
 typedef struct LabVIEW_Info_
 {
-	float HeadSteer_KP_Item;					//摇头舵机KP项数据
-	float HeadSteer_KI_Item;					//摇头舵机KI项数据
-
-	float Steer_Head_Item;						//转向舵机摇头项数据
 	float Steer_Err_Item;						//转向舵机偏差项数据
 
 	float Motor_KP_Item;						//电机KP项数据
@@ -332,7 +342,9 @@ typedef struct DMA_Required_Variable
 	uint8 ThreeCCDs_Image[420];
 } DMA_Required_Variable;
 
-typedef struct
+
+
+typedef struct           //OLED选择菜单
 {
 	uint8  enter_exit;
 	uint16 choice_flag;
@@ -344,12 +356,49 @@ typedef struct
 } menu;
 
 
-
+//老版本兼容
 extern CCD_Info ccd1_info;
 extern CCD_Info ccd2_info;
 extern Car_State ccd1_state;
 extern Car_State ccd2_state;
 
+extern Pidsuite PidServo;
+extern Pidsuite PidSpeed;
+extern Pidsuite PidDSpe;
+
+
+//新版
+extern Parameter_Info  Parameter_info;
+extern Car_State  	Car_state;
+extern Car_State 	Car_state_Pre;
+extern Car_Mode    Car_mode;
+extern Road_Type 	Road_type;
+extern menu Menu;
+
+
+extern CCD_Info CCD1_info;
+extern CCD_Info CCD2_info;
+
+extern Motor_Info Motor_info;
+extern Speed_Info Speed_info;
+
+extern Gyro_Info Gyro_info;
+
+extern DMA_Required_Variable DMA_Variable_1;
+extern Flash_Info Flash_info;
+extern RemSpeedUpDown_Info RemSpeedUpDown_info;
+
+
+
+extern Steer_Info Steer_info;   //舵机初始化
+
+
+
+
+
+//函数声明
+extern void mySteer_DataInit(Steer_Info *Steer_info);
+extern void myData_Init();   //数据信息初始化
 
 
 #endif

@@ -750,6 +750,9 @@
       <file>
         <name>$PROJ_DIR$\..\User\src\Serial_oscilloscope.c</name>
       </file>
+      <file>
+        <name>$PROJ_DIR$\..\User\src\Struct.c</name>
+      </file>
     </group>
   </group>
 </project>
