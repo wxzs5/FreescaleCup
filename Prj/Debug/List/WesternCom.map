@@ -1,89 +1,88 @@
 ###############################################################################
 #
-# IAR ELF Linker V7.30.4.8167/W32 for ARM                 23/Jun/2016  17:40:35
+# IAR ELF Linker V7.30.4.8167/W32 for ARM                 23/Jun/2016  21:15:19
 # Copyright 2007-2014 IAR Systems AB.
 #
 #    Output file  =  
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Exe\WesternCom.out
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Exe\WesternCom.out
 #    Map file     =  
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\List\WesternCom.map
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\List\WesternCom.map
 #    Command line =  
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\Calculate.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\CCD.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\control.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\diskio.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\ff.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\fuzzy.o
-#        D:\Project\SmartCar11\WesternCom\Lib\CMSIS\iar_cortexM4l_math.a
-#        D:\Project\SmartCar11\WesternCom\Lib\CMSIS\iar_cortexM4lf_math.a
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\Init.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\key_int.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\main.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\misc.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_adc.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_can.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_conf.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_dac.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_dma.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_DWT.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_flash.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_flexbus.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_ftm.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_gpio.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_i2c.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_it.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_lptmr.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_mcg.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_PIT.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_port.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_rtc.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_sdhc.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_spi.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_SysTick.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_uart.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_usb.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\MK60_wdog.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\motor.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\OLED.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\PID.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\PIT0.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\process.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\Serial_oscilloscope.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\startup_MK60DZ10.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\Struct.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\system_MK60DZ10.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\USB.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\USB_CDC.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_ASCII.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_BMP.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_camera.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_computer.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\vcan_img2sd.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_key.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_key_event.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_LCD.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_LCD_CH.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_LCD_ILI9341.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_LCD_ST7735R.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_LCD_ST7735S.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_LED.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_MMA7455.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_NRF24L0.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_NRF24L0_MSG.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_OV7725_Eagle.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_OV7725_Wolf.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_RTC_count.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_SCCB.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\vcan_sd_app.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\Vcan_touch.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_TSL1401.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\VCAN_UI_VAR.o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj\vectors.o -o
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\Exe\WesternCom.out --map
-#        D:\Project\SmartCar11\WesternCom\Prj\Debug\List\WesternCom.map
-#        --config "D:\Project\SmartCar11\WesternCom\Prj\config
-#        files\vcan_ROM_K60N1M.icf"
-#        D:\Project\SmartCar11\WesternCom\Prj\..\Lib\CMSIS\iar_cortexM4l_math.a
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\Calculate.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\CCD.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\control.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\diskio.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\ff.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\fuzzy.o
+#        C:\Project\SmartCar\WesternCom\Lib\CMSIS\iar_cortexM4l_math.a
+#        C:\Project\SmartCar\WesternCom\Lib\CMSIS\iar_cortexM4lf_math.a
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\Init.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\key_int.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\main.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\misc.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_adc.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_can.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_conf.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_dac.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_dma.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_DWT.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_flash.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_flexbus.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_ftm.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_gpio.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_i2c.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_it.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_lptmr.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_mcg.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_PIT.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_port.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_rtc.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_sdhc.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_spi.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_SysTick.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_uart.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_usb.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\MK60_wdog.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\motor.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\OLED.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\PID.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\PIT0.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\process.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\Serial_oscilloscope.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\startup_MK60DZ10.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\Struct.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\system_MK60DZ10.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\USB.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\USB_CDC.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_ASCII.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_BMP.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_camera.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_computer.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\vcan_img2sd.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_key.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_key_event.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_LCD.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_LCD_CH.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_LCD_ILI9341.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_LCD_ST7735R.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_LCD_ST7735S.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_LED.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_MMA7455.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_NRF24L0.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_NRF24L0_MSG.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_OV7725_Eagle.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_OV7725_Wolf.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_RTC_count.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_SCCB.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\vcan_sd_app.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\Vcan_touch.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_TSL1401.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\VCAN_UI_VAR.o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Obj\vectors.o -o
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\Exe\WesternCom.out --map
+#        C:\Project\SmartCar\WesternCom\Prj\Debug\List\WesternCom.map --config
+#        "C:\Project\SmartCar\WesternCom\Prj\config files\vcan_ROM_K60N1M.icf"
+#        C:\Project\SmartCar\WesternCom\Prj\..\Lib\CMSIS\iar_cortexM4l_math.a
 #        --entry __iar_program_start --vfe
 #
 ###############################################################################
@@ -332,7 +331,7 @@ Zero (__iar_zero_init3)
 
     Module                 ro code  rw code  ro data  rw data
     ------                 -------  -------  -------  -------
-D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj: [1]
+C:\Project\SmartCar\WesternCom\Prj\Debug\Obj: [1]
     CCD.o                      612
     Calculate.o              1 064                24       40
     Init.o                     556                12
@@ -718,7 +717,7 @@ wdog_unlock             0x000060b1   0x20  Code  Lc  MK60_wdog.o [1]
 write_vtor              0x000060ed   0x22  Code  Gb  misc.o [1]
 
 
-[1] = D:\Project\SmartCar11\WesternCom\Prj\Debug\Obj
+[1] = C:\Project\SmartCar\WesternCom\Prj\Debug\Obj
 [2] = command line
 [3] = dl7M_tlf.a
 [4] = m7M_tls.a

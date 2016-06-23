@@ -163,7 +163,6 @@ typedef struct Speed_Info_//-------------------------------------------------速
 	int16 Straight_Speed;					//直道速度
 	int16 Cur_Speed;				 		//弯道速度
 	int16 Snake_Speed;					//小S速度
-	int16 TurnRound_Speed;				//调头速度
 	int16 Obstacle_Speed;					//路障速度
 	int16 RampUp_Speed;					//上坡道速度
 	int16 RampDown_Speed;					//下坡道速度
@@ -203,8 +202,6 @@ typedef struct Speed_Info_//-------------------------------------------------速
 
 	int16 Error_K;
 	int16 Error_D_K;
-	int32 HeadSteerPWMError_K;
-	int32 HeadSteerPWMError_D_K;
 
 } Speed_Info;
 
@@ -227,10 +224,7 @@ typedef struct Steer_Info_//--------------------------------------舵机
 
 typedef struct Motor_Info_//-----------------------------------------------电机
 {
-	float KPT;
-	float KP;
-	float KI;
-	float KD;
+	Pidsuite Pid;
 
 	uint8 KP_Mult;				//PID放大倍数
 	uint8 KI_Mult;
