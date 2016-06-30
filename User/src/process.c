@@ -2,7 +2,7 @@
 
 #define  UPDATE   0     //用于处理函数等函数更新
 
-uint8 stop_flag = 0;   //目前的停车
+uint8 stop_flag = 1;   //目前的停车
 
 uint32 Calservo;
 int32 Coderval;
@@ -84,9 +84,9 @@ void   Motor_Process()
 	Coderval = (int32) ((Speed_Val2_R + Speed_Val1_L) / 2);
 	if (!stop_flag)
 	{
-		//Caldiffer = Pid_Calculate_Differ(&PidDSpe, Center_Board_Value, 64);
-		//Calspeed = Pid_Calculate_Speed(&PidSpeed, Coderval, Speed_Expect);
-		// MotorSpeedOut(Calspeed, Caldiffer);
+		Caldiffer = Pid_Calculate_Differ(&PidDSpe, Center_Board_Value, 64);
+		Calspeed = Pid_Calculate_Speed(&PidSpeed, Coderval, Speed_Expect);
+		MotorSpeedOut(Calspeed, Caldiffer);
 		MotorSpeedOut(3000, 0);
 		if (check_flag < 50) check_flag++;     //用于开始一段不检测起跑线，此处为50，即500ms内不检测起跑线
 		if (reduce_spe_flag < REDUCE_COUNT && ccd1_state.now == Into_Curva)reduce_spe_flag++;
@@ -127,9 +127,9 @@ void   Motor_Process()
 	Coderval = (int32) ((Speed_Val2_R + Speed_Val1_L) / 2);
 	if (!stop_flag)
 	{
-		//Caldiffer = Pid_Calculate_Differ(&PidDSpe, Center_Board_Value, 64);
-		//Calspeed = Pid_Calculate_Speed(&PidSpeed, Coderval, Speed_Expect);
-		// MotorSpeedOut(Calspeed, Caldiffer);
+		// Caldiffer = Pid_Calculate_Differ(&PidDSpe, Center_Board_Value, 64);
+		// Calspeed = Pid_Calculate_Speed(&PidSpeed, Coderval, Speed_Expect);
+		// MotorSpeedOut(Calspeed, 0);
 		MotorSpeedOut(3000, 0);
 		if (check_flag < 50) check_flag++;
 		if (reduce_spe_flag < REDUCE_COUNT && ccd1_state.now == Into_Curva)reduce_spe_flag++;

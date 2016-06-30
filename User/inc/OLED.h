@@ -92,6 +92,6 @@ void myOLED_Decimals(uint8 x, uint8 y, float als);
 
 void myOLED_CCDwave(CCD_Info * CCD1_info, CCD_Info * CCD2_info);
 
-
+uint8 lcd_menu_display_init(menu * Menu);
 
 #endif

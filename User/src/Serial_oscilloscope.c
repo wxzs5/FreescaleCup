@@ -11,7 +11,7 @@
 
 #include "include.h"
 
-uint8 Tune_Mode = 1;
+uint8 Tune_Mode = 7;
 uint8 data_to_send[50] = {0};       //发送缓存
 
 uint8   SendBuf[UartDataNum ] = {0};

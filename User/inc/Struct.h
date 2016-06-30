@@ -346,7 +346,7 @@ typedef struct           //OLED选择菜单
 	uint8  enter_exit_temp;
 	uint8  Clear;
 	uint8  Ready_Go;
-
+	uint8  Tun_Res;
 } menu;
 
 

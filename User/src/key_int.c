@@ -4,105 +4,103 @@ uint8 mode_correct = 0;
 uint8 ccd_switch_flag = 1;
 float proportion = 0;
 
+
+
+
 void Init_PORT(void)
 {
-  port_init(PTB0, ALT1 | IRQ_EITHER);
-  port_init(PTB1, ALT1 | IRQ_EITHER);
-  port_init(PTB2, ALT1 | IRQ_EITHER );
-  port_init(PTB3, ALT1 | IRQ_EITHER );
-  port_init(PTB4, ALT1 | IRQ_EITHER );
-  port_init(PTB5, ALT1 | IRQ_EITHER );
+  port_init(PTB18, ALT1 | IRQ_FALLING | PF | PULLUP);
+  port_init(PTB20, ALT1 | IRQ_FALLING | PF | PULLUP);
+  port_init(PTB21, ALT1 | IRQ_FALLING | PF | PULLUP );
+  port_init(PTB22, ALT1 | IRQ_FALLING | PF | PULLUP );
+  port_init(PTB23, ALT1 | IRQ_FALLING | PF | PULLUP );
+  adc_init(ADC1_DM1);
 
   set_vector_handler(PORTB_VECTORn , PORTB_IRQHandler);
   enable_irq (PORTB_IRQn);
-
-  B0_Process();
-  B1_Process();
-  B2_Process();
-  B3_Process();
-  B4_Process();
-  B5_Process();
 }
 
 
 void PORTB_IRQHandler(void)
 {
-  PORT_FUNC(B, 0, B0_Process);
-  PORT_FUNC(B, 1, B1_Process);
-  PORT_FUNC(B, 2, B2_Process);
-  PORT_FUNC(B, 3, B3_Process);
-  PORT_FUNC(B, 4, B4_Process);
-  PORT_FUNC(B, 5, B5_Process);
-
+  PORT_FUNC(B, 18, B2_Process);
+  PORT_FUNC(B, 20, B1_Process);
+  PORT_FUNC(B, 21, B4_Process);
+  PORT_FUNC(B, 22, B3_Process);
+  PORT_FUNC(B, 23, B0_Process);
 }
 
 
 void B0_Process()
 {
-  if (PTB0_IN == 1)
+  Parameter_info.OLED_NoAction_Flag = 0;//按键已经有反应了
+  DELAY_MS(20);
+  if (gpio_get(PTB23) == 0)
   {
-    ccd_switch_flag = 1;
-  }
-  else
-  {
-    ccd_switch_flag = 0;
+    switch (Menu.enter_exit)
+    {
+    case 1: Menu.choice_flag += 100; break;
+    case 2: Menu.choice_flag += 10 ; break;
+    }
+    Menu.Clear = 1;
   }
 }
 
 void B1_Process()
 {
-  if (PTB1_IN == 1)
+  Parameter_info.OLED_NoAction_Flag = 0;//按键已经有反应了
+  DELAY_MS(20);
+  if (gpio_get(PTB20) == 0)
   {
-  }
-  else
-  {
+    switch (Menu.enter_exit)
+    {
+    case 1: Menu.choice_flag -= 100; break;
+    case 2: Menu.choice_flag -= 10 ; break;
+    }
+    Menu.Clear = 1;
   }
 }
 
 void B2_Process()
 {
-  if (PTB2_IN == 1)
+  Parameter_info.OLED_NoAction_Flag = 0;//按键已经有反应了
+  DELAY_MS(20);
+  if (gpio_get(PTB18) == 0)
   {
-
-  }
-  else
-  {
-
+    switch (Menu.enter_exit_temp)
+    {
+    case 3: Menu.enter_exit = 2; Menu.enter_exit_temp = 2; Menu.choice_flag = Menu.choice_flag / 10 * 10; break;
+    case 2: Menu.enter_exit = 1; Menu.enter_exit_temp = 1; Menu.choice_flag = Menu.choice_flag / 100 * 100; break;
+    case 1: Menu.enter_exit = 1; Menu.enter_exit_temp = 1; break;
+    }
+    Menu.Clear = 1;
   }
 }
 
 void B3_Process()
 {
-  if (PTB3_IN == 1)
+  Parameter_info.OLED_NoAction_Flag = 0;//按键已经有反应了
+  DELAY_MS(20);
+  if (gpio_get(PTB22) == 0)
   {
-
-  }
-  else
-  {
-
+    switch (Menu.enter_exit_temp)
+    {
+    case 0: Menu.enter_exit = 1; Menu.enter_exit_temp = 1; Menu.choice_flag = Menu.choice_flag / 10 * 10; break;
+    case 1: Menu.enter_exit = 2; Menu.enter_exit_temp = 2; Menu.choice_flag = Menu.choice_flag / 100 * 100 + 10; break;
+    case 2: Menu.enter_exit = 3; Menu.enter_exit_temp = 3; Menu.choice_flag += 1; break;
+    }
+    Menu.Clear = 1;
   }
 }
 
 void B4_Process()
 {
-  if (PTB4_IN == 1)
+  Parameter_info.OLED_NoAction_Flag = 0;//按键已经有反应了
+  DELAY_MS(20);
+  if (gpio_get(PTB21) == 0)
   {
-
-  }
-  else
-  {
-
-  }
-}
-
-void B5_Process()
-{
-  if (PTB5_IN == 1)
-  {
-
-  }
-  else
-  {
-
+    Menu.add_sub = 2;
+    Menu.Clear = 1;
   }
 }
+

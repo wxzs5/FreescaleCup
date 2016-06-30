@@ -1,15 +1,15 @@
 /*!
  *     COPYRIGHT NOTICE
- *     Copyright (c) 2013,É½Íâ¿Æ¼¼
+ *     Copyright (c) 2013,å±±å¤–ç§‘æŠ€
  *     All rights reserved.
- *     ¼¼ÊõÌÖÂÛ£ºÉ½ÍâÂÛÌ³ http://www.vcan123.com
+ *     æŠ€æœ¯è®¨è®ºï¼šå±±å¤–è®ºå› http://www.vcan123.com
  *
- *     ³ý×¢Ã÷³ö´¦Íâ£¬ÒÔÏÂËùÓÐÄÚÈÝ°æÈ¨¾ùÊôÉ½Íâ¿Æ¼¼ËùÓÐ£¬Î´¾­ÔÊÐí£¬²»µÃÓÃÓÚÉÌÒµÓÃÍ¾£¬
- *     ÐÞ¸ÄÄÚÈÝÊ±±ØÐë±£ÁôÉ½Íâ¿Æ¼¼µÄ°æÈ¨ÉùÃ÷¡£
+ *     é™¤æ³¨æ˜Žå‡ºå¤„å¤–ï¼Œä»¥ä¸‹æ‰€æœ‰å†…å®¹ç‰ˆæƒå‡å±žå±±å¤–ç§‘æŠ€æ‰€æœ‰ï¼Œæœªç»å…è®¸ï¼Œä¸å¾—ç”¨äºŽå•†ä¸šç”¨é€”ï¼Œ
+ *     ä¿®æ”¹å†…å®¹æ—¶å¿…é¡»ä¿ç•™å±±å¤–ç§‘æŠ€çš„ç‰ˆæƒå£°æ˜Žã€‚
  *
  * @file       MK60_port.c
- * @brief      port¸´ÓÃÅäÖÃºÍ¸÷ÖÖ¹¦ÄÜÅäÖÃ
- * @author     É½Íâ¿Æ¼¼
+ * @brief      portå¤ç”¨é…ç½®å’Œå„ç§åŠŸèƒ½é…ç½®
+ * @author     å±±å¤–ç§‘æŠ€
  * @version    v5.1
  * @date       2014-04-25
  */
@@ -20,68 +20,68 @@
 PORT_MemMapPtr PORTX[PTX_MAX] = {PORTA_BASE_PTR, PORTB_BASE_PTR, PORTC_BASE_PTR, PORTD_BASE_PTR, PORTE_BASE_PTR};
 
 /*!
- *  @brief      PORT³õÊ¼»¯
- *  @param      PTxn    ¶Ë¿Ú
- *  @param      cfg     ¶Ë¿ÚÊôÐÔÅäÖÃ£¬Èç´¥·¢Ñ¡ÏîºÍÉÏÀ­ÏÂÀ­Ñ¡Ïî
+ *  @brief      PORTåˆå§‹åŒ–
+ *  @param      PTxn    ç«¯å£
+ *  @param      cfg     ç«¯å£å±žæ€§é…ç½®ï¼Œå¦‚è§¦å‘é€‰é¡¹å’Œä¸Šæ‹‰ä¸‹æ‹‰é€‰é¡¹
  *  @since      v5.0
- *  @note       Óëport_init_NoALT²»Í¬µÄÊÇ£¬´Ëº¯ÊýÐèÒªÅäÖÃ MUX ¸´ÓÃ¹¦ÄÜ£¬
-                ·ñÔò MUX = ALT0
- *  Sample usage:       port_init (PTA8, IRQ_RISING | PF | ALT1 | PULLUP );    //³õÊ¼»¯ PTA8 ¹Ü½Å£¬ÉÏÉýÑØ´¥·¢ÖÐ¶Ï£¬´øÎÞÔ´ÂË²¨Æ÷£¬¸´ÓÃ¹¦ÄÜÎªGPIO £¬ÉÏÀ­µç×è
+ *  @note       ä¸Žport_init_NoALTä¸åŒçš„æ˜¯ï¼Œæ­¤å‡½æ•°éœ€è¦é…ç½® MUX å¤ç”¨åŠŸèƒ½ï¼Œ
+                å¦åˆ™ MUX = ALT0
+ *  Sample usage:       port_init (PTA8, IRQ_RISING | PF | ALT1 | PULLUP );    //åˆå§‹åŒ– PTA8 ç®¡è„šï¼Œä¸Šå‡æ²¿è§¦å‘ä¸­æ–­ï¼Œå¸¦æ— æºæ»¤æ³¢å™¨ï¼Œå¤ç”¨åŠŸèƒ½ä¸ºGPIO ï¼Œä¸Šæ‹‰ç”µé˜»
  */
 void  port_init(PTXn_e ptxn, uint32 cfg )
 {
-    SIM_SCGC5 |= (SIM_SCGC5_PORTA_MASK << PTX(ptxn));                           //¿ªÆôPORTx¶Ë¿Ú
+    SIM_SCGC5 |= (SIM_SCGC5_PORTA_MASK << PTX(ptxn));                           //å¼€å¯PORTxç«¯å£
 
-    PORT_ISFR_REG(PORTX_BASE(ptxn)) = (1<<PTn(ptxn));                           // Çå¿Õ±êÖ¾Î»
+    PORT_ISFR_REG(PORTX_BASE(ptxn)) = (1 << PTn(ptxn));                         // æ¸…ç©ºæ ‡å¿—ä½
 
-    PORT_PCR_REG(PORTX_BASE(ptxn), PTn(ptxn)) = cfg;                            // ¸´ÓÃ¹¦ÄÜ , È·¶¨´¥·¢Ä£Ê½ ,¿ªÆôÉÏÀ­»òÏÂÀ­µç×è
+    PORT_PCR_REG(PORTX_BASE(ptxn), PTn(ptxn)) = cfg;                            // å¤ç”¨åŠŸèƒ½ , ç¡®å®šè§¦å‘æ¨¡å¼ ,å¼€å¯ä¸Šæ‹‰æˆ–ä¸‹æ‹‰ç”µé˜»
 }
 
 /*!
- *  @brief      PORT³õÊ¼»¯
- *  @param      PTxn    ¶Ë¿Ú
- *  @param      cfg     ¶Ë¿ÚÊôÐÔÅäÖÃ£¬Èç´¥·¢Ñ¡ÏîºÍÉÏÀ­ÏÂÀ­Ñ¡Ïî
+ *  @brief      PORTåˆå§‹åŒ–
+ *  @param      PTxn    ç«¯å£
+ *  @param      cfg     ç«¯å£å±žæ€§é…ç½®ï¼Œå¦‚è§¦å‘é€‰é¡¹å’Œä¸Šæ‹‰ä¸‹æ‹‰é€‰é¡¹
  *  @since      v5.0
- *  @note       Óëport_init²»Í¬µÄÊÇ£¬´Ëº¯Êý²»ÐèÒªÅäÖÃ MUX ¸´ÓÃ¹¦ÄÜ£¨¼´Ê¹ÅäÖÃÁËÒ²²»ÉúÐ§£©£¬
-                MUX ±£Áô ÎªÔ­ÏÈ¼Ä´æÆ÷ÅäÖÃµÄÖµ
- *  Sample usage:       port_init_NoALT (PTA8, IRQ_RISING | PF | PULLUP );    //³õÊ¼»¯ PTA8 ¹Ü½Å£¬ÉÏÉýÑØ´¥·¢ÖÐ¶Ï£¬´øÎÞÔ´ÂË²¨Æ÷£¬±£ÁôÔ­ÏÈ¸´ÓÃ¹¦ÄÜ£¬ÉÏÀ­µç×è
+ *  @note       ä¸Žport_initä¸åŒçš„æ˜¯ï¼Œæ­¤å‡½æ•°ä¸éœ€è¦é…ç½® MUX å¤ç”¨åŠŸèƒ½ï¼ˆå³ä½¿é…ç½®äº†ä¹Ÿä¸ç”Ÿæ•ˆï¼‰ï¼Œ
+                MUX ä¿ç•™ ä¸ºåŽŸå…ˆå¯„å­˜å™¨é…ç½®çš„å€¼
+ *  Sample usage:       port_init_NoALT (PTA8, IRQ_RISING | PF | PULLUP );    //åˆå§‹åŒ– PTA8 ç®¡è„šï¼Œä¸Šå‡æ²¿è§¦å‘ä¸­æ–­ï¼Œå¸¦æ— æºæ»¤æ³¢å™¨ï¼Œä¿ç•™åŽŸå…ˆå¤ç”¨åŠŸèƒ½ï¼Œä¸Šæ‹‰ç”µé˜»
  */
 void  port_init_NoALT(PTXn_e ptxn, uint32 cfg)
 {
-    SIM_SCGC5 |= (SIM_SCGC5_PORTA_MASK << PTX(ptxn));                           //¿ªÆôPORTx¶Ë¿Ú
+    SIM_SCGC5 |= (SIM_SCGC5_PORTA_MASK << PTX(ptxn));                           //å¼€å¯PORTxç«¯å£
 
-    PORT_ISFR_REG(PORTX_BASE(ptxn)) = (1<<PTn(ptxn));                           // Çå¿Õ±êÖ¾Î»
+    PORT_ISFR_REG(PORTX_BASE(ptxn)) = (1 << PTn(ptxn));                         // æ¸…ç©ºæ ‡å¿—ä½
 
-    //Çå¿ÕcfgÀïµÄMUX£¬¼ÓÔØ¼Ä´æÆ÷ÀïµÄMUX
-    cfg &= ~PORT_PCR_MUX_MASK;                      //ÇåÁËMUX ×Ö¶Î£¨¼´²»ÐèÒªÅäÖÃALT£¬±£³ÖÔ­À´µÄALT£©
-    cfg |=  (PORT_PCR_REG(PORTX_BASE(ptxn), PTn(ptxn)) & PORT_PCR_MUX_MASK);    //¶ÁÈ¡¼Ä´æÆ÷ÀïÅäÖÃµÄ MUX
+    //æ¸…ç©ºcfgé‡Œçš„MUXï¼ŒåŠ è½½å¯„å­˜å™¨é‡Œçš„MUX
+    cfg &= ~PORT_PCR_MUX_MASK;                      //æ¸…äº†MUX å­—æ®µï¼ˆå³ä¸éœ€è¦é…ç½®ALTï¼Œä¿æŒåŽŸæ¥çš„ALTï¼‰
+    cfg |=  (PORT_PCR_REG(PORTX_BASE(ptxn), PTn(ptxn)) & PORT_PCR_MUX_MASK);    //è¯»å–å¯„å­˜å™¨é‡Œé…ç½®çš„ MUX
 
-    PORT_PCR_REG(PORTX_BASE(ptxn), PTn(ptxn)) = cfg;            // ¸´ÓÃ¹¦ÄÜ , È·¶¨´¥·¢Ä£Ê½ ,¿ªÆôÉÏÀ­»òÏÂÀ­µç×è
+    PORT_PCR_REG(PORTX_BASE(ptxn), PTn(ptxn)) = cfg;            // å¤ç”¨åŠŸèƒ½ , ç¡®å®šè§¦å‘æ¨¡å¼ ,å¼€å¯ä¸Šæ‹‰æˆ–ä¸‹æ‹‰ç”µé˜»
 }
 
 /*!
- *  @brief      PORTAµÄ²Î¿¼ÖÐ¶Ï·þÎñº¯Êý
+ *  @brief      PORTAçš„å‚è€ƒä¸­æ–­æœåŠ¡å‡½æ•°
  *  @since      v5.0
- *  @warning    ´Ëº¯ÊýÐèÒªÓÃ»§¸ù¾Ý×Ô¼ºÐèÇóÍê³É£¬ÕâÀï½ö½öÊÇÌá¹©Ò»¸öÄ£°æ
- *  Sample usage:       set_vector_handler(PORTA_VECTORn , porta_handler);    //°Ñ porta_handler º¯ÊýÌí¼Óµ½ÖÐ¶ÏÏòÁ¿±í£¬²»ÐèÒªÎÒÃÇÊÖ¶¯µ÷ÓÃ
+ *  @warning    æ­¤å‡½æ•°éœ€è¦ç”¨æˆ·æ ¹æ®è‡ªå·±éœ€æ±‚å®Œæˆï¼Œè¿™é‡Œä»…ä»…æ˜¯æä¾›ä¸€ä¸ªæ¨¡ç‰ˆ
+ *  Sample usage:       set_vector_handler(PORTA_VECTORn , porta_handler);    //æŠŠ porta_handler å‡½æ•°æ·»åŠ åˆ°ä¸­æ–­å‘é‡è¡¨ï¼Œä¸éœ€è¦æˆ‘ä»¬æ‰‹åŠ¨è°ƒç”¨
  */
 void porta_handler(void)
 {
-    uint8  n = 0;    //Òý½ÅºÅ
+    uint8  n = 0;    //å¼•è„šå·
 
     //PTA6
     n = 6;
-    if(PORTA_ISFR & (1 << n))           //PTA6´¥·¢ÖÐ¶Ï
+    if (PORTA_ISFR & (1 << n))          //PTA6è§¦å‘ä¸­æ–­
     {
-        PORTA_ISFR  = (1 << n);        //Ð´1ÇåÖÐ¶Ï±êÖ¾Î»
+        PORTA_ISFR  = (1 << n);        //å†™1æ¸…ä¸­æ–­æ ‡å¿—ä½
 
-        /*  ÒÔÏÂÎªÓÃ»§ÈÎÎñ  */
+        /*  ä»¥ä¸‹ä¸ºç”¨æˆ·ä»»åŠ¡  */
 
 
-        /*  ÒÔÉÏÎªÓÃ»§ÈÎÎñ  */
+        /*  ä»¥ä¸Šä¸ºç”¨æˆ·ä»»åŠ¡  */
     }
 
-    //¼ÙÉè PTA7 ÐèÒªÖ´ÐÐµÄÓÃ»§ÈÎÎñº¯ÊýÎª func() £¬Ôò¿ÉÒÔÖ±½Óµ÷ÓÃÈçÏÂºê¶¨Òå£º
+    //å‡è®¾ PTA7 éœ€è¦æ‰§è¡Œçš„ç”¨æˆ·ä»»åŠ¡å‡½æ•°ä¸º func() ï¼Œåˆ™å¯ä»¥ç›´æŽ¥è°ƒç”¨å¦‚ä¸‹å®å®šä¹‰ï¼š
     //PORT_FUNC(A,7,func);
-    //Õâ¸öºêµÄ×÷ÓÃÓëÉÏÃæ PTA6 µÄÐ§¹ûÊÇÒ»ÑùµÄ£¬Ö»²»¹ýÊÇ¼ò»¯ÁËÓÃ»§µÄÊäÈë
+    //è¿™ä¸ªå®çš„ä½œç”¨ä¸Žä¸Šé¢ PTA6 çš„æ•ˆæžœæ˜¯ä¸€æ ·çš„ï¼Œåªä¸è¿‡æ˜¯ç®€åŒ–äº†ç”¨æˆ·çš„è¾“å…¥
 }

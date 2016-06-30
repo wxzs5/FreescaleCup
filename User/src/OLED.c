@@ -1,6 +1,8 @@
 #include"include.h"
 
 
+#define MAP(b,c,d)  ((b)=(((Menu->Tun_Res)-(40.0))/(100.0)*((c)-(d))+(d)))
+
 uint8 OLED_GRAM[8][128];
 uint8  ASCII_code[101][6] = {
 	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, // (0)
@@ -297,7 +299,7 @@ void myOLED_GPIO_Init(void)
 	gpio_init(PTC11, GPO, 0);
 	gpio_init(PTA19, GPO, 0);
 	gpio_init(PTA24, GPO, 0);
-	gpio_init(PTA25, GPO, 1);
+	gpio_init(PTA25, GPO, 0);
 }
 
 /*************************************************************************
@@ -799,7 +801,6 @@ uint8 lcd_menu_display_init(menu * Menu)
 	{
 
 	case 0: if (Menu->Clear) { myOLED_Clear(); Menu->Clear = 0;}
-		myOLED_String(4, 20, "Pass Cet6!!!!");
 		break;
 	case 1:   //Sudu1
 	{
@@ -820,27 +821,9 @@ uint8 lcd_menu_display_init(menu * Menu)
 				break;
 			case 1:  //
 				myOLED_String(6, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					zhi += 2;
-
-					myOLED_String(6, 121, "+");
-
-					Menu->add_sub = 0;
-					break;
-				case 2:
-					if (zhi >= 2)
-					{
-						zhi -= 2;
-					}
-
-					myOLED_String(6, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				}
+				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
+				MYRANGE(Menu->Tun_Res, 140, 40);
+				MAP(zhi, 500, 300);
 				break;
 			}
 			break;

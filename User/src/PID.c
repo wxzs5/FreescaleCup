@@ -8,7 +8,7 @@ Pidsuite PidServo;
 Pidsuite PidSpeed;
 Pidsuite PidDSpe;
 
-float Speed_Expect = 320;
+float Speed_Expect = 10;
 
 
 /*************************************************************************

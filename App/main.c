@@ -8,8 +8,6 @@
 *********************************************************************************/
 #include "include.h"
 
-uint16 StopType = 0;   //停车类型
-
 /*!
  *  @brief      main函数
  *  @since      v5.0
@@ -18,6 +16,21 @@ uint16 StopType = 0;   //停车类型
 void main()
 {
   Init_all();
+  while (lcd_menu_display_init(&Menu))
+  {
+    if (1 == Parameter_info.OLED_NoAction_Flag) //当按键没有反应的时候计时退出
+    {
+      if (Parameter_info.OLED_NoAction_Counter > 0)
+      {
+        Parameter_info.OLED_NoAction_Counter--;
+      }
+      else if (Parameter_info.OLED_NoAction_Counter <= 0)
+      {
+        break;//直接跳出OLED等待
+      }
+    }
+  }
+  wdog_init_ms(150);
   for (;;)
   {
     Car_stop();
@@ -52,7 +65,8 @@ void main()
     if (TIME0flag_100ms == 1)
     {
       TIME0flag_100ms = 0 ;
-      Send_CCD_Imag();
+      // printf("%d\n", Menu.Tun_Res );
+      //Send_CCD_Imag();
       wdog_feed();
     }
 

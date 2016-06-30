@@ -30,7 +30,7 @@
 #define LCD_ST7735S     2       //LCD_ST7735S 与 LCD_ST7735R 外观一样，寄存器操作略有不同
 #define LCD_ST7735R     3       //
 
-#define USE_LCD         LCD_ILI9341             //选择使用的 LCD
+#define USE_LCD         LCD_ST7735S             //选择使用的 LCD
 
 /*
  * 选择是否输出调试信息，不输出则注释下面的宏定义
@@ -54,7 +54,7 @@
  * 定义 PLL 超频 频率
  */
 #define CORE_CLK                PLL180      // 从 PLL_e 里选择 已提供的 配置方案
-                                            // bus 、 flex bus 、 flash 频率 都是 core 整数倍分频而来
+// bus 、 flex bus 、 flash 频率 都是 core 整数倍分频而来
 #define MAX_BUS_CLK             90         // bus      (bus        >= core/16  )
 #define MAX_FLEXBUS_CLK         25          // flex bus (flex bus   >= core/16  )
 #define MAX_FLASH_CLK           25          // flash    (flash      >= core/16  )
@@ -62,7 +62,7 @@
 #elif defined(MK60F15)			//以下为 MK60F15 的超频配置
 
 #define CORE_CLK                PLL200      // 从 PLL_e 里选择 已提供的 配置方案
-                                            // bus 、 flex bus 、 flash 频率 都是 core 整数倍分频而来
+// bus 、 flex bus 、 flash 频率 都是 core 整数倍分频而来
 #define MAX_BUS_CLK             100         // bus      (bus        >= core/16  )
 #define MAX_FLEXBUS_CLK         50          // flex bus (flex bus   >= core/16  )
 #define MAX_FLASH_CLK           25          // flash    (flash      >= core/16  )

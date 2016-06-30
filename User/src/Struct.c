@@ -1,6 +1,8 @@
 #include "include.h"
 int8 qhead = 0;     //队列头
 
+uint16 StopType = 0;   //停车类型
+
 Parameter_Info  Parameter_info                 = {0};
 Car_State  Car_state                                     = {In_Straight};
 Car_State     Car_state_Pre                           = {In_Straight};
@@ -10,6 +12,17 @@ Road_Type 	 Road_type                                = {All};//默认赛道种�
 menu Menu = {0};
 
 Steer_Info Steer_info = {0};   //舵机初始化
+Motor_Info Motor_info = {0};
+Speed_Info Speed_info = {0};
+
+Gyro_Info Gyro_info = {0};
+
+// DMA_Required_Variable DMA_Variable_1= {0};
+// Flash_Info Flash_info= {0};
+RemSpeedUpDown_Info RemSpeedUpDown_info = {0};
+
+CCD_Info CCD1_info = {0};
+CCD_Info CCD2_info = {0};
 
 /*************************************************************************
 *					我要过六级

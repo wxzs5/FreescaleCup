@@ -54,7 +54,6 @@ void Init_all()
   Init_PORT_C();
 
   //Init_PIT1();
-  led_init(LED0);
 
   Info_Init();
 
@@ -66,9 +65,8 @@ void Init_all()
   EnableInterrupts;//中断允许
 
   //Init_my_NRF();
-  myOLED_String(4, 20, "Pass Cet6!");
+  // myOLED_String(4, 20, "Pass Cet6!");
   DELAY_MS(1000);
-  wdog_init_ms(150);
 }
 
 void Init_uart4(void)
