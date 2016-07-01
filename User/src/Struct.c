@@ -31,18 +31,19 @@ CCD_Info CCD2_info = {0};
 *  功能说明：转向舵机参数初始化
 *  参数说明：
 *  函数返回：无
-*  修改时间：2016-06-23
+*  修改时间：2016-07-1
 *  备    注：
 *************************************************************************/
 void mySteer_DataInit(Steer_Info *Steer_info)
 {
 	uint8_t ii = 0;
 
-	PID_Init(&(Steer_info->Pid));
-
 	Steer_info->Pid.kp = 0;
 	Steer_info->Pid.ki  = 0;
 	Steer_info->Pid.kd = 0;
+	Steer_info->Pid.kpi = 0;
+	Steer_info->Pid.kii  = 0;
+	Steer_info->Pid.kdi = 0;
 
 	Steer_info->KP_Mult = 0;            //PID放大倍数
 	Steer_info->KD_Mult = 0;

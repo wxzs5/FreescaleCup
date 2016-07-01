@@ -25,6 +25,4 @@ float PidDelta_Calculate(Pidsuite *Pid, float Measured, float Expect);
 #endif
 
 
-void PID_Init(Pidsuite *Pid);  //新版
-
 #endif

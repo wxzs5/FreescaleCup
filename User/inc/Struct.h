@@ -26,7 +26,7 @@ extern int8 qhead;       //队列头
 #define     Line_SIZE   			(45)		//存储左右边界线，中线等的队列长度
 #define 	GYRO_LENGTH				(16)		//存储陀螺仪的AD电压值
 
-#define QRANGE(x)       ((x)<(0) ? (Line_SIZE-1) : ( (x)>(Line_SIZE-1) ? (0):(x) ))   //用于限定队列循环指针的值
+#define QRANGE(x)       ((x)<(0) ? ((Line_SIZE)-(1)) : ( (x)>((Line_SIZE)-(1)) ? (0):(x) ))   //用于限定队列循环指针的值
 #define MYRANGE(x,max,min)      ((x) =((x)<(min) ? (min) : ( (x)>(max) ? (max):(x) )))  //限定范围
 
 
@@ -45,6 +45,9 @@ typedef struct
 	float kp;           //< 比例系数
 	float ki;           //< 积分系数
 	float kd;           //< 比例系数
+	float kpi;           //< 比例系数
+	float kii;           //< 积分系数
+	float kdi;           //< 比例系数
 	float outP;         //< pid比例部分，调试用
 	float outI;         //< pid积分部分，调试用
 	float outD;         //< pid微分部分，调试用

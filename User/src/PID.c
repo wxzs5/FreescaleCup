@@ -4,37 +4,12 @@
 float para_a = 0.02;
 float para_b = 3.0;
 
-Pidsuite PidServo;
-Pidsuite PidSpeed;
-Pidsuite PidDSpe;
+Pidsuite PidServo = {0};
+Pidsuite PidSpeed = {0};
+Pidsuite PidDSpe = {0};
 
 float Speed_Expect = 10;
 
-
-/*************************************************************************
-*       我要过六级
-*  函数名称:  PID_Init
-*  功能说明:  Pid参数初始化
-*  参数说明:
-*
-*  函数返回:
-*  修改时间:2016-06-23
-*  备注:
-*************************************************************************/
-void PID_Init(Pidsuite *Pid)
-{
-  Pid->kp                     = 0;
-  Pid->ki                      = 0;
-  Pid->kd                     = 0;
-  Pid->error                 = 0;
-  Pid->error_pre               = 0;
-  Pid->error_pre_pre        = 0;
-  Pid->out                        = 0;
-  Pid->outD                     = 0;
-  Pid->outI                       = 0;
-  Pid->outP                      = 0;
-  Pid->temp                     = 0;
-}
 
 void Pid_Init(void)
 {
