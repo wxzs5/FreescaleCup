@@ -3,24 +3,15 @@
 #define __STRUCT_H__
 
 
-extern int8 qhead;       //队列头
-
 /*-----------------------选择使用各个功能辅助模块-------------------*/
 //#define LabVIEW_Control_Enable	(1)					//使用上位机
 //#define	DMA_Enable (2)								//开DMA
 //#define   Remote_Control_Enable		(3)				//遥控器控制使能
-#define   RemRoad_Control_Enable	(4)	//记忆算法使能,注意，此算法不能关闭，否则可能导致坡道问题
+//#define   RemRoad_Control_Enable	(4)	//记忆算法使能,注意，此算法不能关闭，否则可能导致坡道问题
 //#define   PROTECT_CAR_ENABLE		(5)				//出界保护
 //#define   GetRoadCondition_Enable	(6)				//获取赛道类型
 
-/*-----------------------DMA通道选择----------------------------------*/
-//#define DMA_CH0_Enable	(1)//发送CCD图像
-//#define DMA_CH1_Enable	(2)//不发送图像,只发送舵机，电机，陀螺仪，及路况信息
-//#define DMA_CH2_Enable 	(3)//发送压缩图像或者临时变量项，两者不能同时发送
 
-/*-----------------------DMA发送数据选择------------------------------*/
-//#define DMA_CH2_SendImage_Enable			(4)//CH2通道复用功能1：发送压缩图像
-//#define DMA_CH2_SendLabVIEW_Info_Enable		(5)//CH2通道复用功能2：发送临时变量项
 
 #define 	SPEED_FIFO_LENGTH		(20)
 #define     Line_SIZE   			(45)		//存储左右边界线，中线等的队列长度
@@ -28,10 +19,6 @@ extern int8 qhead;       //队列头
 
 #define QRANGE(x)       ((x)<(0) ? ((Line_SIZE)-(1)) : ( (x)>((Line_SIZE)-(1)) ? (0):(x) ))   //用于限定队列循环指针的值
 #define MYRANGE(x,max,min)      ((x) =((x)<(min) ? (min) : ( (x)>(max) ? (max):(x) )))  //限定范围
-
-
-/*--------------------DMA发送缓冲区大小-------------------------*/
-#define  image_SendBuff_size   (358)//定义缓冲区的大小，单位字节
 
 
 /*--------------------我要过六级-------------------------
@@ -53,6 +40,7 @@ typedef struct
 	float outD;         //< pid微分部分，调试用
 	float out;
 	float temp;  //留一个临时变量为PID调节过程中打印参数
+	uint8 ID;
 } Pidsuite;
 
 
@@ -104,37 +92,38 @@ typedef enum Car_Mode_//----------------------------------------选择速度模�
 
 typedef struct CCD_Info_//--------------------------------CCD数据
 {
-  uint8 PixelOri[2][128];       // CCD原始值
-  uint8 Pixel[128];             // CCD滤波后值
-  uint8 PixelBinary[128];       // CCD二值化值
-  uint8  CCD_PhotoValue[16];    // CCD二维压缩图像存储值
+	uint8 PixelOri[2][128];       // CCD原始值
+	uint8 Pixel[128];             // CCD滤波后值
+	uint8 PixelBinary[128];       // CCD二值化值
+	uint8  CCD_PhotoValue[16];    // CCD二维压缩图像存储值
 
-  uint8 AD_MAX[4];              //AD最大值
-  uint8 AD_MIN[4];              //AD最小值
+	uint8 AD_MAX[4];              //AD最大值
+	uint8 AD_MIN[4];              //AD最小值
 
-  int16 CCD_PhotoCenter;        //图像的中心点
-  int16 CCD_ObstacleShift;      //路障的时候图像偏移点数
+	int16 CCD_PhotoCenter;        //图像的中心点
+	int16 CCD_ObstacleShift;      //路障的时候图像偏移点数
 
-  int16  LeftLine[Line_SIZE];   //左边界队列
-  int16  CentralLine[Line_SIZE];  //中线队列
-  int16  RightLine[Line_SIZE];    //右边界队列
-  int16  LineError[Line_SIZE];		//偏差队列
-  int16  LineError_D[Line_SIZE];	//偏差D队列
-  int16  RoadWidth[10];				//路宽队列
-  //int16 LeftLossLinePixel;      //记录丢左边线时左边的点
-  //int16 RightLossLinePixel;     //记录丢右边线时右边的点
+	int16  LeftLine[Line_SIZE];   //左边界队列
+	int16  CentralLine[Line_SIZE];  //中线队列
+	int16  RightLine[Line_SIZE];    //右边界队列
+	int16  LineError[Line_SIZE];		//偏差队列
+	int16  LineError_D[Line_SIZE];	//偏差D队列
+	int16  RoadWidth[10];				//路宽队列
+	//int16 LeftLossLinePixel;      //记录丢左边线时左边的点
+	//int16 RightLossLinePixel;     //记录丢右边线时右边的点
 
-  uint8 LeftLossLineFlag;       //左边丢线标志
-  uint8 RightLossLineFlag;      //右边丢线标志
+	uint8 LeftLossLineFlag;       //左边丢线标志
+	uint8 RightLossLineFlag;      //右边丢线标志
 
-  int16  RoadWidthOfStraight;   //直道的路宽
+	int16  RoadWidthOfStraight;   //直道的路宽
 
-  uint8  CCD_Ready_Num;       //CCD数据有效次数
+	uint8  CCD_Ready_Num;       //CCD数据有效次数
 
-  uint8 AddLine_Flag;       //补线标记
-  uint8 LossLine_Flag;        //CCD丢线标志
-  uint8 Cross_Flag;         //十字道标志
-  uint8 RoadInvalid_Flag;     //左边赛道无效标记，防止窜道
+	uint8 AddLine_Flag;       //补线标记
+	uint8 LossLine_Flag;        //CCD丢线标志
+	uint8 Cross_Flag;         //十字道标志
+	uint8 RoadInvalid_Flag;     //左边赛道无效标记，防止窜道
+	uint8 ID;
 
 } CCD_Info;
 
@@ -195,33 +184,6 @@ typedef struct Speed_Info_//-------------------------------------------------速
 	int16 Error_D_K;
 
 } Speed_Info;
-
-
-typedef struct Steer_Info_//--------------------------------------舵机
-{
-	Pidsuite Pid;
-
-	uint8 KP_Mult;				//PID放大倍数
-	uint8 KD_Mult;
-	uint8 KI_Mult;
-
-	int32 Steer_Center;
-
-	int32 SteerPWM_Error[10];
-
-	uint8 RampUp_SteerBackToCenter_Flag;
-
-} Steer_Info;
-
-typedef struct Motor_Info_//-----------------------------------------------电机
-{
-	Pidsuite Pid;
-
-	uint8 KP_Mult;				//PID放大倍数
-	uint8 KI_Mult;
-	uint8 KD_Mult;
-
-} Motor_Info;
 
 typedef struct Parameter_Info_//------------------------------------------一些参数
 {
@@ -305,35 +267,11 @@ typedef struct Flash_Info_//------------------------------------------------Flas
 
 } Flash_Info;
 
-/*************************DMA所需参数配置部分********************************/
-
-#ifdef LabVIEW_Control_Enable
-
-typedef struct LabVIEW_Info_
-{
-	float Steer_Err_Item;						//转向舵机偏差项数据
-
-	float Motor_KP_Item;						//电机KP项数据
-	float Motor_KI_Item;						//电机KI项数据
-	float Motor_KD_Item;						//电机KD项数据
-
-} LabVIEW_Info;
-
-#endif
-
-typedef struct DMA_Required_Variable
-{
-	uint8 CCD_Image[image_SendBuff_size];
-	uint8 ThreeCCDs_Image[420];
-} DMA_Required_Variable;
-
-
 
 typedef struct           //OLED选择菜单
 {
 	uint8  enter_exit;
-	uint16 choice_flag;
-	uint8  add_sub;
+	int16 choice_flag;
 	uint8  enter_exit_temp;
 	uint8  Clear;
 	uint8  Ready_Go;
@@ -358,25 +296,17 @@ extern menu Menu;
 extern CCD_Info CCD1_info;
 extern CCD_Info CCD2_info;
 
-extern Motor_Info Motor_info;
+
 extern Speed_Info Speed_info;
-
 extern Gyro_Info Gyro_info;
-
-extern DMA_Required_Variable DMA_Variable_1;
 extern Flash_Info Flash_info;
+
+#ifdef  RemRoad_Control_Enable
 extern RemSpeedUpDown_Info RemSpeedUpDown_info;
-
-
-
-extern Steer_Info Steer_info;   //舵机初始化
-
-
-
+#endif
 
 
 //函数声明
-extern void mySteer_DataInit(Steer_Info *Steer_info);
 extern void myData_Init();   //数据信息初始化
 
 

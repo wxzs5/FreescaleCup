@@ -99,8 +99,7 @@ void B4_Process()
   DELAY_MS(20);
   if (gpio_get(PTB21) == 0)
   {
-    Menu.add_sub = 2;
-    Menu.Clear = 1;
+    // stop_flag = !stop_flag;
   }
 }
 

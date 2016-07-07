@@ -11,56 +11,18 @@ Road_Type 	 Road_type                                = {All};//默认赛道种�
 
 menu Menu = {0};
 
-Steer_Info Steer_info = {0};   //舵机初始化
-Motor_Info Motor_info = {0};
 Speed_Info Speed_info = {0};
 
 Gyro_Info Gyro_info = {0};
 
 // DMA_Required_Variable DMA_Variable_1= {0};
 // Flash_Info Flash_info= {0};
+#ifdef  RemRoad_Control_Enable
 RemSpeedUpDown_Info RemSpeedUpDown_info = {0};
+#endif
 
-CCD_Info CCD1_info;
-CCD_Info CCD2_info;
-Speed_Info Speed_info;
-
-/*************************************************************************
-*					我要过六级
-*
-*  函数名称：mySteer_DataInit
-*  功能说明：转向舵机参数初始化
-*  参数说明：
-*  函数返回：无
-*  修改时间：2016-07-1
-*  备    注：
-*************************************************************************/
-void mySteer_DataInit(Steer_Info *Steer_info)
-{
-	uint8_t ii = 0;
-
-	Steer_info->Pid.kp = 0;
-	Steer_info->Pid.ki  = 0;
-	Steer_info->Pid.kd = 0;
-	Steer_info->Pid.kpi = 0;
-	Steer_info->Pid.kii  = 0;
-	Steer_info->Pid.kdi = 0;
-
-	Steer_info->KP_Mult = 0;            //PID放大倍数
-	Steer_info->KD_Mult = 0;
-	Steer_info->KI_Mult = 0;
-
-
-	Steer_info->Steer_Center = 1000;    //舵机中心为1000
-
-	for (ii = 0; ii < 10; ii++)
-	{
-		Steer_info->SteerPWM_Error[ii] = 0;
-	}
-
-	Steer_info->RampUp_SteerBackToCenter_Flag = 0;
-
-}
+CCD_Info CCD1_info = {0};
+CCD_Info CCD2_info = {0};
 
 
 
@@ -76,5 +38,5 @@ void mySteer_DataInit(Steer_Info *Steer_info)
 *************************************************************************/
 void myData_Init()
 {
-	mySteer_DataInit(&Steer_info);
+
 }

@@ -46,86 +46,8 @@ void Pid_Init(void)
   PidServo.outP                    = 0;
   PidServo.temp                    = 0;
 }
-#if PIDUPDATE
 
 
-/*************************************************************************
-*       我要过六级
-*  函数名称:  PidPosi_Calculate
-*  功能说明:  位置式PID计算
-*  参数说明:  other   是外部微分项,如果使用默认位置式计算则把other置0
-*
-*  函数返回:
-*  修改时间:2016-06-23
-*  备注:
-*************************************************************************/
-float PidPosi_Calculate(Pidsuite *Pid, float Measured, float Expect, float other)
-{
-
-  Pid->error = Expect - Measured;
-
-  Pid->outP   = Pid->kp * Pid->error;
-
-  Pid->outI += Pid->ki * Pid->error;
-  //MYRANGE(Pid->outI, 40, -40);       //积分限幅
-
-  Pid->outD = Pid->kd * (Pid->error - Pid->error_pre);
-  Pid->temp = Pid->kd * other;                         //为变微分项算法保留
-
-  Pid->error_pre = Pid->error;
-
-  if (ohter)
-  {
-    Pid->out   = Pid->outP
-                 + Pid->outI
-                 + Pid->temp;
-  }
-  else
-  {
-    Pid->out   = Pid->outP
-                 + Pid->outI
-                 + Pid->outD;
-  }
-
-  Pid->out = -Pid->out;
-
-  return   MYRANGE(Pid->out, 100, -100);
-}
-
-/*************************************************************************
-*       我要过六级
-*  函数名称:  PidDelta_Calculate
-*  功能说明:  增量式PID计算
-*  参数说明:
-*
-*  函数返回:
-*  修改时间:2016-06-23
-*  备注:
-*************************************************************************/
-float PidDelta_Calculate(Pidsuite *Pid, float Measured, float Expect)
-{
-  Pid->error = Expect - Measured;
-
-  Pid->outP   = Pid->kp * (Pid->error - Pid->error_pre);
-
-
-  Pid->outI   = Pid->ki * Pid->error;
-  //MYRANGE(Pid->outI, 5000, -5000);
-
-  Pid->outD   = Pid->kd * (Pid->error + Pid->error_pre_pre - 2 * Pid->error_pre);
-
-  Pid->out   += Pid->outP
-                + Pid->outI
-                + Pid->outD;
-
-  Pid->error_pre_pre = Pid->error_pre;
-  Pid->error_pre = Pid->error;
-
-  return MYRANGE(Pid->out, 10000, -10000);
-}
-
-
-#else
 float Pid_Calculate_Servo(Pidsuite *Pid, int16 Measured, int16 Expect)
 {
   float kp , kd;
@@ -206,6 +128,4 @@ float Pid_Calculate_Differ(Pidsuite *Pid, int16 Measured, int16 Expect)
   return    MYRANGE(Pid->out, 3000, -3000);
 }
 
-
-#endif
 

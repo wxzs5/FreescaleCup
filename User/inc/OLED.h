@@ -15,23 +15,8 @@
 #define   LuZ  Speed_info.Obstacle_Speed
 
 #define  SExp  Speed_Expect;
-#define   Add3 Speed_info.SpeedAdd_3
-#define   E_K  Speed_info.Error_K
 #define   Chfile Parameter_info.SD_Data_name_Change
 
-#define   S_P   Steer_info.Pid.kp
-#define   S_I   Steer_info.Pid.ki
-#define   S_D   Steer_info.Pid.kd
-#define   S_PI   Steer_info.Pid.kpi
-#define   S_II   Steer_info.Pid.kii
-#define   S_DI   Steer_info.Pid.kdi
-
-#define   VP  Motor_info.Pid.kp
-#define   VI   Motor_info.Pid.ki
-#define   VD   Motor_info.Pid.kd
-#define   VPI  Motor_info.Pid.kpi
-#define   VII   Motor_info.Pid.kii
-#define   VDI   Motor_info.Pid.kdi
 
 #define   D_T  Parameter_info.DebugTime
 #define   Po_T Parameter_info.GetRampTime
@@ -68,14 +53,10 @@
 #define   Jiyi  RemSpeedUpDown_info.RemRoad_Enable
 #define   C_J Parameter_info.WheelOutOfWay_Enable
 #define   P_Y   CCD2_info.CCD_ObstacleShift
-#define   RNum  Parameter_info.TurnRound_Num_MAX
 
 #endif
 
-#define   B_T Parameter_info.CCD1_AD_TargetValue
-#define   b_m Parameter_info.CCD1_Binary_MIN
-#define   B_M Parameter_info.CCD1_Binary_MAX
-#define   Sght  Parameter_info.Mode_HighSpeedDistance
+
 
 
 
@@ -94,11 +75,10 @@ void myOLED_Dec(uint8 x, uint8 y, uint16 DEC);
 void myOLED_Dec4(uint8 x, uint8 y, int16 DEC);
 void myOLED_ADC_value(uint16 * value);
 void myOLED_XY_point(uint8 x, uint8 y, uint8 ch);
-
 void myOLED_Decimals(uint8 x, uint8 y, float als);
-
 void myOLED_CCDwave(CCD_Info * CCD1_info, CCD_Info * CCD2_info);
 
 uint8 lcd_menu_display_init(menu * Menu);
+void lcd_menu_display_end(menu * Menu);
 
 #endif

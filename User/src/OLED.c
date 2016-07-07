@@ -109,179 +109,6 @@ uint8  ASCII_code[101][6] = {
 	{0x00, 0x1C, 0x22, 0x44, 0x22, 0x1C} //??(132)
 };
 
-uint16 ADC_value[128] = {
-	/*
-				0x1FF0,0x1FF0,0x1FF0,0x1FF0,0x1FF0,
-				0x1FF0,0x1FF0,0x1FF0,0x1FF0,0x1FF0,
-				0x1FF0,0x1FF0,0x1FF0,0x1FF0,0x1FF0,
-				0x1FF0,0x1FF0,0x1FF0,0x1FF0,0x1FF0,	//20
-
-				0x2FF0,0x2FF0,0x2FF0,0x2FF0,0x2FF0,
-				0x2FF0,0x2FF0,0x2FF0,0x2FF0,0x2FF0,
-				0x2FF0,0x2FF0,0x2FF0,0x2FF0,0x2FF0,
-				0x2FF0,0x2FF0,0x2FF0,0x2FF0,0x2FF0,	//40
-
-				0x4FF0,0x4FF0,0x4FF0,0x4FF0,0x4FF0,
-				0x4FF0,0x4FF0,0x4FF0,0x4FF0,0x4FF0,
-				0x6FF0,0x6FF0,0x6FF0,0x6FF0,0x6FF0,
-				0x6FF0,0x6FF0,0x6FF0,0x6FF0,0x6FF0,	//60
-
-				0x6FF0,0x6FF0,0x6FF0,0x6FF0,0x6FF0,
-				0x7FF0,0x7FF0,0x7FF0,0x7FF0,0x7FF0,
-				0x7FF0,0x7FF0,0x7FF0,0x7FF0,0x7FF0,
-				0x7FF0,0x7FF0,0x7FF0,0x7FF0,0x7FF0,	//80
-
-				0x5FF0,0x5FF0,0xAFF0,0xAFF0,0xAFF0,
-				0x4FF0,0x4FF0,0x4FF0,0x4FF0,0x4FF0,
-				0x1FF0,0x1FF0,0x7FF0,0x2FF0,0x2FF0,
-				0x1FF0,0x1FF0,0x1FF0,0x1FF0,0x1FF0,	//100
-
-				0x6FF0,0x6FF0,0x6FF0,0x6FF0,0x6FF0,
-				0x7FF0,0x7FF0,0x7FF0,0x7FF0,0x7FF0,
-				0x7FF0,0x7FF0,0x7FF0,0x7FF0,0x7FF0,
-				0x7FF0,0x7FF0,0x7FF0,0x7FF0,0x7FF0,	//120
-
-				0xFFF0,0xFFF0,0xFFF0,0xFFF0,0xFFF0,
-				0xFFF0,0xFFF0,0xFFF0,
-		*/
-
-	0x0F00, 0x5F00, 0xBF00, 0x9F00, 0x7F00,
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-	0x5F00, 0x5F00, 0x7F00, 0x5F00, 0x5F00,
-
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-
-	0x0F00, 0x0F00, 0x0F00, 0x0F00, 0x0F00,
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-
-	0x5F00, 0x5F00, 0x5F00, 0x5F00, 0x5F00,
-	0x7F00, 0x0F00, 0xFF00,
-};
-
-/********************************************************
-
-   LCD1608字符
-
-*********************************************************/
-
-uint8  asc2_1608[1520] = {
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x00, 0x00, 0x18, 0x18, 0x00, 0x00,
-	0x00, 0x48, 0x6C, 0x24, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x24, 0x24, 0x24, 0x7F, 0x12, 0x12, 0x12, 0x7F, 0x12, 0x12, 0x12, 0x00, 0x00,
-	0x00, 0x00, 0x08, 0x1C, 0x2A, 0x2A, 0x0A, 0x0C, 0x18, 0x28, 0x28, 0x2A, 0x2A, 0x1C, 0x08, 0x08,
-	0x00, 0x00, 0x00, 0x22, 0x25, 0x15, 0x15, 0x15, 0x2A, 0x58, 0x54, 0x54, 0x54, 0x22, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x0C, 0x12, 0x12, 0x12, 0x0A, 0x76, 0x25, 0x29, 0x11, 0x91, 0x6E, 0x00, 0x00,
-	0x00, 0x06, 0x06, 0x04, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x40, 0x20, 0x10, 0x10, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x10, 0x10, 0x20, 0x40, 0x00,
-	0x00, 0x02, 0x04, 0x08, 0x08, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x08, 0x08, 0x04, 0x02, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x08, 0x08, 0x6B, 0x1C, 0x1C, 0x6B, 0x08, 0x08, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x08, 0x08, 0x08, 0x08, 0x7F, 0x08, 0x08, 0x08, 0x08, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x06, 0x04, 0x03,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x06, 0x00, 0x00,
-	0x00, 0x00, 0x80, 0x40, 0x40, 0x20, 0x20, 0x10, 0x10, 0x08, 0x08, 0x04, 0x04, 0x02, 0x02, 0x00,
-	0x00, 0x00, 0x00, 0x18, 0x24, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x24, 0x18, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x08, 0x0E, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x3E, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x3C, 0x42, 0x42, 0x42, 0x20, 0x20, 0x10, 0x08, 0x04, 0x42, 0x7E, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x3C, 0x42, 0x42, 0x20, 0x18, 0x20, 0x40, 0x40, 0x42, 0x22, 0x1C, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x20, 0x30, 0x28, 0x24, 0x24, 0x22, 0x22, 0x7E, 0x20, 0x20, 0x78, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x7E, 0x02, 0x02, 0x02, 0x1A, 0x26, 0x40, 0x40, 0x42, 0x22, 0x1C, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x38, 0x24, 0x02, 0x02, 0x1A, 0x26, 0x42, 0x42, 0x42, 0x24, 0x18, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x7E, 0x22, 0x22, 0x10, 0x10, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x3C, 0x42, 0x42, 0x42, 0x24, 0x18, 0x24, 0x42, 0x42, 0x42, 0x3C, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x18, 0x24, 0x42, 0x42, 0x42, 0x64, 0x58, 0x40, 0x40, 0x24, 0x1C, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0x18, 0x00, 0x00, 0x00, 0x00, 0x18, 0x18, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x08, 0x04,
-	0x00, 0x00, 0x00, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7F, 0x00, 0x00, 0x00, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x3C, 0x42, 0x42, 0x46, 0x40, 0x20, 0x10, 0x10, 0x00, 0x18, 0x18, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x1C, 0x22, 0x5A, 0x55, 0x55, 0x55, 0x55, 0x2D, 0x42, 0x22, 0x1C, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x08, 0x08, 0x18, 0x14, 0x14, 0x24, 0x3C, 0x22, 0x42, 0x42, 0xE7, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x1F, 0x22, 0x22, 0x22, 0x1E, 0x22, 0x42, 0x42, 0x42, 0x22, 0x1F, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x7C, 0x42, 0x42, 0x01, 0x01, 0x01, 0x01, 0x01, 0x42, 0x22, 0x1C, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x1F, 0x22, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x22, 0x1F, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x3F, 0x42, 0x12, 0x12, 0x1E, 0x12, 0x12, 0x02, 0x42, 0x42, 0x3F, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x3F, 0x42, 0x12, 0x12, 0x1E, 0x12, 0x12, 0x02, 0x02, 0x02, 0x07, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x3C, 0x22, 0x22, 0x01, 0x01, 0x01, 0x71, 0x21, 0x22, 0x22, 0x1C, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0xE7, 0x42, 0x42, 0x42, 0x42, 0x7E, 0x42, 0x42, 0x42, 0x42, 0xE7, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x3E, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x3E, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x7C, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x11, 0x0F,
-	0x00, 0x00, 0x00, 0x77, 0x22, 0x12, 0x0A, 0x0E, 0x0A, 0x12, 0x12, 0x22, 0x22, 0x77, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x07, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x42, 0x7F, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x77, 0x36, 0x36, 0x36, 0x36, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x6B, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0xE3, 0x46, 0x46, 0x4A, 0x4A, 0x52, 0x52, 0x52, 0x62, 0x62, 0x47, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x1C, 0x22, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x41, 0x22, 0x1C, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x3F, 0x42, 0x42, 0x42, 0x42, 0x3E, 0x02, 0x02, 0x02, 0x02, 0x07, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x1C, 0x22, 0x41, 0x41, 0x41, 0x41, 0x41, 0x4D, 0x53, 0x32, 0x1C, 0x60, 0x00,
-	0x00, 0x00, 0x00, 0x3F, 0x42, 0x42, 0x42, 0x3E, 0x12, 0x12, 0x22, 0x22, 0x42, 0xC7, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x7C, 0x42, 0x42, 0x02, 0x04, 0x18, 0x20, 0x40, 0x42, 0x42, 0x3E, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x7F, 0x49, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x1C, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0xE7, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x42, 0x3C, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0xE7, 0x42, 0x42, 0x22, 0x24, 0x24, 0x14, 0x14, 0x18, 0x08, 0x08, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x6B, 0x49, 0x49, 0x49, 0x49, 0x55, 0x55, 0x36, 0x22, 0x22, 0x22, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0xE7, 0x42, 0x24, 0x24, 0x18, 0x18, 0x18, 0x24, 0x24, 0x42, 0xE7, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x77, 0x22, 0x22, 0x14, 0x14, 0x08, 0x08, 0x08, 0x08, 0x08, 0x1C, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x7E, 0x21, 0x20, 0x10, 0x10, 0x08, 0x04, 0x04, 0x42, 0x42, 0x3F, 0x00, 0x00,
-	0x00, 0x78, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x78, 0x00,
-	0x00, 0x00, 0x02, 0x02, 0x04, 0x04, 0x08, 0x08, 0x08, 0x10, 0x10, 0x20, 0x20, 0x20, 0x40, 0x40,
-	0x00, 0x1E, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x1E, 0x00,
-	0x00, 0x38, 0x44, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF,
-	0x00, 0x06, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3C, 0x42, 0x78, 0x44, 0x42, 0x42, 0xFC, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x03, 0x02, 0x02, 0x02, 0x1A, 0x26, 0x42, 0x42, 0x42, 0x26, 0x1A, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x38, 0x44, 0x02, 0x02, 0x02, 0x44, 0x38, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x60, 0x40, 0x40, 0x40, 0x78, 0x44, 0x42, 0x42, 0x42, 0x64, 0xD8, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3C, 0x42, 0x7E, 0x02, 0x02, 0x42, 0x3C, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0xF0, 0x88, 0x08, 0x08, 0x7E, 0x08, 0x08, 0x08, 0x08, 0x08, 0x3E, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7C, 0x22, 0x22, 0x1C, 0x02, 0x3C, 0x42, 0x42, 0x3C,
-	0x00, 0x00, 0x00, 0x03, 0x02, 0x02, 0x02, 0x3A, 0x46, 0x42, 0x42, 0x42, 0x42, 0xE7, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x0C, 0x0C, 0x00, 0x00, 0x0E, 0x08, 0x08, 0x08, 0x08, 0x08, 0x3E, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x30, 0x30, 0x00, 0x00, 0x38, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x22, 0x1E,
-	0x00, 0x00, 0x00, 0x03, 0x02, 0x02, 0x02, 0x72, 0x12, 0x0A, 0x16, 0x12, 0x22, 0x77, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x0E, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x3E, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7F, 0x92, 0x92, 0x92, 0x92, 0x92, 0xB7, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3B, 0x46, 0x42, 0x42, 0x42, 0x42, 0xE7, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3C, 0x42, 0x42, 0x42, 0x42, 0x42, 0x3C, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1B, 0x26, 0x42, 0x42, 0x42, 0x22, 0x1E, 0x02, 0x07,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x78, 0x44, 0x42, 0x42, 0x42, 0x44, 0x78, 0x40, 0xE0,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x77, 0x4C, 0x04, 0x04, 0x04, 0x04, 0x1F, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7C, 0x42, 0x02, 0x3C, 0x40, 0x42, 0x3E, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x08, 0x3E, 0x08, 0x08, 0x08, 0x08, 0x08, 0x30, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x42, 0x42, 0x42, 0x42, 0x62, 0xDC, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xE7, 0x42, 0x24, 0x24, 0x14, 0x08, 0x08, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xEB, 0x49, 0x49, 0x55, 0x55, 0x22, 0x22, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x76, 0x24, 0x18, 0x18, 0x18, 0x24, 0x6E, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xE7, 0x42, 0x24, 0x24, 0x14, 0x18, 0x08, 0x08, 0x07,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7E, 0x22, 0x10, 0x08, 0x08, 0x44, 0x7E, 0x00, 0x00,
-	0x00, 0xC0, 0x20, 0x20, 0x20, 0x20, 0x20, 0x10, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0xC0, 0x00,
-	0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10,
-	0x00, 0x06, 0x08, 0x08, 0x08, 0x08, 0x08, 0x10, 0x08, 0x08, 0x08, 0x08, 0x08, 0x08, 0x06, 0x00,
-	0x0C, 0x32, 0xC2, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-};
 
 /*************************************************************************
 *				我要过六级
@@ -812,32 +639,130 @@ void myOLED_CCDwave(CCD_Info * CCD1_info, CCD_Info * CCD2_info)
 *  参数说明:
 *
 *  函数返回:
-*  修改时间:2016-7-1
-*  备		 注:
+*  修改时间:2016-7-4
+*  备		 注:去除了大量暂时用不上的变量
 *************************************************************************/
 uint8 lcd_menu_display_init(menu * Menu)
 {
 
 	Menu->Ready_Go =  1;
-
 	switch (Menu->choice_flag / 100)
 	{
 	case 0: if (Menu->Clear) { myOLED_Clear(); Menu->Clear = 0;}
 		myOLED_String(4, 20, "Pass Cet6!!!!");
 		break;
-	case 1:   //Sudu1
+	case 1:  //Pid
 	{
 		if (Menu->Clear) { myOLED_Clear(); Menu->Clear = 0;}
 		myOLED_String(4, 1, "*");
-		myOLED_String(6, 10, "Binay"); myOLED_String(6, 50, "Zhi"); myOLED_Dec(6, 87, zhi);
-		myOLED_String(4, 10, "SuDu1"); myOLED_String(5, 50, "Wan"); myOLED_Dec(5, 87, wan);
-		myOLED_String(2, 10, "SuDu2"); myOLED_String(4, 50, "X-S"); myOLED_Dec(4, 87, x_s);
-		// myOLED_String(3, 50, "Up"); myOLED_Dec(3, 87, Up);
-		//myOLED_String(2, 50, "Dn"); myOLED_Dec(2, 87, Dn);
-		// myOLED_String(1, 50, "LuZ"); myOLED_Dec(1, 87, LuZ);
-		myOLED_String(3, 50, "SFlg"); myOLED_Dec(3, 87, stop_flag);
-		myOLED_String(2, 50, "TunM"); myOLED_Dec(2, 87, Tune_Mode);
-		myOLED_String(1, 50, "Diff"); myOLED_Decimals(1, 87, PidSpeedLeft.kd);
+		myOLED_String(6, 10, "ChkRp"); myOLED_String(6, 50, "S_P"); myOLED_Decimals(6, 87, PidServo.kp);
+		myOLED_String(2, 10, "Pid"); myOLED_String(5, 50, "S_I"); myOLED_Decimals(5, 87, PidServo.ki);
+		myOLED_String(4, 10, "Shudu"); myOLED_String(4, 50, "S_D"); myOLED_Decimals(4, 87, PidServo.kd);
+		myOLED_String(3, 50, "Diff"); myOLED_Decimals(3, 87, PidSpeedLeft.temp);
+		myOLED_String(2, 50, "SExp"); myOLED_Decimals(2, 87, Speed_Expect);
+		myOLED_String(1, 50, "TingC"); myOLED_Decimals(1, 87, stop_flag);
+
+		switch (Menu->choice_flag % 100 / 10)
+		{
+		case 1: //第二层	P
+			myOLED_String(6, 40, "*");
+			switch (Menu->choice_flag % 10)
+			{
+			case 0:  // 第三层
+				break;
+			case 1:  //
+				myOLED_String(6, 77, "*");
+				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
+				MYRANGE(Menu->Tun_Res, 140, 40);
+				MAP(PidServo.kp, 30, -30);
+				break;
+			}
+			break;
+		case 2:  ////第二层	I
+			myOLED_String(5, 40, "*");
+			switch (Menu->choice_flag % 10)
+			{
+			case 0:  // 第三层
+				break;
+			case 1:  //
+				myOLED_String(5, 77, "*");
+				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
+				MYRANGE(Menu->Tun_Res, 140, 40);
+				MAP(PidServo.ki, 30, -30);
+				break;
+			}
+			break;
+		case 3:  ////第二层	D
+			myOLED_String(4, 40, "*");
+			switch (Menu->choice_flag % 10)
+			{
+			case 0:  // 第三层
+				break;
+			case 1:  //
+				myOLED_String(4, 77, "*");
+				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
+				MYRANGE(Menu->Tun_Res, 140, 40);
+				MAP(PidServo.kd, 30, -30);
+				break;
+			}
+			break;
+		case 4:
+			myOLED_String(3, 40, "*");
+			switch (Menu->choice_flag % 10)
+			{
+			case 0:  // 第三层
+				break;
+			case 1:  //
+				myOLED_String(3, 77, "*");
+				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
+				MYRANGE(Menu->Tun_Res, 140, 40);
+				MAP(PidSpeedLeft.temp, 30, -30);
+				break;
+			}
+			break;
+		case 5://
+			myOLED_String(2, 40, "*");
+			switch (Menu->choice_flag % 10)
+			{
+			case 0:  // 第三层
+				break;
+			case 1:  //
+				myOLED_String(2, 77, "*");
+				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
+				MYRANGE(Menu->Tun_Res, 140, 40);
+				MAP(Speed_Expect, 500, 300);
+				break;
+			}
+			break;
+		case 6:
+			myOLED_String(1, 40, "*");
+			switch (Menu->choice_flag % 10)
+			{
+			case 0:  // 第三层
+				break;
+			case 1:  //
+				myOLED_String(1, 77, "*");
+				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
+				MYRANGE(Menu->Tun_Res, 140, 40);
+				MAP(stop_flag, 1, 0);
+				break;
+			}
+			break;
+		default:
+			break;
+		}
+	}
+	break;  // end of Pid
+	case 2:   //Sudu
+	{
+		if (Menu->Clear) { myOLED_Clear(); Menu->Clear = 0;}
+		myOLED_String(4, 1, "*");
+		myOLED_String(6, 10, "Pid"); myOLED_String(6, 50, "Zhi"); myOLED_Dec(6, 87, zhi);
+		myOLED_String(4, 10, "SuDu"); myOLED_String(5, 50, "Wan"); myOLED_Dec(5, 87, wan);
+		myOLED_String(2, 10, "Go"); myOLED_String(4, 50, "X-S"); myOLED_Dec(4, 87, x_s);
+		myOLED_String(3, 50, "Up"); myOLED_Dec(3, 87, Up);
+		myOLED_String(2, 50, "Dn"); myOLED_Dec(2, 87, Dn);
+		myOLED_String(1, 50, "LuZ"); myOLED_Dec(1, 87, LuZ);
 		switch (Menu->choice_flag % 100 / 10)
 		{
 		case 1:  //第二层	直道	速度
@@ -892,8 +817,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(3, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				// MAP(Up, 400, 200);
-				MAP(stop_flag, 1, 0);
+				MAP(Up, 400, 200);
 				break;
 			}
 			break;
@@ -907,7 +831,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(2, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(Tune_Mode, 5, 1);
+				MAP(Dn, 400, 200);
 				break;
 			}
 			break;
@@ -921,737 +845,15 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(1, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				// MAP(LuZ, 400, 200);
-				MAP(PidSpeedLeft.kd , 1, -1);
+				MAP(LuZ, 400, 200);
 				break;
 			}
 		default:
 			break;
 		}
 	}
-	break;  //end of sudu1
-	case 2:   //Sudu2
-	{
-		if (Menu->Clear) { myOLED_Clear(); Menu->Clear = 0;}
-		myOLED_String(4, 1, "*");
-		myOLED_String(6, 10, "SuDu1"); myOLED_String(6, 50, "SExp"); myOLED_Dec(6, 87, (uint16)Speed_Expect);
-		myOLED_String(4, 10, "SuDu2"); myOLED_String(5, 50, "Add3"); myOLED_Dec(5, 87, Add3);
-		myOLED_String(2, 10, "Duoji");	myOLED_String(4, 50, "E_K"); myOLED_Dec(4, 87, E_K);
-		myOLED_String(3, 50, "P"); myOLED_Decimals(3, 87, PidServo.kp);
-		myOLED_String(2, 50, "I"); myOLED_Decimals(2, 87, PidServo.ki);
-		myOLED_String(1, 50, "D"); myOLED_Decimals(1, 87, PidServo.kd);
-
-		switch (Menu->choice_flag % 100 / 10)
-		{
-		case 1: //第二层	速度
-			myOLED_String(6, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(6, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(Speed_Expect, 480, 280);
-				break;
-			}
-			break;
-		case 2: //第二层	Add3
-			myOLED_String(5, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(5, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(Add3, 500, 300);
-				break;
-			}
-			break;
-		case 3:  ////第二层	E_K
-			myOLED_String(4, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(4, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				// MAP(E_K, 450, 250);
-				MAP(Chfile, 9, 0);
-				break;
-			}
-			break;
-		case 4:  ////第二层	P
-			myOLED_String(3, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(3, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(PidServo.kp, 30, -10);
-				break;
-			}
-			break;
-		case 5:  ////第二层	P
-			myOLED_String(2, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(2, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(PidServo.ki, 30, -10);
-				break;
-			}
-			break;
-		case 6:  ////第二层	D
-			myOLED_String(1, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(1, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(PidServo.kd, 1, -1);
-				break;
-			}
-			break;
-		default:
-			break;
-		}
-	}
-	break;//end of sudu2
-	case 3:  //Duoji
-	{
-		if (Menu->Clear) { myOLED_Clear(); Menu->Clear = 0;}
-		myOLED_String(4, 1, "*");
-		myOLED_String(6, 10, "Shudu2"); myOLED_String(6, 50, "S_P"); myOLED_Decimals(6, 87, S_P);
-		myOLED_String(2, 10, "Duoji"); myOLED_String(5, 50, "S_I"); myOLED_Decimals(5, 87, S_I);
-		myOLED_String(4, 10, "--V--"); myOLED_String(4, 50, "S_D"); myOLED_Decimals(4, 87, S_D);
-		myOLED_String(3, 50, "S_PI"); myOLED_Decimals(3, 87, S_PI);
-		myOLED_String(2, 50, "S_II"); myOLED_Decimals(2, 87, S_II);
-		myOLED_String(1, 50, "S_DI"); myOLED_Decimals(1, 87, S_DI);
-
-		switch (Menu->choice_flag % 100 / 10)
-		{
-		case 1: //第二层	P
-			myOLED_String(6, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(6, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(S_P, 30, -30);
-				break;
-			}
-			break;
-		case 2:  ////第二层	I
-			myOLED_String(5, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(5, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(S_I, 30, -30);
-				break;
-			}
-			break;
-		case 3:  ////第二层	D
-			myOLED_String(4, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(4, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(S_D, 30, -30);
-				break;
-			}
-			break;
-		case 4:
-			myOLED_String(3, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(3, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(S_PI, 30, -30);
-				break;
-			}
-			break;
-		case 5://H2
-			myOLED_String(2, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(2, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(S_II, 30, -30);
-				break;
-			}
-			break;
-		case 6://H3
-			myOLED_String(1, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(1, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(S_D, 30, -30);
-				break;
-			}
-			break;
-		default:
-			break;
-		}
-	}
-	break;  // end of duoji
-	case 4:   //--V--
-	{
-		if (Menu->Clear) { myOLED_Clear(); Menu->Clear = 0;}
-		myOLED_String(4, 1, "*");
-		myOLED_String(6, 10, "Duoji"); myOLED_String(6, 50, "VP"); myOLED_Decimals(6, 87, VP);
-		myOLED_String(4, 10, "--V--"); myOLED_String(5, 50, "VI"); myOLED_Decimals(5, 87, VI);
-		myOLED_String(2, 10, "Time"); myOLED_String(4, 50, "VD"); myOLED_Decimals(4, 87, VD);
-		myOLED_String(3, 50, "VPI"); myOLED_Decimals(3, 87, VPI);
-		myOLED_String(2, 50, "VII"); myOLED_Decimals(2, 87, VII);
-		myOLED_String(1, 50, "VDI"); myOLED_Decimals(1, 87, VDI);
-
-		switch (Menu->choice_flag % 100 / 10)
-		{
-		case 0:
-			break;
-		case 1:  //第二层	VP
-			myOLED_String(6, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(4, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(VP, 30, -30);
-				break;
-			}
-			break;
-		case 2: //第二层	VI
-			myOLED_String(5, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(5, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(VI, 30, -30);
-				break;
-			}
-			break;
-		case 3: //第二层	VD
-			myOLED_String(4, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(4, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(VD, 30, -30);
-				break;
-			}
-			break;
-		case 4: //第二层	VI
-			myOLED_String(3, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(3, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(VPI, 30, -30);
-				break;
-			}
-			break;
-		case 5: //第二层	VI
-			myOLED_String(2, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(2, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(VII, 30, -30);
-				break;
-			}
-			break;
-		case 6: //第二层	VI
-			myOLED_String(1, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(1, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(VDI, 30, -30);
-				break;
-			}
-			break;
-		default:
-			break;
-		}
-	}
-	break; // end of --V--
-	case 5:	  // Time
-	{
-		if (Menu->Clear) { myOLED_Clear(); Menu->Clear = 0;}
-
-		myOLED_String(4, 1, "*");
-		myOLED_String(6, 10, "--V--"); myOLED_String(6, 50, "D-T"); myOLED_Dec(6, 87, (uint16)D_T);
-		myOLED_String(5, 50, "Po"); myOLED_Dec(5, 87, (uint16)Po_T);
-		myOLED_String(4, 10, "Time"); /*myOLED_String(4, 50, "Ren"); myOLED_Dec(4, 87, (uint16)Ren_T);*/
-		myOLED_String(2, 10, "juli"); myOLED_String(3, 50, "LuZ"); myOLED_Dec(3, 87, (uint16)LuZ_T);
-		myOLED_String(2, 50, "S_T"); myOLED_Dec(2, 87, (uint16)S_T);
-
-		switch (Menu->choice_flag % 100 / 10)
-		{
-		case 1:  //第二层	D_T
-		{
-			myOLED_String(6, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-			{
-				myOLED_String(6, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-				{
-					D_T += 1;
-					myOLED_String(6, 121, "+");
-
-					Menu->add_sub = 0;
-				}
-				break;
-				case 2:
-				{
-					if (D_T >= 1)
-					{
-						D_T -= 1;
-					}
-					myOLED_String(6, 121, "-");
-					Menu->add_sub = 0;
-				}
-				break;
-				default:
-					break;
-				}
-			}
-			break;
-			default:
-				break;
-			}
-		}
-		break;
-		case 2:  //第二层	Po_T
-		{
-			myOLED_String(5, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-			{
-				myOLED_String(5, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-				{
-					Po_T += 1;
-					myOLED_String(5, 121, "+");
-
-					Menu->add_sub = 0;
-				}
-				break;
-				case 2:
-				{
-					if (Po_T >= 1)
-					{
-						Po_T -= 1;
-					}
-
-					myOLED_String(5, 121, "-");
-					Menu->add_sub = 0;
-				}
-				break;
-				default:
-					break;
-				}
-			}
-			break;
-			default:
-				break;
-			}
-		}
-		break;
-		case 4:  //第二层	LuZ_T
-		{
-			myOLED_String(3, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-			{
-				myOLED_String(3, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-				{
-					LuZ_T += 1;
-					myOLED_String(3, 121, "+");
-
-					Menu->add_sub = 0;
-				}
-				break;
-				case 2:
-				{
-					if (LuZ_T >= 1)
-					{
-						LuZ_T -= 1;
-					}
-
-					myOLED_String(3, 121, "-");
-					Menu->add_sub = 0;
-				}
-				break;
-				default:
-					break;
-				}
-			}
-			break;
-			default:
-				break;
-			}
-		}
-		break;
-		case 5:  //第二层	S_T
-		{
-			myOLED_String(2, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-			{
-				myOLED_String(2, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-				{
-					S_T += 1;
-					myOLED_String(2, 121, "+");
-
-					Menu->add_sub = 0;
-				}
-				break;
-				case 2:
-				{
-					if (S_T >= 1)
-					{
-						S_T -= 1;
-					}
-
-					myOLED_String(2, 121, "-");
-					Menu->add_sub = 0;
-				}
-				break;
-				default:
-					break;
-				}
-			}
-			break;
-			default:
-				break;
-			}
-		}
-		break;
-		default:
-			break;
-		}
-	}
-	break;// end of Time
-	case 6:   // juli
-	{
-		if (Menu->Clear) { myOLED_Clear(); Menu->Clear = 0;}
-
-		myOLED_String(4, 1, "*");
-		myOLED_String(6, 10, "Time"); myOLED_String(6, 50, "jl_3"); myOLED_Dec(6, 87, jl_3);
-		myOLED_String(4, 10, "juli"); /*myOLED_String(5, 50, "R-l"); myOLED_Dec(5, 87, R_l);*/
-		myOLED_String(2, 10, "Other"); /*myOLED_String(4, 50, "R-L"); myOLED_Dec(4, 87, R_L);*/
-		myOLED_String(3, 50, "Po_S1"); myOLED_Dec(3, 87, Po_S1);
-		myOLED_String(2, 50, "Po_S2"); myOLED_Dec(2, 87, Po_S2);
-		myOLED_String(1, 50, "Po_X"); myOLED_Dec(1, 87, Po_X);
-
-		switch (Menu->choice_flag % 100 / 10)
-		{
-		case 1:  //第二层	jl-3
-			myOLED_String(6, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(6, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (jl_3 < 1200)
-					{
-						jl_3 += 50;
-					}
-					myOLED_String(6, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-					if (jl_3 >= 50)
-					{
-						jl_3 -= 50;
-					}
-					myOLED_String(6, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				default:
-					break;
-				}
-				break;
-			}
-			break;
-		// case 2: //第二层	L_2
-		// 	myOLED_String(5, 40, "*");
-		// 	switch (Menu->choice_flag % 10)
-		// 	{
-		// 	case 0:  // 第三层
-		// 		break;
-		// 	case 1:  //
-		// 		myOLED_String(5, 77, "*");
-		// 		switch (Menu->add_sub)
-		// 		{
-		// 		case 0:
-		// 			break;
-		// 		case 1:
-		// 			if (R_l < 50)
-		// 			{
-		// 				R_l += 5;
-		// 			}
-		// 			myOLED_String(5, 121, "+");
-		// 			Menu->add_sub = 0;
-		// 			break;
-		// 		case 2:
-		// 			if (R_l >= 5)
-		// 			{
-		// 				R_l -= 5;
-		// 			}
-		// 			myOLED_String(5, 121, "-");
-		// 			Menu->add_sub = 0;
-		// 			break;
-		// 		default:
-		// 			break;
-		// 		}
-		// 		break;
-		// 	}
-		// 	break;
-		// case 3: //R_L
-		// 	myOLED_String(4, 40, "*");
-		// 	switch (Menu->choice_flag % 10)
-		// 	{
-		// 	case 0:  // 第三层
-		// 		break;
-		// 	case 1:  //
-		// 		myOLED_String(4, 77, "*");
-		// 		switch (Menu->add_sub)
-		// 		{
-		// 		case 0:
-		// 			break;
-		// 		case 1:
-		// 			if (R_L < 50)
-		// 			{
-		// 				R_L += 5;
-		// 			}
-		// 			myOLED_String(4, 121, "+");
-		// 			Menu->add_sub = 0;
-		// 			break;
-		// 		case 2:
-		// 			if (R_L >= 5)
-		// 			{
-		// 				R_L -= 5;
-		// 			}
-		// 			myOLED_String(4, 121, "-");
-		// 			Menu->add_sub = 0;
-		// 			break;
-		// 		default:
-		// 			break;
-		// 		}
-		// 		break;
-		// 	}
-		// 	break;
-		case 4: //Po_S1
-			myOLED_String(3, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(3, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (Po_S1 < 300)
-					{
-						Po_S1 += 5;
-					}
-					myOLED_String(3, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-					if (Po_S1 >= 5)
-					{
-						Po_S1 -= 5;
-					}
-					myOLED_String(3, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				default:
-					break;
-				}
-				break;
-			}
-			break;
-		case 5: //Po_S2
-			myOLED_String(2, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(2, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (Po_S2 < 300)
-					{
-						Po_S2 += 5;
-					}
-					myOLED_String(2, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-					if (Po_S2 >= 5)
-					{
-						Po_S2 -= 5;
-					}
-					myOLED_String(2, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				default:
-					break;
-				}
-				break;
-			}
-			break;
-		case 6: //Po_X
-			myOLED_String(1, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(1, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (Po_X < 300)
-					{
-						Po_X += 5;
-					}
-					myOLED_String(1, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-					if (Po_X >= 5)
-					{
-						Po_X -= 5;
-					}
-					myOLED_String(1, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				default:
-					break;
-				}
-				break;
-			}
-			break;
-		default:
-			break;
-		}
-	}
-	break;
-	case 7:	//Other
+	break;  //end of sudu
+	case 3:  // Go
 	{
 		if (Menu->Clear)
 		{
@@ -1659,268 +861,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 			Menu->Clear = 0;
 		}
 		myOLED_String(4, 1, "*");
-		myOLED_String(6, 10, "juli");	myOLED_String(6, 50, "R-tp"); myOLED_Dec(6, 87, R_tp);
-		myOLED_String(4, 10, "Other"); myOLED_String(5, 50, "Ramp"); myOLED_Dec(5, 87, Ramp);
-		myOLED_String(2, 10, "Go");	myOLED_String(4, 50, "Wu_x"); myOLED_Dec(4, 87, Wu_x);
-		// myOLED_String(3, 50, "LSBR"); myOLED_Dec(3, 87, LSBR);
-		myOLED_String(2, 50, "S_L"); myOLED_Dec(2, 87, S_L);
-		myOLED_String(1, 50, "CCDL"); myOLED_Dec(1, 87, CCDL);
-		switch (Menu->choice_flag % 100 / 10)
-		{
-		case 1: //第二层	R_tp
-		{
-			myOLED_String(6, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //R_tp
-			{
-				myOLED_String(6, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (R_tp < 2)
-					{
-						R_tp += 1;
-					}
-					myOLED_String(6, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-					if (R_tp > 0)
-					{
-						R_tp -= 1;
-					}
-					myOLED_String(6, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				default:
-					break;
-				}
-			}
-			break;
-			default:
-				break;
-			}
-		}
-		break;
-		case 2:  //Ramp
-		{
-			myOLED_String(5, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //R_tp
-			{
-				myOLED_String(5, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (Ramp < 2000)
-					{
-						Ramp += 50;
-					}
-					myOLED_String(5, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-					if (Ramp > 50)
-					{
-						Ramp -= 50;
-					}
-					myOLED_String(5, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				default:
-					break;
-				}
-			}
-			break;
-			default:
-				break;
-			}
-		}
-		break;
-		case 3:  //Wu_x
-		{
-			myOLED_String(4, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //R_tp
-			{
-				myOLED_String(4, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (Wu_x != TRUE)
-					{
-						Wu_x = TRUE;
-					}
-					myOLED_String(4, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-					if (Wu_x != FALSE)
-					{
-						Wu_x = FALSE;
-					}
-					myOLED_String(4, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				default:
-					break;
-				}
-			}
-			break;
-			default:
-				break;
-			}
-		}
-		break;
-		// case 4:  //LSBR
-		// {
-		// 	myOLED_String(3, 40, "*");
-		// 	switch (Menu->choice_flag % 10)
-		// 	{
-		// 	case 0:  // 第三层
-		// 		break;
-		// 	case 1:  //
-		// 	{
-		// 		myOLED_String(3, 77, "*");
-		// 		switch (Menu->add_sub)
-		// 		{
-		// 		case 0:
-		// 			break;
-		// 		case 1:
-		// 			if (0 == LSBR)
-		// 			{
-		// 				LSBR = 1;
-		// 			}
-		// 			myOLED_String(3, 121, "+");
-		// 			Menu->add_sub = 0;
-		// 			break;
-		// 		case 2:
-		// 			if (1 == LSBR)
-		// 			{
-		// 				LSBR = 0;
-		// 			}
-		// 			myOLED_String(3, 121, "-");
-		// 			Menu->add_sub = 0;
-		// 			break;
-		// 		default:
-		// 			break;
-		// 		}
-		// 	}
-		// 	break;
-		// 	default:
-		// 		break;
-		// 	}
-		// }
-		// break;
-		case 5:  //S_L
-		{
-			myOLED_String(2, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-			{
-				myOLED_String(2, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (0 == S_L)
-					{
-						S_L = 1;
-					}
-					myOLED_String(2, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-					if (1 == S_L)
-					{
-						S_L = 0;
-					}
-					myOLED_String(2, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				default:
-					break;
-				}
-			}
-			break;
-			default:
-				break;
-			}
-		}
-		break;
-		case 6:  //CCDL
-		{
-			myOLED_String(1, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-			{
-				myOLED_String(1, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (0 == CCDL)
-					{
-						CCDL = 1;
-					}
-					myOLED_String(1, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-					if (1 == CCDL)
-					{
-						CCDL = 0;
-					}
-					myOLED_String(1, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				default:
-					break;
-				}
-			}
-			break;
-			default:
-				break;
-			}
-		}
-		break;
-		default:
-			break;
-		}
-	}
-	break;
-	case 8:  // Go
-	{
-		if (Menu->Clear)
-		{
-			myOLED_Clear();
-			Menu->Clear = 0;
-		}
-		myOLED_String(4, 1, "*");
-		myOLED_String(6, 10, "Other");
+		myOLED_String(6, 10, "Shudu");
 		myOLED_String(4, 10, "Go");
 		myOLED_String(2, 10, "ChkCCD");
 		myOLED_String(4, 50, "Ready--Go");
@@ -1929,16 +870,14 @@ uint8 lcd_menu_display_init(menu * Menu)
 		case 1:  //第二层
 			myOLED_String(4, 40, "*");
 			Menu->Ready_Go =  0;
-
 			Car_mode = SelfDef;
-
 			break;
 		default:
 			break;
 		}
 	}
-	break;
-	case 9:  // ChkCCD
+	break;//end of Go
+	case 4:  // ChkCCD
 	{
 		if (Menu->Clear)
 		{
@@ -1948,7 +887,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 		myOLED_String(4, 1, "*");
 		myOLED_String(6, 10, "Go");
 		myOLED_String(4, 10, "ChkCCD");
-		myOLED_String(2, 10, "ChkSL");
+		myOLED_String(2, 10, "ChkRp");
 		myOLED_String(4, 50, "CheckCCD");
 
 		switch (Menu->choice_flag % 100 / 10)
@@ -1957,17 +896,15 @@ uint8 lcd_menu_display_init(menu * Menu)
 		{
 			myOLED_String(4, 40, "*");
 			Menu->Ready_Go =  0;
-
 			Car_mode = CheckCCD;
-
 		}
 		break;
 		default:
 			break;
 		}
 	}
-	break;
-	case 10:  //ChkSL
+	break;//end of ChkCCD
+	case 5: //ChkRp
 	{
 		if (Menu->Clear)
 		{
@@ -1976,35 +913,8 @@ uint8 lcd_menu_display_init(menu * Menu)
 		}
 		myOLED_String(4, 1, "*");
 		myOLED_String(6, 10, "ChkCCD");
-		myOLED_String(4, 10, "ChkSL");
-		myOLED_String(2, 10, "ChkRp");
-		myOLED_String(4, 50, "CheckSL");
-
-		switch (Menu->choice_flag % 100 / 10)
-		{
-		case 1:  //第二层
-			myOLED_String(4, 40, "*");
-			Menu->Ready_Go =  0;
-
-			Car_mode = CheckSL;
-
-			break;
-		default:
-			break;
-		}
-	}
-	break;
-	case 11: //ChkRp
-	{
-		if (Menu->Clear)
-		{
-			myOLED_Clear();
-			Menu->Clear = 0;
-		}
-		myOLED_String(4, 1, "*");
-		myOLED_String(6, 10, "ChkSL");
 		myOLED_String(4, 10, "ChkRp");
-		myOLED_String(2, 10, "ShiZ");
+		myOLED_String(2, 10, "Pid");
 		myOLED_String(4, 50, "CheckRp");
 
 		switch (Menu->choice_flag % 100 / 10)
@@ -2012,786 +922,16 @@ uint8 lcd_menu_display_init(menu * Menu)
 		case 1:  //第二层
 			myOLED_String(4, 40, "*");
 			Menu->Ready_Go =  0;
-
 			Car_mode = CheckRamp;
-
 			break;
 		default:
 			break;
 		}
 	}
-	break;
-#ifdef RemRoad_Control_Enable
-	case 12://ShiZ
-	{
-		if (Menu->Clear) { myOLED_Clear(); Menu->Clear = 0;}
-		myOLED_String(4, 1, "*");
-		myOLED_String(6, 10, "ChkRp"); myOLED_String(6, 50, "S_Z1"); myOLED_Dec(6, 87, S_Z1);
-		myOLED_String(4, 10, "ShiZ"); myOLED_String(5, 50, " SQ1"); myOLED_Dec(5, 87, SQ1);
-		myOLED_String(2, 10, "RenZ"); myOLED_String(4, 50, " SG1"); myOLED_Dec(4, 87, SG1);
-		myOLED_String(3, 50, "S_Z2"); myOLED_Dec(3, 87, S_Z2);
-		myOLED_String(2, 50, " SQ2"); myOLED_Dec(2, 87, SQ2);
-		myOLED_String(1, 50, " SG2"); myOLED_Dec(1, 87, SG2);
-
-		switch (Menu->choice_flag % 100 / 10)
-		{
-
-		case 1:  //S_Z1
-			myOLED_String(6, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(6, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (S_Z1 < 16)
-					{
-						S_Z1 += 1;
-					}
-					myOLED_String(6, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-
-					if (S_Z1 > 1)
-					{
-						S_Z1 -= 1;
-					}
-
-					myOLED_String(6, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				}
-				break;
-			}
-			break;
-		case 2: //SQ1
-		{
-			myOLED_String(5, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-			{
-				myOLED_String(5, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (SQ1 < 800)
-					{
-						SQ1 += 50;
-					}
-					myOLED_String(5, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-					if (SQ1 >= 50)
-					{
-						SQ1 -= 50;
-					}
-					myOLED_String(5, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				default:
-					break;
-				}
-			}
-			break;
-			default:
-				break;
-			}
-		}
-		break;
-		case 3: //SG1
-		{
-			myOLED_String(4, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-			{
-				myOLED_String(4, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (SG1 < 800)
-					{
-						SG1 += 50;
-					}
-
-					myOLED_String(4, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-					if (SG1 >= 50)
-					{
-						SG1 -= 50;
-					}
-					myOLED_String(4, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				default:
-					break;
-				}
-			}
-			break;
-			default:
-				break;
-			}
-		}
-		break;
-		case 4:  //S_Z2
-			myOLED_String(3, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(3, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (S_Z2 < 16)
-					{
-						S_Z2 += 1;
-					}
-					myOLED_String(3, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-
-					if (S_Z2 > 1)
-					{
-						S_Z2 -= 1;
-					}
-
-					myOLED_String(3, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				}
-				break;
-			}
-			break;
-		case 5:  //SQ2
-			myOLED_String(2, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(2, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (SQ2 < 800)
-					{
-						SQ2 += 50;
-					}
-					myOLED_String(2, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-
-					if (SQ2 >= 50)
-					{
-						SQ2 -= 50;
-					}
-
-					myOLED_String(2, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				}
-				break;
-			}
-			break;
-		case 6:  //SG2
-			myOLED_String(1, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(1, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (SG2 < 800)
-					{
-						SG2 += 50;
-					}
-					myOLED_String(1, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-
-					if (SG2 >= 50)
-					{
-						SG2 -= 50;
-					}
-
-					myOLED_String(1, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				}
-				break;
-			default:
-				break;
-			}
-			break;
-		default:
-			break;
-		}
-	}
-	break;
-	case 13://Po_D
-	{
-		if (Menu->Clear) { myOLED_Clear(); Menu->Clear = 0;}
-		myOLED_String(4, 1, "*");
-		myOLED_String(6, 10, "RenZ"); myOLED_String(6, 50, "P_D1"); myOLED_Dec(6, 87, P_D1);
-		myOLED_String(4, 10, "Po_D"); myOLED_String(5, 50, " PQ1"); myOLED_Dec(5, 87, PQ1);
-		myOLED_String(2, 10, "TeShu"); myOLED_String(4, 50, " PG1"); myOLED_Dec(4, 87, PG1);
-		myOLED_String(3, 50, "P_D2"); myOLED_Dec(3, 87, P_D2);
-		myOLED_String(2, 50, " PQ2"); myOLED_Dec(2, 87, PQ2);
-		myOLED_String(1, 50, " PG2"); myOLED_Dec(1, 87, PG2);
-
-		switch (Menu->choice_flag % 100 / 10)
-		{
-
-		case 1:  //P_D1
-			myOLED_String(6, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(6, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (P_D1 < 2)
-					{
-						P_D1 += 1;
-					}
-					myOLED_String(6, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-
-					if (P_D1 > 1)
-					{
-						P_D1 -= 1;
-					}
-
-					myOLED_String(6, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				}
-				break;
-			}
-			break;
-		case 2: //PQ1
-		{
-			myOLED_String(5, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-			{
-				myOLED_String(5, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (PQ1 < 800)
-					{
-						PQ1 += 50;
-					}
-					myOLED_String(5, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-					if (PQ1 >= 50)
-					{
-						PQ1 -= 50;
-					}
-					myOLED_String(5, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				default:
-					break;
-				}
-			}
-			break;
-			default:
-				break;
-			}
-		}
-		break;
-		case 3: //PG1
-		{
-			myOLED_String(4, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-			{
-				myOLED_String(4, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (PG1 < 800)
-					{
-						PG1 += 50;
-					}
-
-					myOLED_String(4, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-					if (PG1 >= 50)
-					{
-						PG1 -= 50;
-					}
-					myOLED_String(4, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				default:
-					break;
-				}
-			}
-			break;
-			default:
-				break;
-			}
-		}
-		break;
-		case 4:  //P_D2
-			myOLED_String(3, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(3, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (P_D2 < 2)
-					{
-						P_D2 += 1;
-					}
-					myOLED_String(3, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-
-					if (P_D2 > 1)
-					{
-						P_D2 -= 1;
-					}
-
-					myOLED_String(3, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				}
-				break;
-			}
-			break;
-		case 5:  //PQ2
-			myOLED_String(2, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(2, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (PQ2 < 800)
-					{
-						PQ2 += 50;
-					}
-					myOLED_String(2, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-
-					if (PQ2 >= 50)
-					{
-						PQ2 -= 50;
-					}
-
-					myOLED_String(2, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				}
-				break;
-			}
-			break;
-		case 6:  //PG2
-			myOLED_String(1, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(1, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (PG2 < 800)
-					{
-						PG2 += 50;
-					}
-					myOLED_String(1, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-
-					if (PG2 >= 50)
-					{
-						PG2 -= 50;
-					}
-
-					myOLED_String(1, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				}
-				break;
-			default:
-				break;
-			}
-			break;
-		default:
-			break;
-		}
-	}
-	break;
-	case 14://TeShu 特殊模块功能设定
-	{
-		if (Menu->Clear) { myOLED_Clear(); Menu->Clear = 0;}
-		myOLED_String(4, 1, "*");
-		myOLED_String(6, 10, "Po_D"); myOLED_String(6, 50, "Jiyi"); myOLED_Dec(6, 87, Jiyi);
-		myOLED_String(4, 10, "TeShu");/* myOLED_String(5, 50, "F_C"); myOLED_Dec(5, 87, F_C);*/
-		myOLED_String(2, 10, "Binay"); myOLED_String(4, 50, "C_J"); myOLED_Dec(4, 87, C_J);
-		myOLED_String(3, 50, "P_Y"); myOLED_Dec(3, 87, P_Y);
-		// myOLED_String(2, 50, "RNum"); myOLED_Dec(2, 87, RNum);
-
-		switch (Menu->choice_flag % 100 / 10)
-		{
-		case 1: //Jiyi
-		{
-			myOLED_String(6, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(6, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (1 != Jiyi)
-					{
-						Jiyi = 1;
-					}
-					myOLED_String(6, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-
-					if (0 != Jiyi)
-					{
-						Jiyi = 0;
-					}
-
-					myOLED_String(6, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				default:
-					break;
-				}
-				break;
-			default:
-				break;
-			}
-
-		}
-		break;
-		// case 2: //F_C
-		// {
-		// 	myOLED_String(5, 40, "*");
-		// 	switch (Menu->choice_flag % 10)
-		// 	{
-		// 	case 0:  // 第三层
-		// 		break;
-		// 	case 1:  //
-		// 	{
-		// 		myOLED_String(5, 77, "*");
-		// 		switch (Menu->add_sub)
-		// 		{
-		// 		case 0:
-		// 			break;
-		// 		case 1:
-		// 			if (F_C < 100)
-		// 			{
-		// 				F_C += 2;
-		// 			}
-		// 			myOLED_String(5, 121, "+");
-		// 			Menu->add_sub = 0;
-		// 			break;
-		// 		case 2:
-		// 			if (F_C >= 2)
-		// 			{
-		// 				F_C -= 2;
-		// 			}
-		// 			myOLED_String(5, 121, "-");
-		// 			Menu->add_sub = 0;
-		// 			break;
-		// 		default:
-		// 			break;
-		// 		}
-		// 	}
-		// 	break;
-		// 	default:
-		// 		break;
-		// 	}
-		// }
-		// break;
-		case 3: //C_J
-		{
-			myOLED_String(4, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-			{
-				myOLED_String(4, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (1 != C_J)
-					{
-						C_J = 1;
-					}
-					myOLED_String(4, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-					if (0 != C_J)
-					{
-						C_J = 0;
-					}
-					myOLED_String(4, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				default:
-					break;
-				}
-			}
-			break;
-			default:
-				break;
-			}
-		}
-		break;
-		case 4: //P_Y
-		{
-			myOLED_String(3, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-			{
-				myOLED_String(3, 77, "*");
-				switch (Menu->add_sub)
-				{
-				case 0:
-					break;
-				case 1:
-					if (P_Y < 5)
-					{
-						P_Y += 1;
-					}
-					myOLED_String(3, 121, "+");
-					Menu->add_sub = 0;
-					break;
-				case 2:
-					if (P_Y >= 1)
-					{
-						P_Y -= 1;
-					}
-					myOLED_String(3, 121, "-");
-					Menu->add_sub = 0;
-					break;
-				default:
-					break;
-				}
-			}
-			break;
-			default:
-				break;
-			}
-		}
-		break;
-		// case 5: //RNum
-		// {
-		// 	myOLED_String(2, 40, "*");
-		// 	switch (Menu->choice_flag % 10)
-		// 	{
-		// 	case 0:  // 第三层
-		// 		break;
-		// 	case 1:  //
-		// 	{
-		// 		myOLED_String(2, 77, "*");
-		// 		switch (Menu->add_sub)
-		// 		{
-		// 		case 0:
-		// 			break;
-		// 		case 1:
-		// 			if (RNum < 3)
-		// 			{
-		// 				RNum += 1;
-		// 			}
-		// 			myOLED_String(2, 121, "+");
-		// 			Menu->add_sub = 0;
-		// 			break;
-		// 		case 2:
-		// 			if (RNum > 1)
-		// 			{
-		// 				RNum -= 1;
-		// 			}
-		// 			myOLED_String(2, 121, "-");
-		// 			Menu->add_sub = 0;
-		// 			break;
-		// 		default:
-		// 			break;
-		// 		}
-		// 	}
-		// 	break;
-		// 	default:
-		// 		break;
-		// 	}
-		// }
-		// break;
-		default:
-			break;
-		}
-	}
-	break;
-#endif
-	case 15://Binay  CCD二值化设定
-	{
-		if (Menu->Clear) { myOLED_Clear(); Menu->Clear = 0;}
-		myOLED_String(4, 1, "*");
-		myOLED_String(6, 10, "TeShu"); myOLED_String(6, 50, "B_T"); myOLED_Dec(6, 87, B_T);
-		myOLED_String(4, 10, "Binay"); myOLED_String(5, 50, "b_m"); myOLED_Dec(5, 87, b_m);
-		myOLED_String(2, 10, "Shudu1"); myOLED_String(4, 50, "B_M"); myOLED_Dec(4, 87, B_M);
-		myOLED_String(3, 50, "Sght"); myOLED_Dec(3, 87, Sght);
-
-		switch (Menu->choice_flag % 100 / 10)
-		{
-		case 1: //B_T
-			myOLED_String(6, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(6, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(B_T, 450, 250);
-				break;
-			}
-			break;
-		case 2: //b_m
-			myOLED_String(5, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(5, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(b_m, 450, 250);
-				break;
-			}
-			break;
-		case 3: //B_M
-			myOLED_String(4, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(4, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(B_T, 450, 250);
-				break;
-			}
-			break;
-		case 4: //Sght
-			myOLED_String(3, 40, "*");
-			switch (Menu->choice_flag % 10)
-			{
-			case 0:  // 第三层
-				break;
-			case 1:  //
-				myOLED_String(3, 77, "*");
-				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
-				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(Sght, 450, 250);
-				break;
-			}
-			break;
-		default:
-			break;
-		}
-	}
-	break;
+	break;//end of ChkRp
 	default :
 	{
-		Menu->choice_flag = 0;
+		Menu->choice_flag  %= 600;
 	}
 	break;
 	}
@@ -2799,6 +939,57 @@ uint8 lcd_menu_display_init(menu * Menu)
 	return Menu->Ready_Go;
 }
 
+
+/*************************************************************************
+*                             我要过六级
+*  函数名称:lcd_menu_display_end
+*  功能说明: 显示菜单
+*  参数说明:
+*
+*  函数返回:
+*  修改时间:2016-7-4
+*  备		 注:
+*************************************************************************/
+void lcd_menu_display_end(menu * Menu)
+{
+	Menu->Ready_Go =  1;
+	if (Menu->Clear) { myOLED_Clear(); Menu->Clear = 0;}
+	myOLED_String(4, 1, "*");
+	myOLED_String(4, 10, "Store Parameter?"); myOLED_String(5, 40, "Yes"); myOLED_String(4, 87, "Choice");
+	myOLED_String(3, 40, "No"); myOLED_String(3, 87, "Choice");
+	switch (Menu->choice_flag % 100 / 10)
+	{
+	case 1: //第二层	P
+		myOLED_String(5, 40, "*");
+		switch (Menu->choice_flag % 10)
+		{
+		case 0:  // 第三层
+			break;
+		case 1:  //
+			myOLED_String(5, 77, "*");
+			Menu->Ready_Go =  0;
+
+			break;
+		}
+		break;
+	case 2:  ////第二层	I
+		myOLED_String(3, 40, "*");
+		switch (Menu->choice_flag % 10)
+		{
+		case 0:  // 第三层
+			break;
+		case 1:  //
+			myOLED_String(3, 77, "*");
+			Menu->Ready_Go =  0;
+
+			break;
+		}
+		break;
+	default:
+		break;
+	}
+
+}
 
 
 

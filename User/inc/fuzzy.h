@@ -10,13 +10,13 @@
 #define 	PM		 5
 #define 	PB		 6
 
-#define 	RNB		 -51
-#define 	RNM		 -34
-#define 	RNS		 -17
+#define 	RNB		 -52
+#define 	RNM		 -30
+#define 	RNS		 -15
 #define 	RZO		  0
-#define 	RPS		  17
-#define 	RPM		  34
-#define 	RPB		  51
+#define 	RPS		        15
+#define 	RPM		  30
+#define 	RPB		        52
 
 #define 	EC_RNB		 -12
 #define 	EC_RNM		 -8
@@ -38,9 +38,12 @@ typedef struct
 	float ki;
 	float kp;
 	float kd;
+	uint8 id;
 } Fuzzysuite;
 
 extern Fuzzysuite ServoFuzzy;
+extern float FRP[7][7];
+extern float FRD[7][7];
 
 void Fuzzy_Init();
 void Fuzzy_Cal(Fuzzysuite *Fuzzy, float error, float ec);

@@ -331,6 +331,8 @@ void myCCD_CCD1_GetLineError(CCD_Info *CCD1_info, Speed_Info *Speed_info)
 {
   int16 CentralLinePixel_Now = CCD1_info->CentralLine[0];//从上次的中点开始搜线
   int16 LinePixel_Temp = CentralLinePixel_Now;
+  //uint8 Cross_Flag_buf = CCD1_info->Cross_Flag;
+  //uint8 AddLine_Flag_buf = CCD1_info->AddLine_Flag;
 
   int16 Left_temp = 0, Right_temp = 0;
   int16 ii = 0;
@@ -444,8 +446,8 @@ void myCCD_CCD1_GetLineError(CCD_Info *CCD1_info, Speed_Info *Speed_info)
             && (1 == CCD1_info->PixelBinary[LinePixel_Temp + 3]))//不是坡道则为十字道或者全黑丢线
       {
         CCD1_info->Cross_Flag = 1;
-        //CCD1_info->LeftLine[0] = Left_temp;
-        //CCD1_info->RightLine[0] = Right_temp;
+        CCD1_info->LeftLine[0] = CCD1_info->LeftLine[2];
+        CCD1_info->RightLine[0] = CCD1_info->RightLine[2];
 
       }
       else

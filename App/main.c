@@ -25,11 +25,11 @@ void main()
 #if IIC_ENABLE
       Imu_calculate();
 #endif
-       if (IIC_Count >= 20000)
+      if (IIC_Count >= 20000)
       {
-            Init_TLY();
-            IIC_Count = 0;
-       }
+        Init_TLY();
+        IIC_Count = 0;
+      }
       //Send_Steer_Info();
     }
 
@@ -58,7 +58,6 @@ void main()
     if (TIME0flag_100ms == 1)
     {
       TIME0flag_100ms = 0 ;
-      // printf("%d\n", Menu.Tun_Res );
       Send_CCD_Imag();
 
       //注意：此处应加上起跑线检测计数

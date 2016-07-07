@@ -52,7 +52,7 @@ void Init_all()
   Init_quad();                                 //初始化正交解码器
 
   gpio_init(PTA16, GPO, 0);
- 
+
 
 
   Init_PORT();
@@ -61,9 +61,7 @@ void Init_all()
 
   myOLED_Init();
 
-  //mySD_Init_Parameter();
-  //DELAY_MS(100);  //用于显示SD卡信息初始化情况
-  //myOLED_Clear();
+  // mySD_Init_Parameter();
 
   EnableInterrupts;//中断允许
 
@@ -72,21 +70,22 @@ void Init_all()
 #endif
 
   /***********  //lcd菜单初始化选择，注意*******/
- /* while (lcd_menu_display_init(&Menu))
-  {
-    if (1 == Parameter_info.OLED_NoAction_Flag) //当按键没有反应的时候计时退出
-    {
-      if (Parameter_info.OLED_NoAction_Counter > 0)
-      {
-        Parameter_info.OLED_NoAction_Counter--;
-      }
-      else if (Parameter_info.OLED_NoAction_Counter <= 0)
-      {
-        break;//直接跳出OLED等待
-      }
-    }
-  }
-  mySDWrite_Para();*/
+  /* while (lcd_menu_display_init(&Menu))
+   {
+     if (1 == Parameter_info.OLED_NoAction_Flag) //当按键没有反应的时候计时退出
+     {
+       if (Parameter_info.OLED_NoAction_Counter > 0)
+       {
+         Parameter_info.OLED_NoAction_Counter--;
+       }
+       else if (Parameter_info.OLED_NoAction_Counter <= 0)
+       {
+         break;//直接跳出OLED等待
+       }
+     }
+   }*/
+  // mySDWrite_Para();
+  // mySD_RunData_Init();
   Init_PIT0();
   Init_PIT1();   //初始化电机控制定时
   DELAY_MS(1000);

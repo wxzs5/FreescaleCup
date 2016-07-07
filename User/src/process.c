@@ -53,7 +53,8 @@ void   Steer_Process()
 	}
 	else if ( ( CCD1_info.Cross_Flag == 1 ) || ( Gyro_info.RampUpDown == 1 ) )
 	{
-		Center_Board_Value = 64;
+		//Center_Board_Value = 64;
+		Center_Board_Value = (CCD1_info.LeftLine[0] + CCD1_info.RightLine[0]) / 2;
 		Bell_On;
 	}
 
@@ -117,8 +118,8 @@ void Send_Steer_Info()    //发送给匿名上位机
 		push(1, 64);
 		push(2, (int16)(PidServo.kpi * 1000));
 		push(3, (int16)(PidServo.kdi * 1000));
-		push(4, (int16)(PidServo.outP * 1000));
-		push(5, (int16)(PidServo.out));
+		push(4, (int16)(PidServo.error));
+		push(5, (int16)(PidServo.temp));
 		push(6, (int16)(ServoFuzzy.outP * 1000));
 		push(7, (int16)(ServoFuzzy.outD * 1000));
 		push(8, 1);

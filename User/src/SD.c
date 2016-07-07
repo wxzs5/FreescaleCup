@@ -50,14 +50,14 @@ void mySD_Init_Parameter(void)
     return;
   }
 
-  size = f_size(&Car_Parmeter_file);                   //获取文件的大小
-
-  if (size > Parameter_Size)size = Parameter_Size;  //防止溢出
+  // size = f_size(&Car_Parmeter_file);                   //获取文件的大小
+  // if (size > Parameter_Size)size = Parameter_Size;  //防止溢出
 
   f_lseek(&Car_Parmeter_file, 0);                      //把指针指向文件顶部
   f_read (&Car_Parmeter_file, Parameters, Parameter_Size, &sizetmp);   //读取
   mySD_Get_Parameter();
-
+  DELAY_MS(200);  //用于显示SD卡信息初始化情况
+  myOLED_Clear();
 }
 
 
@@ -105,13 +105,13 @@ void mySD_Load_Parameter(void)
   Parameters[4] = (int16)(PidServo.kd * 1000) / 256;
   Parameters[5] = (int16)(PidServo.kd * 1000) % 256;
 
-  Parameters[6] = (int16)(PidServo.kp * 1000) / 256;
-  Parameters[7] = (int16)(PidServo.kp * 1000) % 256;
-  Parameters[8] = (int16)(PidServo.ki * 1000) / 256;
-  Parameters[9] = (int16)(PidServo.ki * 1000) % 256;
-  Parameters[10] = (int16)(PidServo.kd * 1000) / 256;
-  Parameters[11] = (int16)(PidServo.kd * 1000) % 256;
-
+  Parameters[6] = (int16)(PidSpeedLeft.kp * 1000) / 256;
+  Parameters[7] = (int16)(PidSpeedLeft.kp * 1000) % 256;
+  Parameters[8] = (int16)(PidSpeedLeft.ki * 1000) / 256;
+  Parameters[9] = (int16)(PidSpeedLeft.ki * 1000) % 256;
+  Parameters[10] = (int16)(PidSpeedLeft.kd * 1000) / 256;
+  Parameters[11] = (int16)(PidSpeedLeft.kd * 1000) % 256;
+  //期望速度
   Parameters[12] = (uint16)(Speed_Expect) / 256;
   Parameters[13] = (uint16)(Speed_Expect) % 256;
   Parameters[14] = Parameter_info.SD_Data_name_Change;
@@ -138,7 +138,7 @@ void mySD_Load_Parameter(void)
 *  参数说明:
 *
 *  函数返回:
-*  修改时间:
+*  修改时间:2016-7-3
 *  备     注:
 *************************************************************************/
 void mySD_Get_Parameter(void)
@@ -153,7 +153,168 @@ void mySD_Get_Parameter(void)
   PidSpeedRight.kp = PidSpeedLeft.kp;
   PidSpeedRight.ki = PidSpeedLeft.ki;
   PidSpeedRight.kd = PidSpeedLeft.kd;
-  
+
   Speed_Expect = (float)(Parameters[12] << 8 | Parameters[13]);
   Parameter_info.SD_Data_name_Change = Parameters[14] ;
 }
+
+/*************************************************************************
+*                             我要过六级
+*  函数名称:mySD_Load_Parameter
+*  功能说明:初始化小车运行数据文件
+*  参数说明:
+*
+*  函数返回:
+*  修改时间:2016-7-4
+*  备     注:
+*************************************************************************/
+void mySD_RunData_Init()
+{
+  Parameter_info.SD_Data_name_Change = (Parameter_info.SD_Data_name_Change + 1) % 10;
+  switch (Parameter_info.SD_Data_name_Change)
+  {
+  case 0:
+    f_unlink("0:/RunData1.txt");
+    res = f_open(&Car_RunData_file, "0:/RunData1.txt", FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
+    break;
+  case 1:
+    f_unlink("0:/RunData2.txt");
+    res = f_open(&Car_RunData_file, "0:/RunData2.txt", FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
+    break;
+  case 2:
+    f_unlink("0:/RunData3.txt");
+    res = f_open(&Car_RunData_file, "0:/RunData3.txt", FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
+    break;
+  case 3:
+    f_unlink("0:/RunData4.txt");
+    res = f_open(&Car_RunData_file, "0:/RunData4.txt", FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
+    break;
+  case 4:
+    f_unlink("0:/RunData5.txt");
+    res = f_open(&Car_RunData_file, "0:/RunData5.txt", FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
+    break;
+  case 5:
+    f_unlink("0:/RunData6.txt");
+    res = f_open(&Car_RunData_file, "0:/RunData6.txt", FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
+    break;
+  case 6:
+    f_unlink("0:/RunData7.txt");
+    res = f_open(&Car_RunData_file, "0:/RunData7.txt", FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
+    break;
+  case 7:
+    f_unlink("0:/RunData8.txt");
+    res = f_open(&Car_RunData_file, "0:/RunData8.txt", FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
+    break;
+  case 8:
+    f_unlink("0:/RunData9.txt");
+    res = f_open(&Car_RunData_file, "0:/RunData9.txt", FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
+    break;
+  case 9:
+    f_unlink("0:/RunData0.txt");
+    res = f_open(&Car_RunData_file, "0:/RunData0.txt", FA_OPEN_ALWAYS | FA_WRITE | FA_READ);
+    break;
+  default:
+    res = 25;
+    break;
+  }
+  if ( res == FR_DISK_ERR)
+  {
+    myOLED_Clear();
+    myOLED_String(4, 10, "No SD Card!");
+    return;
+  }
+  else if ( res == FR_OK )
+  {
+    myOLED_Clear();
+    myOLED_String(4, 10, "Rundata successful!");
+    f_lseek(&Car_RunData_file, 0);                      //把指针指向文件顶部
+  }
+  else if (res == 25)
+  {
+    myOLED_Clear();
+    myOLED_String(4, 10, "not choice Rundata!");
+  }
+  else
+  {
+    myOLED_Clear();
+    myOLED_String(4, 10, "SD return Invalid value!");
+    return;
+  }
+  DELAY_MS(200);
+}
+
+/*************************************************************************
+*                             我要过六级
+*  函数名称:mySD_Write_CCD
+*  功能说明:初始化小车运行数据文件
+*  参数说明:
+*
+*  函数返回:
+*  修改时间:2016-7-4
+*  备     注:
+*************************************************************************/
+void mySD_Write_CCD(CCD_Info *ccd)
+{
+  uint8 ii = 0;
+  f_puts("\n CCD Info\n", &Car_RunData_file);
+  f_putc(ccd->ID, &Car_RunData_file);
+  f_putc(((uint8)ccd->CentralLine[0]), &Car_RunData_file);
+  f_putc(ccd->AddLine_Flag, &Car_RunData_file);
+  f_putc(ccd->LossLine_Flag, &Car_RunData_file);
+  f_putc(ccd->LeftLossLineFlag, &Car_RunData_file);
+  f_putc(ccd->RightLossLineFlag, &Car_RunData_file);
+  f_putc(ccd->Cross_Flag, &Car_RunData_file);
+  f_putc(ccd->CCD_Ready_Num, &Car_RunData_file);
+
+  for (ii = 0; ii < 16; ii++)
+  {
+    ccd->CCD_PhotoValue[ii] =   (ccd->PixelBinary[7 + 8 * ii] << 7)
+                                | (ccd->PixelBinary[6 + 8 * ii] << 6)
+                                | (ccd->PixelBinary[5 + 8 * ii] << 5)
+                                | (ccd->PixelBinary[4 + 8 * ii] << 4)
+                                | (ccd->PixelBinary[3 + 8 * ii] << 3)
+                                | (ccd->PixelBinary[2 + 8 * ii] << 2)
+                                | (ccd->PixelBinary[1 + 8 * ii] << 1)
+                                | (ccd->PixelBinary[0 + 8 * ii])
+                                ;
+  }
+
+  f_puts(ccd->CCD_PhotoValue, &Car_RunData_file);
+  f_sync(&Car_RunData_file);
+}
+
+/*************************************************************************
+*                             我要过六级
+*  函数名称:mySD_Write_Contr_Data
+*  功能说明:初始化小车运行数据文件
+*  参数说明:
+*
+*  函数返回:
+*  修改时间:2016-7-4
+*  备     注:
+*************************************************************************/
+void mySD_Write_Contr_Data(Pidsuite *Pid)
+{
+  int16 temp = 0;
+  f_puts("\n Pid output info\n", &Car_RunData_file);
+  f_putc(Pid->ID, &Car_RunData_file);
+  temp = (int16)(Pid->kp * 1000);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(Pid->ki * 1000);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(Pid->kd * 1000);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(Pid->error);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(Pid->outP);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(Pid->outI);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(Pid->outD);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(Pid->out);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  f_sync(&Car_RunData_file);
+}
+
+
