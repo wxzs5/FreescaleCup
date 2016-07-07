@@ -33,9 +33,9 @@ typedef struct
 	float ecMeShip[2];
 	int8 ecstart;
 	float outP;
-	float outI;
+	float outSpeed;
 	float outD;
-	float ki;
+	float ks;
 	float kp;
 	float kd;
 	uint8 id;
@@ -44,6 +44,7 @@ typedef struct
 extern Fuzzysuite ServoFuzzy;
 extern float FRP[7][7];
 extern float FRD[7][7];
+extern float FR_Speed[7][7];
 
 void Fuzzy_Init();
 void Fuzzy_Cal(Fuzzysuite *Fuzzy, float error, float ec);

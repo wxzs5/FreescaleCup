@@ -57,7 +57,10 @@ void   Steer_Process()
 		Center_Board_Value = (CCD1_info.LeftLine[0] + CCD1_info.RightLine[0]) / 2;
 		Bell_On;
 	}
-
+	if (Gyro_info.RampUpDown == 1)
+	{
+		Center_Board_Value = 64;
+	}
 	Calservo = SERVOCENTER + (int32) (Pid_Calculate_Servo(&PidServo, Center_Board_Value, 64));
 	if (!stop_flag) ftm_pwm_duty(FTM3, SERVO, Calservo);
 
@@ -86,9 +89,8 @@ void   Motor_Process()
 
 		//if ( ( K_Speed_Diff < 0.01 ) && ( K_Speed_Diff > -0.01 ) ) //差速很小的时候就不差速了
 		//	K_Speed_Diff = 0;
-
-		Speed_Expect_L = Speed_Expect * ( 1 - K_Speed_Diff );
-		Speed_Expect_R = Speed_Expect * ( 1 + K_Speed_Diff );
+		Speed_Expect_L = ( Speed_Expect + (int32)(ServoFuzzy.outSpeed) ) * ( 1 - K_Speed_Diff );
+		Speed_Expect_R = ( Speed_Expect + (int32)(ServoFuzzy.outSpeed) ) * ( 1 + K_Speed_Diff );
 
 		Cal_Speed_L = Pid_Calculate_Speed(&PidSpeedLeft, Speed_Val1_L, Speed_Expect_L);
 		Cal_Speed_R = Pid_Calculate_Speed(&PidSpeedRight, Speed_Val2_R, Speed_Expect_R);
@@ -138,7 +140,7 @@ void Send_Motor_Info()    //发送电机信息匿名上位机
 {
 	if (Tune_Mode == 2)  //Send Data to ANO Lab
 	{
-		push(0, (int16)Speed_Expect);
+		push(0, (int16)( Speed_Expect + (int32)(ServoFuzzy.outSpeed) ) );
 		push(1, (int16)Speed_Expect_L);
 		push(2, (int16)(Speed_Expect_R));
 		push(3, (int16)(Speed_Average));
@@ -158,7 +160,7 @@ void Send_Motor_Info()    //发送电机信息匿名上位机
 		push(4, (int16)(Angle_Servo * 5729.6));
 		push(5, (int16)(PidServo.temp * 100));
 		push(6, (int16)IIC_Count);
-		push(7, (int16)Speed_Expect);
+		push(7, (int16)(Gyro_info.RampUpDown * 1000 ));
 		push(8, 3);
 		Data_Send((uint8 *)SendBuf);
 	}

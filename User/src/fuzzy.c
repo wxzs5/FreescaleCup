@@ -38,23 +38,35 @@ float FRD[7][7] = {
                   {-3,  -1,  -1,   1,   1,   3,   3,}
 };*/
 float FRP[7][7] = {
-  { 5,    4,   3,    2,   0,  -2,  -3,},
+  { 4,    4,   3,    2,   0,  -2,  -3,},
   { 4,    3,   3,    1,  -1,  -3,  -3,},
   { 3,    2,   -2,  -3,  -3,  -1,  -1,},
   { 0,   -2,  -3,  -4,  -3,  -2,    0,},
   { -1,  -1,  -3,  -3,  -2,   2,    3,},
   { -3,  -3,  -1,   1,   3,   3,    4,},
-  { -3,  -2,   0,   2,   3,   4,    5,}
+  { -3,  -2,   0,   2,   3,   4,    4,}
 };
+
+
+float FR_Speed[7][7] = {
+  { -5,    0,    -15,      5,     5,      0,     15,},
+  { -5,   -5,     5,     10,      5,     -2,    10,},
+  {  0,   -2,   -10,   -15,     -2,    -2,    5,},
+  {  5,    5,      5,     20,      5,     3,     5,},
+  {  5,    5,      5,    -15,    -10,   -2,    0,},
+  {  10,  -2,    5,     10,      5,      -5,   -5,},
+  { -15,  0,     5,      5,      -15,    0,    -5,}
+};
+
 
 void Fuzzy_Init()
 {
   ServoFuzzy.errstart       = 0;
   ServoFuzzy.ecstart        = 0;
   ServoFuzzy.outP           = 0;
-  ServoFuzzy.outI            = 0;
+  ServoFuzzy.outSpeed   = 0;
   ServoFuzzy.outD          = 0;
-  ServoFuzzy.ki               = 0;
+  ServoFuzzy.ks               = 1;
   ServoFuzzy.kp              = 1;
   ServoFuzzy.kd              = 1;
   ServoFuzzy.id              = 0;
@@ -64,6 +76,7 @@ void Fuzzy_Cal(Fuzzysuite *Fuzzy, float error, float ec)
 {
   float KP_Fuzzy[4] = {0, 0, 0, 0};
   float KD_Fuzzy[4] = {0, 0, 0, 0};
+  float Speed_Fuzzy[4] = {0, 0, 0, 0};
   if (error <= RNB)
   {
     Fuzzy->errstart = NB;
@@ -182,6 +195,11 @@ void Fuzzy_Cal(Fuzzysuite *Fuzzy, float error, float ec)
                              + Fuzzy->errMeShip[0] * Fuzzy->ecMeShip[1] * FRD[Fuzzy->errstart][Fuzzy->ecstart + 1]
                              + Fuzzy->errMeShip[1] * Fuzzy->ecMeShip[0] * FRD[Fuzzy->errstart + 1][Fuzzy->ecstart]
                             );
+  Fuzzy->outSpeed = Fuzzy->ks * (Fuzzy->errMeShip[0] * Fuzzy->ecMeShip[0] * FR_Speed[Fuzzy->errstart][Fuzzy->ecstart]
+                                 + Fuzzy->errMeShip[1] * Fuzzy->ecMeShip[1] * FR_Speed[Fuzzy->errstart + 1][Fuzzy->ecstart + 1]
+                                 + Fuzzy->errMeShip[0] * Fuzzy->ecMeShip[1] * FR_Speed[Fuzzy->errstart][Fuzzy->ecstart + 1]
+                                 + Fuzzy->errMeShip[1] * Fuzzy->ecMeShip[0] * FR_Speed[Fuzzy->errstart + 1][Fuzzy->ecstart]
+                                );
 }
 
 #include "include.h"

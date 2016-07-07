@@ -36,7 +36,9 @@ void Init2100()
   i2c_delay();
   Gyro_info.counter = 0;
   Gyro_info.Gyro_Sum = 0;
-  Gyro_info.RampThresholdValue = 3000;
+  Gyro_info.RampThresholdValue = 2000;
+  Gyro_info.Need_Delay_Counter = 0;
+
 }
 /*!
  *  @brief      Init8700()函数
@@ -130,7 +132,7 @@ void Imu_calculate()
   Gyro_read();
   Acc_read();
 
-//z轴四次平均  
+//z轴四次平均
   gyro_z_tmp[gyro_z_counter] = Gyro_data.z;
   gyro_z_counter++;
   if (gyro_z_counter >= 4)
@@ -150,32 +152,65 @@ void Imu_calculate()
   if (Gyro_info.counter == GYRO_LENGTH)
     Gyro_info.counter = 0;
 
-  for (int i = 0; i < GYRO_LENGTH; i++) //50长度
+  for (int i = 0; i < GYRO_LENGTH; i++) //70长度
     Gyro_info.Gyro_Sum += Gyro_info.Gyroscope_Fifo[i];
   Gyro_info.Gyro_Sum - 65; //0偏
 
-    if((Gyro_info.Gyro_Sum > Gyro_info.RampThresholdValue )||(Gyro_info.Gyro_Sum < -Gyro_info.RampThresholdValue)) {
-        Bell_On;
-        Gyro_info.RampUpDown = 1;
-      }
-    else {
+  if (Gyro_info.Need_Delay_Counter > 0)
+    Gyro_info.Need_Delay_Counter--;
+  if ( ( Gyro_info.Gyro_Sum > Gyro_info.RampThresholdValue ) &&  //第一次上坡
+       ( Gyro_info.Ramp_Over_0_1st == 0 ) &&
+       ( Gyro_info.Ramp_Less_0 == 0) &&
+       ( Gyro_info.Ramp_Over_0_2nd == 0 ) &&
+       ( Gyro_info.Need_Delay_Counter == 0 ) )
+  {
+    Gyro_info.RampUpDown = 1;
+    Gyro_info.Ramp_Over_0_1st = 1;
+    Gyro_info.Ramp_Less_0 = 0;
+    Gyro_info.Ramp_Over_0_2nd = 0;
+  }
+  if ( ( Gyro_info.Gyro_Sum < -Gyro_info.RampThresholdValue) &&
+       ( Gyro_info.Ramp_Over_0_1st == 1) &&
+       ( Gyro_info.Ramp_Less_0 == 0) &&
+       ( Gyro_info.Ramp_Over_0_2nd == 0) )
+  {
+    Gyro_info.RampUpDown = 0;
+    Gyro_info.Ramp_Over_0_1st = 1;
+    Gyro_info.Ramp_Less_0 = 1;
+    Gyro_info.Ramp_Over_0_2nd = 0;
 
-      Bell_Off;
-      Gyro_info.RampUpDown = 0;
-    }
+  }
+  if ( ( Gyro_info.Gyro_Sum > Gyro_info.RampThresholdValue) &&
+       ( Gyro_info.Ramp_Over_0_1st == 1) &&
+       ( Gyro_info.Ramp_Less_0 == 1) &&
+       (Gyro_info.Ramp_Over_0_2nd == 0))
+  {
+    Gyro_info.RampUpDown = 0;
+    Gyro_info.Ramp_Over_0_1st = 0;
+    Gyro_info.Ramp_Less_0 = 0;
+    Gyro_info.Ramp_Over_0_2nd = 0;
+    Gyro_info.Need_Delay_Counter  = 200;
+  }
+  if (( Gyro_info.Ramp_Over_0_1st == 0) &&
+      ( Gyro_info.Ramp_Less_0 == 0) &&
+      ( Gyro_info.Ramp_Over_0_2nd == 0) )
+  {
+    Gyro_info.RampUpDown = 0;
+  }
 
+}
 ///////////////////////////////////////////////////////
 
-  /* Q_angle.gyro =Q_angle.result + (0.005*Gyro_data.y);
-   if(Acc_data.z>17090)
-       Acc_data.z=17090;
-   if(Acc_data.z<1)
-       Acc_data.z=1;
-   Q_angle.acc = acosf(Acc_data.z/17100.0)*57.29578;
-   if (Acc_data.x > 0.0f)
-   {
-     Q_angle.acc =  (-1) * Q_angle.acc;
-   }
-   Q_angle.result = (Q_angle.acc*0.0) + Q_angle.gyro*1;
-  */
-}
+/* Q_angle.gyro =Q_angle.result + (0.005*Gyro_data.y);
+ if(Acc_data.z>17090)
+     Acc_data.z=17090;
+ if(Acc_data.z<1)
+     Acc_data.z=1;
+ Q_angle.acc = acosf(Acc_data.z/17100.0)*57.29578;
+ if (Acc_data.x > 0.0f)
+ {
+   Q_angle.acc =  (-1) * Q_angle.acc;
+ }
+ Q_angle.result = (Q_angle.acc*0.0) + Q_angle.gyro*1;
+*/
+

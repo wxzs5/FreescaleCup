@@ -15,7 +15,7 @@
 
 #define 	SPEED_FIFO_LENGTH		(20)
 #define     Line_SIZE   			(45)		//存储左右边界线，中线等的队列长度
-#define 	GYRO_LENGTH			(70)		//存储陀螺仪的AD电压值
+#define 	GYRO_LENGTH			(50)		//存储陀螺仪的AD电压值
 
 #define QRANGE(x)       ((x)<(0) ? ((Line_SIZE)-(1)) : ( (x)>((Line_SIZE)-(1)) ? (0):(x) ))   //用于限定队列循环指针的值
 #define MYRANGE(x,max,min)      ((x) =((x)<(min) ? (min) : ( (x)>(max) ? (max):(x) )))  //限定范围
@@ -135,7 +135,10 @@ typedef struct Gyro_Info_//------------------------------------------------陀�
 	int16 counter;   //记录队列尾
 	int16 RampThresholdValue;    //上下坡的阈值
 	uint8 RampUpDown;		//记录检测到陀螺仪电压突变的次数
-
+	uint8 Ramp_Over_0_1st;
+	uint8 Ramp_Less_0;
+	uint8 Ramp_Over_0_2nd;
+	uint32 Need_Delay_Counter;
 } Gyro_Info;
 
 typedef struct Speed_Info_//-------------------------------------------------速度

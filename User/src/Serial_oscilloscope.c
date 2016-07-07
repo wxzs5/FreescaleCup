@@ -223,6 +223,12 @@ void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num)
 			ServoFuzzy.kp = 0.001 * ( temp - 30000);
 			if (ServoFuzzy.kp < 0) ServoFuzzy.kp = -(30 + ServoFuzzy.kp);
 		}
+		temp = ( (uint16)(*(data_buf + 10) << 8) | *(data_buf + 11) );
+		if (temp != 65535)
+		{
+			ServoFuzzy.ks = 0.001 * ( temp - 30000);
+			if (ServoFuzzy.ks < 0) ServoFuzzy.ks = -(30 + ServoFuzzy.ks);
+		}
 		temp = ( (uint16)(*(data_buf + 14) << 8) | *(data_buf + 15) );
 		if (temp != 65535)
 		{
