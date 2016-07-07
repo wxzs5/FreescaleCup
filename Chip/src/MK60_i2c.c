@@ -17,9 +17,12 @@
 #include "common.h"
 #include "MK60_port.h"
 #include "MK60_i2c.h"
-
+#include "include.h"
 unsigned char MasterTransmission;
 unsigned char SlaveID;
+
+uint32 IIC_Count = 0;
+
 
 I2C_MemMapPtr I2CN[2] = {I2C0_BASE_PTR, I2C1_BASE_PTR}; //定义两个指针数组保存 I2CN 的地址
 
@@ -47,11 +50,13 @@ I2C_MemMapPtr I2CN[2] = {I2C0_BASE_PTR, I2C1_BASE_PTR}; //定义两个指针数�
 #define i2c_DisableAck(I2Cn)        I2C_C1_REG(I2CN[I2Cn]) |= I2C_C1_TXAK_MASK
 
 //等待 I2C_S
-#define i2c_Wait(I2Cn)              while(( I2C_S_REG(I2CN[I2Cn]) & I2C_S_IICIF_MASK)==0) {} \
-                                    I2C_S_REG(I2CN[I2Cn]) |= I2C_S_IICIF_MASK;
+#define i2c_Wait(I2Cn)              IIC_Count = 0 ;\
+                                     while((( I2C_S_REG(I2CN[I2Cn]) & I2C_S_IICIF_MASK)==0) &&(IIC_Count<20000)) {IIC_Count++;} \
+                                    I2C_S_REG(I2CN[I2Cn]) |= I2C_S_IICIF_MASK;\
+                                    if(IIC_Count>=20000) { i2c_Stop(i2cn); return 0;}
 
 //写一个字节
-#define i2c_write_byte(I2Cn,data)   (I2C_D_REG(I2CN[I2Cn]) = (data));i2c_Wait(I2Cn)
+#define i2c_write_byte(I2Cn,data)   (I2C_D_REG(I2CN[I2Cn]) = (data)) ; i2c_Wait(I2Cn)
 /*!
  *  @brief      I2C初始化，设置波特率
  *  @param      I2Cn_e      I2C模块(I2C0、I2C1)
@@ -236,7 +241,7 @@ uint8 i2c_read_reg(I2Cn_e i2cn, uint8 SlaveID, uint8 reg)
  *  Sample usage:       i2c_write_reg(I2C0, 0x1D, 1,2);     //向从机0x1D 的寄存器 1 写入数据 2
  */
 
-void i2c_write_reg(I2Cn_e i2cn, uint8 SlaveID, uint8 reg, uint8 Data)
+uint8 i2c_write_reg(I2Cn_e i2cn, uint8 SlaveID, uint8 reg, uint8 Data)
 {
 
     i2c_Start(i2cn);                                    //发送启动信号
@@ -253,7 +258,7 @@ void i2c_write_reg(I2Cn_e i2cn, uint8 SlaveID, uint8 reg, uint8 Data)
 }
 
 
-void oled_i2c_write(I2Cn_e i2cn, uint8 Data)
+uint8 oled_i2c_write(I2Cn_e i2cn, uint8 Data)
 {
 
     i2c_Start(i2cn);                                    //发送启动信号

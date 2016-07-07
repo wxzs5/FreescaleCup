@@ -32,10 +32,12 @@ void Init_all()
   DisableInterrupts;                           //禁止总中断
 
   Pid_Init();                                    //Pid Calculate parameters initialize
+  gpio_init(PTC3, GPO, 0);
+  myCCD_DataInit(&CCD1_info);
+
+  myCCD_DataInit(&CCD2_info);
 
   Fuzzy_Init();
-
-  Init_uart1();
 
   Init_uart4();
 
@@ -43,29 +45,50 @@ void Init_all()
 
   CCD2_init();
 
+  myCCD_GetBeginLineError(&CCD1_info, &CCD2_info, &Speed_info);
+
   Init_ftm_motor();                            //初始化电机
 
   Init_quad();                                 //初始化正交解码器
 
-  Init_PIT0();
+  gpio_init(PTA16, GPO, 0);
+ 
+
 
   Init_PORT();
 
   Init_PORT_C();
 
-  //Init_PIT1();
-
-  Info_Init();
-
-  State_Init();
-
   myOLED_Init();
-  //gpio_init (PTC0, GPO,0);
+
+  //mySD_Init_Parameter();
+  //DELAY_MS(100);  //用于显示SD卡信息初始化情况
+  //myOLED_Clear();
 
   EnableInterrupts;//中断允许
 
-  //Init_my_NRF();
-  // myOLED_String(4, 20, "Pass Cet6!");
+#if IIC_ENABLE
+  Init_TLY();
+#endif
+
+  /***********  //lcd菜单初始化选择，注意*******/
+ /* while (lcd_menu_display_init(&Menu))
+  {
+    if (1 == Parameter_info.OLED_NoAction_Flag) //当按键没有反应的时候计时退出
+    {
+      if (Parameter_info.OLED_NoAction_Counter > 0)
+      {
+        Parameter_info.OLED_NoAction_Counter--;
+      }
+      else if (Parameter_info.OLED_NoAction_Counter <= 0)
+      {
+        break;//直接跳出OLED等待
+      }
+    }
+  }
+  mySDWrite_Para();*/
+  Init_PIT0();
+  Init_PIT1();   //初始化电机控制定时
   DELAY_MS(1000);
 }
 
@@ -76,35 +99,6 @@ void Init_uart4(void)
   uart_rx_irq_en(UART4);
 }
 
-void Init_uart1(void)
-{
-  uart_init (UART1, 115200);
-  set_vector_handler(UART1_RX_TX_VECTORn, uart1_handler);  // 设置中断服务函数到中断向量表里
-  uart_rx_irq_en (UART1);                                //开串口接收中断
-}
-
-
-/*!
- *  @brief      main函数
- *  @since      v5.2
- *  @note       测试查询接收多个字符串函数
- */
-extern uint8 mode_correct;
-
-void uart1_handler(void)
-{
-  char ch;
-
-  if (uart_query    (UART1) == 1)  //接收数据寄存器满
-  {
-    //用户需要处理接收数据
-    if (mode_correct == 1)
-    {
-      uart_getchar   (UART1, &ch);                    //无限等待接受1个字节
-      uart_putchar   (UART4 , ch);                    //发送字符串
-    }
-  }
-}
 
 /*!
  *  @brief      main函数
@@ -122,8 +116,6 @@ void uart4_test_handler(void)
 }
 
 
-
-
 /*!
  *  @brief      main函数
  *  @since      v5.2
@@ -131,10 +123,17 @@ void uart4_test_handler(void)
  */
 void Init_PORT_C(void)
 {
-  port_init(PTC6, ALT1 | IRQ_RISING);
-  port_init(PTC7, ALT1 | IRQ_RISING);
+  gpio_init(PTC0, GPI, 0);
+  gpio_init(PTC1, GPI, 0);
+  gpio_init(PTC2, GPI, 0);
+
+  port_init(PTC0, ALT1 | IRQ_FALLING | PF);
+  port_init(PTC1, ALT1 | IRQ_FALLING | PF);
+  port_init(PTC2, ALT1 | IRQ_FALLING | PF);
+
   set_vector_handler(PORTC_VECTORn , PORTC_IRQHandler);
-  gpio_init(PTC5, GPI, 0);
+  enable_irq(PORTC_IRQn);
+
 }
 /*!
  *  @brief      main函数
@@ -143,8 +142,9 @@ void Init_PORT_C(void)
  */
 void PORTC_IRQHandler(void)
 {
-  PORT_FUNC(C, 6, stop_IRQProcess);
-  PORT_FUNC(C, 7, stop_IRQProcess);
+  PORT_FUNC(C, 0, stop_IRQProcess);
+  PORT_FUNC(C, 1, stop_IRQProcess);
+  PORT_FUNC(C, 2, stop_IRQProcess);
 
 }
 /*!
@@ -154,12 +154,11 @@ void PORTC_IRQHandler(void)
  */
 void stop_IRQProcess(void)
 {
-  if (PTC6_IN == 1 && PTC7_IN == 1 && PTC5_IN == 0)
+  if (PTC0_IN == 0 && PTC1_IN == 1 && PTC2_IN == 0)
   {
     Speed_Expect = 0;
     // disable_irq(PORTC_IRQn);
     // check_flag = 0;
-    led_turn(LED0);
   }
   else
   {
@@ -167,23 +166,7 @@ void stop_IRQProcess(void)
   }
 }
 
-void Init_my_NRF(void)
-{
-  uint8 i;
-  /************************ 无线模块 NRF 初始化  ***********************/
-  while (!nrf_init());
-  //配置中断服务函数
-  set_vector_handler(PORTE_VECTORn , PORTE_IRQHandler);               //设置 PORTE 的中断服务函数为 PORTE_VECTORn
-  enable_irq(PORTE_IRQn);
-  nrf_msg_init();                                                     //无线模块消息初始化
 
-  //线性CCD模块，需要 发送 空命令给 调试板模块，这样可以清掉 接收图像失败而产生多余数据
-  i = 20;
-  while (i--)
-  {
-    nrf_msg_tx(COM_RETRAN, nrf_tx_buff);                             //发送多个 空 命令过去，用于清空 接收端的缓存数据
-  }
-}
 
 /*!
  *  @brief      PORTE中断服务函数
@@ -206,35 +189,3 @@ void PORTE_IRQHandler(void)
 
 
 
-
-//队列节点初始化
-void Queue_Init(Info_queue *queue)
-{
-  queue->mean = 0;
-  queue->variance = 0;
-}
-
-void State_Init()
-{
-  ccd1_state.now = In_Straight;
-  ccd1_state.pre = In_Straight;
-  ccd1_state.direc_now = 0;
-  ccd1_state.direc_pre = 0;
-  ccd2_state.now = In_Straight;
-  ccd2_state.pre = In_Straight;
-  ccd2_state.direc_now = 0;
-  ccd2_state.direc_pre = 0;
-}
-
-
-void Info_Init()
-{
-  Queue_Init(&ccd1_info.LeftLine);
-  Queue_Init(&ccd1_info.RightLine);
-  Queue_Init(&ccd1_info.Ec_Left);
-  Queue_Init(&ccd1_info.Ec_Right);
-  Queue_Init(&ccd2_info.LeftLine);
-  Queue_Init(&ccd2_info.RightLine);
-  Queue_Init(&ccd2_info.Ec_Left);
-  Queue_Init(&ccd2_info.Ec_Right);
-}

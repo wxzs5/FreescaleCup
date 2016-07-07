@@ -2002,7 +2002,7 @@
         <name>$PROJ_DIR$\..\Board\inc\VCAN_TSL1401.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\Board\inc\vcan_ui_var.h</name>
+        <name>$PROJ_DIR$\..\Board\inc\VCAN_UI_VAR.h</name>
       </file>
     </group>
     <group>
@@ -2164,7 +2164,7 @@
         <name>$PROJ_DIR$\..\Chip\inc\MK60_DWT.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\Chip\inc\MK60_FLASH.h</name>
+        <name>$PROJ_DIR$\..\Chip\inc\MK60_flash.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\Chip\inc\MK60_flexbus.h</name>
@@ -2398,6 +2398,9 @@
     <group>
       <name>inc</name>
       <file>
+        <name>$PROJ_DIR$\..\User\inc\8700_2100.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\User\inc\Calculate.h</name>
       </file>
       <file>
@@ -2434,6 +2437,9 @@
         <name>$PROJ_DIR$\..\User\inc\process.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\User\inc\SD.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\User\inc\Serial_oscilloscope.h</name>
       </file>
       <file>
@@ -2442,6 +2448,9 @@
     </group>
     <group>
       <name>src</name>
+      <file>
+        <name>$PROJ_DIR$\..\User\src\8700_2100.c</name>
+      </file>
       <file>
         <name>$PROJ_DIR$\..\User\src\Calculate.c</name>
       </file>
@@ -2474,6 +2483,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\User\src\process.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\User\src\SD.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\User\src\Serial_oscilloscope.c</name>

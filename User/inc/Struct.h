@@ -24,7 +24,7 @@ extern int8 qhead;       //队列头
 
 #define 	SPEED_FIFO_LENGTH		(20)
 #define     Line_SIZE   			(45)		//存储左右边界线，中线等的队列长度
-#define 	GYRO_LENGTH				(16)		//存储陀螺仪的AD电压值
+#define 	GYRO_LENGTH			(70)		//存储陀螺仪的AD电压值
 
 #define QRANGE(x)       ((x)<(0) ? ((Line_SIZE)-(1)) : ( (x)>((Line_SIZE)-(1)) ? (0):(x) ))   //用于限定队列循环指针的值
 #define MYRANGE(x,max,min)      ((x) =((x)<(min) ? (min) : ( (x)>(max) ? (max):(x) )))  //限定范围
@@ -81,13 +81,6 @@ typedef struct
 } Car_State;
 
 
-typedef struct Info_queue_   //信息队列
-{
-	int16 node[Line_SIZE];
-	int16 variance;   //方差
-	int16 mean;
-} Info_queue;
-
 
 typedef enum Road_Type_	//--------------------------------赛道种类(手动设定是否包含坡道，路障)
 {
@@ -111,53 +104,48 @@ typedef enum Car_Mode_//----------------------------------------选择速度模�
 
 typedef struct CCD_Info_//--------------------------------CCD数据
 {
-	uint16 PixelOri[2][128];      	// CCD原始值
-	uint16 Pixel[128];				// CCD滤波后值
-	uint16 PixelAfterMult[128];		// CCD放大后值
-	uint16 PixelBinary[128];			// CCD二值化值
-	uint8  CCD_PhotoValue[16];		// CCD二维压缩图像存储值
+  uint8 PixelOri[2][128];       // CCD原始值
+  uint8 Pixel[128];             // CCD滤波后值
+  uint8 PixelBinary[128];       // CCD二值化值
+  uint8  CCD_PhotoValue[16];    // CCD二维压缩图像存储值
 
-	uint16 AD_MAX[4];					//AD最大值
-	uint16 AD_MIN[4];					//AD最小值
+  uint8 AD_MAX[4];              //AD最大值
+  uint8 AD_MIN[4];              //AD最小值
 
-	int16 CCD_PhotoCenter;			//图像的中心点
-	int16 CCD_ObstacleShift;			//路障的时候图像偏移点数
+  int16 CCD_PhotoCenter;        //图像的中心点
+  int16 CCD_ObstacleShift;      //路障的时候图像偏移点数
 
-	Info_queue  LeftLine;		//左边界队列
-	Info_queue  CentralLine;	//中线队列
-	Info_queue  RightLine;		//右边界队列
-	Info_queue  LineError;		//偏差队列
-	Info_queue  Ec_Left;            //左边界变化队列
-	Info_queue  Ec_Right;         //右边界变化队列
-	Info_queue  LineError_D;	//偏差D队列
-	Info_queue  RoadWidth;	//路宽队列
+  int16  LeftLine[Line_SIZE];   //左边界队列
+  int16  CentralLine[Line_SIZE];  //中线队列
+  int16  RightLine[Line_SIZE];    //右边界队列
+  int16  LineError[Line_SIZE];		//偏差队列
+  int16  LineError_D[Line_SIZE];	//偏差D队列
+  int16  RoadWidth[10];				//路宽队列
+  //int16 LeftLossLinePixel;      //记录丢左边线时左边的点
+  //int16 RightLossLinePixel;     //记录丢右边线时右边的点
 
-	int16 LeftLossLinePixel;			//记录丢左边线时左边的点
-	int16 RightLossLinePixel;			//记录丢右边线时右边的点
+  uint8 LeftLossLineFlag;       //左边丢线标志
+  uint8 RightLossLineFlag;      //右边丢线标志
 
-	uint8 LeftLossLineFlag;       //左边丢线标志
-	uint8 RightLossLineFlag;      //右边丢线标志
+  int16  RoadWidthOfStraight;   //直道的路宽
 
-	int16  RoadWidthOfStraight;		//直道的路宽
+  uint8  CCD_Ready_Num;       //CCD数据有效次数
 
-	uint8  InvalidPixel_Num;			//CCD图像无效点数
-	uint8  CCD_Ready_Num;				//CCD数据有效次数
-
-	uint8 AddLine_Flag;				//补线标记
-	uint8 LossLine_Flag;				//CCD丢线标志
-	uint8 Cross_Flag;					//十字道标志
-	uint8 RoadInvalid_Flag;			//左边赛道无效标记，防止窜道
+  uint8 AddLine_Flag;       //补线标记
+  uint8 LossLine_Flag;        //CCD丢线标志
+  uint8 Cross_Flag;         //十字道标志
+  uint8 RoadInvalid_Flag;     //左边赛道无效标记，防止窜道
 
 } CCD_Info;
 
 typedef struct Gyro_Info_//------------------------------------------------陀螺仪
 {
 	int16 GyroscopeZero;						//记录陀螺仪-加速度计的零点电压AD值
-	int16 Gyroscope_Fifo[GYRO_LENGTH];		//存储陀螺仪-加速度计电压AD值
-	int32 Gyro_Sum;
-
-	int16 RampThresholdValue;
-	uint8 RampUpDown_Num;		//记录检测到陀螺仪电压突变的次数
+	float Gyroscope_Fifo[GYRO_LENGTH];		//存储陀螺仪-加速度计电压AD值
+	float Gyro_Sum;
+	int16 counter;   //记录队列尾
+	int16 RampThresholdValue;    //上下坡的阈值
+	uint8 RampUpDown;		//记录检测到陀螺仪电压突变的次数
 
 } Gyro_Info;
 
@@ -233,8 +221,6 @@ typedef struct Motor_Info_//-----------------------------------------------电�
 	uint8 KI_Mult;
 	uint8 KD_Mult;
 
-	int32 PWMOutputDuty;
-
 } Motor_Info;
 
 typedef struct Parameter_Info_//------------------------------------------一些参数
@@ -282,6 +268,8 @@ typedef struct Parameter_Info_//------------------------------------------一些
 	uint8 RampReady_FLag;				//坡道预判标记
 	uint8 LongStraight_Flag;
 	uint8 CCD1_GetedStartEndLine_Flag;//CCD1识别到起跑线标记
+
+	uint8 SD_Data_name_Change;  //SD卡存储信息
 
 } Parameter_Info;
 
@@ -353,15 +341,9 @@ typedef struct           //OLED选择菜单
 } menu;
 
 
-//老版本兼容
-extern CCD_Info ccd1_info;
-extern CCD_Info ccd2_info;
-extern Car_State ccd1_state;
-extern Car_State ccd2_state;
-
 extern Pidsuite PidServo;
-extern Pidsuite PidSpeed;
-extern Pidsuite PidDSpe;
+extern Pidsuite PidSpeedLeft;
+extern Pidsuite PidSpeedRight;
 
 
 //新版
@@ -396,6 +378,33 @@ extern Steer_Info Steer_info;   //舵机初始化
 //函数声明
 extern void mySteer_DataInit(Steer_Info *Steer_info);
 extern void myData_Init();   //数据信息初始化
+
+
+
+typedef struct {
+	float x;
+	float y;
+	float z;
+} Gyro_Data;
+
+typedef struct {
+	float x;
+	float y;
+	float z;
+} Acc_Data;
+
+typedef struct {
+	float gyro;
+	float acc;
+	float result;
+} Q_Angle;
+
+
+
+extern Gyro_Data Gyro_data;
+extern Acc_Data  Acc_data;
+extern Q_Angle Q_angle;
+
 
 
 #endif

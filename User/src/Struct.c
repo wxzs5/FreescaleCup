@@ -21,8 +21,9 @@ Gyro_Info Gyro_info = {0};
 // Flash_Info Flash_info= {0};
 RemSpeedUpDown_Info RemSpeedUpDown_info = {0};
 
-CCD_Info CCD1_info = {0};
-CCD_Info CCD2_info = {0};
+CCD_Info CCD1_info;
+CCD_Info CCD2_info;
+Speed_Info Speed_info;
 
 /*************************************************************************
 *					我要过六级

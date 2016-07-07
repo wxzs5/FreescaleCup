@@ -3,6 +3,7 @@
 
 #define MAP(b,c,d)  ((b)=(((Menu->Tun_Res)-(40.0))/(100.0)*((c)-(d))+(d)))
 
+
 uint8 OLED_GRAM[8][128];
 uint8  ASCII_code[101][6] = {
 	{0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, // (0)
@@ -684,20 +685,40 @@ void myOLED_Decimals(uint8 x, uint8 y, float als)
 	uint16 temp0 = 0, temS_P = 0, temS_I = 0 , temS_D = 0;
 	uint16 temS_P6 = 0;
 
-	temS_P6 = (uint16)(als * 100);
-	temp0 = (uint16)(temS_P6 / 1000);
-	temS_P = (uint16)(temS_P6 % 1000 / 100);
-	temS_I = (uint16)(temS_P6 % 100 / 10);
-	temS_D = (uint16)(temS_P6 % 10 / 1);
+	if ( als < 0)
+	{
+		temS_P6 = (uint16)(-als * 100);
+		temp0 = (uint16)(temS_P6 / 1000);
+		temS_P = (uint16)(temS_P6 % 1000 / 100);
+		temS_I = (uint16)(temS_P6 % 100 / 10);
+		temS_D = (uint16)(temS_P6 % 10 / 1);
 
 
-	myOLED_Set_XY( x, y);
+		myOLED_Set_XY( x, y);
+		myOLED_Char( 13 );       //"-"
+		myOLED_Char( temp0 + 16 );
+		myOLED_Char( temS_P + 16 );
+		myOLED_Char( 14 );
+		myOLED_Char(temS_I + 16);
+		myOLED_Char(temS_D + 16 );
+	}
+	else
+	{
+		temS_P6 = (uint16)(als * 100);
+		temp0 = (uint16)(temS_P6 / 1000);
+		temS_P = (uint16)(temS_P6 % 1000 / 100);
+		temS_I = (uint16)(temS_P6 % 100 / 10);
+		temS_D = (uint16)(temS_P6 % 10 / 1);
 
-	myOLED_Char( temp0 + 16 );
-	myOLED_Char( temS_P + 16 );
-	myOLED_Char( 14 );
-	myOLED_Char(temS_I + 16);
-	myOLED_Char(temS_D + 16 );
+
+		myOLED_Set_XY( x, y);
+
+		myOLED_Char( temp0 + 16 );
+		myOLED_Char( temS_P + 16 );
+		myOLED_Char( 14 );
+		myOLED_Char(temS_I + 16);
+		myOLED_Char(temS_D + 16 );
+	}
 
 }
 /*************************************************************************
@@ -782,6 +803,8 @@ void myOLED_CCDwave(CCD_Info * CCD1_info, CCD_Info * CCD2_info)
 
 
 
+
+
 /*************************************************************************
 *                             我要过六级
 *  函数名称:lcd_menu_display_init
@@ -809,9 +832,12 @@ uint8 lcd_menu_display_init(menu * Menu)
 		myOLED_String(6, 10, "Binay"); myOLED_String(6, 50, "Zhi"); myOLED_Dec(6, 87, zhi);
 		myOLED_String(4, 10, "SuDu1"); myOLED_String(5, 50, "Wan"); myOLED_Dec(5, 87, wan);
 		myOLED_String(2, 10, "SuDu2"); myOLED_String(4, 50, "X-S"); myOLED_Dec(4, 87, x_s);
-		myOLED_String(3, 50, "Up"); myOLED_Dec(3, 87, Up);
-		myOLED_String(2, 50, "Dn"); myOLED_Dec(2, 87, Dn);
-		myOLED_String(1, 50, "LuZ"); myOLED_Dec(1, 87, LuZ);
+		// myOLED_String(3, 50, "Up"); myOLED_Dec(3, 87, Up);
+		//myOLED_String(2, 50, "Dn"); myOLED_Dec(2, 87, Dn);
+		// myOLED_String(1, 50, "LuZ"); myOLED_Dec(1, 87, LuZ);
+		myOLED_String(3, 50, "SFlg"); myOLED_Dec(3, 87, stop_flag);
+		myOLED_String(2, 50, "TunM"); myOLED_Dec(2, 87, Tune_Mode);
+		myOLED_String(1, 50, "Diff"); myOLED_Decimals(1, 87, PidSpeedLeft.kd);
 		switch (Menu->choice_flag % 100 / 10)
 		{
 		case 1:  //第二层	直道	速度
@@ -866,7 +892,8 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(3, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(Up, 400, 200);
+				// MAP(Up, 400, 200);
+				MAP(stop_flag, 1, 0);
 				break;
 			}
 			break;
@@ -880,7 +907,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(2, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(Dn, 400, 200);
+				MAP(Tune_Mode, 5, 1);
 				break;
 			}
 			break;
@@ -894,7 +921,8 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(1, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(LuZ, 400, 200);
+				// MAP(LuZ, 400, 200);
+				MAP(PidSpeedLeft.kd , 1, -1);
 				break;
 			}
 		default:
@@ -909,6 +937,9 @@ uint8 lcd_menu_display_init(menu * Menu)
 		myOLED_String(6, 10, "SuDu1"); myOLED_String(6, 50, "SExp"); myOLED_Dec(6, 87, (uint16)Speed_Expect);
 		myOLED_String(4, 10, "SuDu2"); myOLED_String(5, 50, "Add3"); myOLED_Dec(5, 87, Add3);
 		myOLED_String(2, 10, "Duoji");	myOLED_String(4, 50, "E_K"); myOLED_Dec(4, 87, E_K);
+		myOLED_String(3, 50, "P"); myOLED_Decimals(3, 87, PidServo.kp);
+		myOLED_String(2, 50, "I"); myOLED_Decimals(2, 87, PidServo.ki);
+		myOLED_String(1, 50, "D"); myOLED_Decimals(1, 87, PidServo.kd);
 
 		switch (Menu->choice_flag % 100 / 10)
 		{
@@ -922,7 +953,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(6, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(Speed_Expect, 400, 200);
+				MAP(Speed_Expect, 480, 280);
 				break;
 			}
 			break;
@@ -950,7 +981,50 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(4, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(E_K, 450, 250);
+				// MAP(E_K, 450, 250);
+				MAP(Chfile, 9, 0);
+				break;
+			}
+			break;
+		case 4:  ////第二层	P
+			myOLED_String(3, 40, "*");
+			switch (Menu->choice_flag % 10)
+			{
+			case 0:  // 第三层
+				break;
+			case 1:  //
+				myOLED_String(3, 77, "*");
+				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
+				MYRANGE(Menu->Tun_Res, 140, 40);
+				MAP(PidServo.kp, 30, -10);
+				break;
+			}
+			break;
+		case 5:  ////第二层	P
+			myOLED_String(2, 40, "*");
+			switch (Menu->choice_flag % 10)
+			{
+			case 0:  // 第三层
+				break;
+			case 1:  //
+				myOLED_String(2, 77, "*");
+				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
+				MYRANGE(Menu->Tun_Res, 140, 40);
+				MAP(PidServo.ki, 30, -10);
+				break;
+			}
+			break;
+		case 6:  ////第二层	D
+			myOLED_String(1, 40, "*");
+			switch (Menu->choice_flag % 10)
+			{
+			case 0:  // 第三层
+				break;
+			case 1:  //
+				myOLED_String(1, 77, "*");
+				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
+				MYRANGE(Menu->Tun_Res, 140, 40);
+				MAP(PidServo.kd, 1, -1);
 				break;
 			}
 			break;

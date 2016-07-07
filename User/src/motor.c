@@ -42,7 +42,7 @@ void Init_ftm_motor()
   ftm_pwm_init(FTM0, MOTOR3_PWM, 20000, 0);              //初始化 电机 PWM
   ftm_pwm_init(FTM0, MOTOR4_PWM, 20000, 0);              //初始化 电机 PWM
 
-  ftm_pwm_init(FTM3, SERVO, 50, 1000);                //初始化 电机 PWM
+  ftm_pwm_init(FTM3, SERVO, 50, SERVOCENTER);                //初始化 电机 PWM
 
   //IO管脚配置
   //gpio_init(MOTOR1_IO,GPO,LOW);
@@ -53,7 +53,6 @@ void Init_ftm_motor()
   gpio_init(MOTOR2_IO,GPO,HIGH);
   gpio_init(MOTOR3_IO,GPO,HIGH);
   gpio_init(MOTOR4_IO,GPO,HIGH);*/
-
 
 }
 /*******************************************************************************
@@ -203,17 +202,14 @@ void Speed_Read()
 * Return         : None
 * Editor         ：yzy
 ***************************************************************************/
-void MotorSpeedOut(float speedPWM , float turnPWM)
+void MotorSpeedOut(float Speed_L, float Speed_R)
 {
 
-  Speed_L = speedPWM - turnPWM;//左轮总速度
-  Speed_R = speedPWM + turnPWM ; //右轮总速度
   /***********************将最大速度限制在985个PWM内******************************/
   if (Speed_L > 10000)  Speed_L = 10000;
   if (Speed_L < -10000) Speed_L = -10000;
   if (Speed_R > 10000)  Speed_R = 10000;
   if (Speed_R < -10000) Speed_R = -10000;
-
 
   /*************用所得到的对应角度的速度进行PWM控制********************/
   if (Speed_L >= 0)   //angle大于0，向前，小于0，向后

@@ -17,6 +17,7 @@
 #define  SExp  Speed_Expect;
 #define   Add3 Speed_info.SpeedAdd_3
 #define   E_K  Speed_info.Error_K
+#define   Chfile Parameter_info.SD_Data_name_Change
 
 #define   S_P   Steer_info.Pid.kp
 #define   S_I   Steer_info.Pid.ki
@@ -76,8 +77,6 @@
 #define   B_M Parameter_info.CCD1_Binary_MAX
 #define   Sght  Parameter_info.Mode_HighSpeedDistance
 
-
-uint8 lcd_menu_display_init(menu * Menu);
 
 
 void myOLED_GPIO_Init(void);

@@ -10,13 +10,21 @@
 #define 	PM		 5
 #define 	PB		 6
 
-#define 	RNB		 -64
-#define 	RNM		 -40
-#define 	RNS		 -20
-#define 	RZO		    0
-#define 	RPS		        20
-#define 	RPM		  40
-#define 	RPB		  64
+#define 	RNB		 -51
+#define 	RNM		 -34
+#define 	RNS		 -17
+#define 	RZO		  0
+#define 	RPS		  17
+#define 	RPM		  34
+#define 	RPB		  51
+
+#define 	EC_RNB		 -12
+#define 	EC_RNM		 -8
+#define 	EC_RNS		 -4
+#define 	EC_RZO		  0
+#define 	EC_RPS		        4
+#define 	EC_RPM		  8
+#define 	EC_RPB		        12
 
 typedef struct
 {

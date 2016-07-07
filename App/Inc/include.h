@@ -42,6 +42,7 @@
 #include  "vcan_sd_app.h"       //SD卡应用（显示sd看上图片固件）
 #include  "Vcan_touch.h"        //触摸驱动
 #include  "VCAN_computer.h"     //多功能调试助手
+#include  <math.h>
 
 
 #include "Struct.h"      //自定义结构体，注意放的顺序
@@ -60,6 +61,7 @@
 
 #include "process.h"
 #include "OLED.h"
-
+#include "8700_2100.h"
+#include "SD.h"
 
 #endif  //__INCLUDE_H__

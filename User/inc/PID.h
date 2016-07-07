@@ -6,11 +6,9 @@
 
 
 #define Piddeadband 0     //1~2
-#define SERVOCENTER 1000
+#define SERVOCENTER 980
 
 extern float Speed_Expect;
-extern float para_a;
-extern float para_b;
 
 
 

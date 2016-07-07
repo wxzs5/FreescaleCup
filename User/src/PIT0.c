@@ -82,5 +82,27 @@ void PIT0_IRQHandler(void)
 
 
 
+void Init_PIT1()
+{
+  pit_init_ms(PIT1, 15);                                //初始化PIT0，定时时间为： 5ms
+  set_vector_handler(PIT1_VECTORn , PIT1_IRQHandler);     //设置PIT0的中断服务函数为 PIT0_IRQHandler
+  enable_irq (PIT1_IRQn);                                 //使能PIT0中断
+}
 
+/*******************************************************************************
+* Function Name  : void PIT1_IRQHandler(void)
+* Description    : 中断初始化函数
+* Input          : None
+* Output         : None
+* Return         : None
+* Editor         ：Ibrahim
+***************************************************************************/
+void PIT1_IRQHandler(void)
+{
+  PIT_Flag_Clear(PIT1);       //清中断标志位
+  gpio_turn(PTA16);
+  Motor_Process();
+  gpio_turn(PTA16);
+
+}
 

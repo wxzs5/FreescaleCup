@@ -11,7 +11,7 @@
 
 #include "include.h"
 
-uint8 Tune_Mode = 7;
+uint8 Tune_Mode = 2;
 uint8 data_to_send[50] = {0};       //发送缓存
 
 uint8   SendBuf[UartDataNum ] = {0};
@@ -140,29 +140,17 @@ void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num)
 
 	if (*(data_buf + 2) == 0X10)								//PID1
 	{
-		// temp = ((uint16) (* (data_buf + 4) << 8) | *(data_buf + 5));
-		// if (temp != 65535)
-		// {
-		// 	PidServo.kp   = 0.001 * (  temp - 30000);
-		// 	if (PidServo.kp < 0)PidServo.kp = -(30 + PidServo.kp);
-		// }
-		// temp = ((uint16)(*(data_buf + 6) << 8) | *(data_buf + 7));
-		// if (temp != 65535)
-		// {
-		// 	PidServo.ki    = 0.001 * (  temp - 30000);
-		// 	if (PidServo.ki < 0) PidServo.ki = -(30 + PidServo.ki);
-		// }
 		temp = ((uint16) (* (data_buf + 4) << 8) | *(data_buf + 5));
 		if (temp != 65535)
 		{
-			para_a   = 0.001 * (  temp - 30000);
-			if (para_a < 0)para_a = -(30 + para_a);
+			PidServo.kp   = 0.001 * (  temp - 30000);
+			if (PidServo.kp < 0)PidServo.kp = -(30 + PidServo.kp);
 		}
 		temp = ((uint16)(*(data_buf + 6) << 8) | *(data_buf + 7));
 		if (temp != 65535)
 		{
-			para_b    = 0.001 * (  temp - 30000);
-			if (para_b < 0) para_b = -(30 + para_b);
+			PidServo.ki    = 0.001 * (  temp - 30000);
+			if (PidServo.ki < 0) PidServo.ki = -(30 + PidServo.ki);
 		}
 		temp = ((uint16)(*(data_buf + 8) << 8) | *(data_buf + 9));
 		if (temp != 65535)
@@ -175,41 +163,43 @@ void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num)
 		temp = ( (uint16)(*(data_buf + 10) << 8) | *(data_buf + 11) );
 		if (temp != 65535)
 		{
-			PidSpeed.kp  = 0.001 * (  temp - 30000);
-			if (PidSpeed.kp < 0) PidSpeed.kp = -(30 + PidSpeed.kp);
+			PidSpeedLeft.kp  = 0.001 * (  temp - 30000);
+			if (PidSpeedLeft.kp < 0) PidSpeedLeft.kp = -(30 + PidSpeedLeft.kp);
+
+			PidSpeedRight.kp = PidSpeedLeft.kp;
 		}
 		temp = ( (uint16)(*(data_buf + 12) << 8) | *(data_buf + 13) );
 		if (temp != 65535)
 		{
-			PidSpeed.ki    = 0.001 * (  temp - 30000);
-			if (PidSpeed.ki < 0) PidSpeed.ki = -(30 + PidSpeed.ki);
+			PidSpeedLeft.ki    = 0.001 * (  temp - 30000);
+			if (PidSpeedLeft.ki < 0) PidSpeedLeft.ki = -(30 + PidSpeedLeft.ki);
+
+			PidSpeedRight.ki = PidSpeedLeft.ki;
 		}
 		temp = ( (uint16)(*(data_buf + 14) << 8) | *(data_buf + 15) );
 		if (temp != 65535)
 		{
-			PidSpeed.kd  = 0.001 * (  temp - 30000);
-			if (PidSpeed.kd < 0) PidSpeed.kd = -(30 + PidSpeed.kd);
+			PidSpeedLeft.kd  = 0.001 * (  temp - 30000);
+			if (PidSpeedLeft.kd < 0) PidSpeedLeft.kd = -(30 + PidSpeedLeft.kd);
+
+			PidSpeedRight.kd = PidSpeedLeft.kd;
 		}
 
-		//DSpe
-		temp = ( (uint16)(*(data_buf + 16) << 8) | *(data_buf + 17) );
-		if (temp != 65535)
-		{
-			PidDSpe.kp 	   = 0.001 * (  temp - 30000);
-			if (PidDSpe.kp < 0) PidDSpe.kp = -(30 + PidDSpe.kp);
-		}
+		//PID3
 		temp = ( (uint16)(*(data_buf + 18) << 8) | *(data_buf + 19) );
 		if (temp != 65535)
 		{
-			PidDSpe.ki 	   = 0.001 * (  temp - 30000);
-			if (PidDSpe.ki < 0) PidDSpe.ki = -(30 + PidDSpe.ki);
+			Gyro_info.RampThresholdValue = temp;
+
 		}
+
 		temp = ( (uint16)(*(data_buf + 20) << 8) | *(data_buf + 21) );
 		if (temp != 65535)
 		{
-			PidDSpe.kd 	   = 0.001 * ( temp - 30000);
-			if (PidDSpe.ki < 0) PidDSpe.ki = -(30 + PidDSpe.ki);
+			PidSpeedLeft.temp = 0.001 * ( temp - 30000);
+			if (PidSpeedLeft.temp < 0) PidSpeedLeft.temp = -(30 + PidSpeedLeft.temp);
 		}
+
 		ANO_DT_Send_Check(*(data_buf + 2), sum);
 	}
 	if (*(data_buf + 2) == 0X11)
@@ -226,6 +216,19 @@ void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num)
 		temp =  (uint16)(*(data_buf + 8) << 8) | *(data_buf + 9);
 		if (temp != 65535) Tune_Mode = 4;
 
+		//ServoFuzzy
+		temp = ( (uint16)(*(data_buf + 10) << 8) | *(data_buf + 11) );
+		if (temp != 65535)
+		{
+			ServoFuzzy.kp = 0.001 * ( temp - 30000);
+			if (ServoFuzzy.kp < 0) ServoFuzzy.kp = -(30 + ServoFuzzy.kp);
+		}
+		temp = ( (uint16)(*(data_buf + 14) << 8) | *(data_buf + 15) );
+		if (temp != 65535)
+		{
+			ServoFuzzy.kd = 0.001 * ( temp - 30000);
+			if (ServoFuzzy.kd < 0) ServoFuzzy.kd = -(30 + ServoFuzzy.kd);
+		}
 		ANO_DT_Send_Check(*(data_buf + 2), sum);
 	}
 

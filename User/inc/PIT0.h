@@ -15,6 +15,9 @@ extern uint8 TIME0flag_100ms ;                     //PTI0 100ms标志位
 
 void Init_PIT0();
 void PIT0_IRQHandler(void);
+void Init_PIT1();
+void PIT1_IRQHandler(void);
+
 
 
 

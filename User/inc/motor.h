@@ -54,7 +54,7 @@ extern volatile float Speed_Val2_R;
 
 void motor_test(uint32 du);
 void Init_ftm_motor();
-void MotorSpeedOut(float speedPWM , float turnPWM);
+void MotorSpeedOut(float Speed_L , float Speed_R);
 int16_t SpeedPWMOut(int16_t NewspeedPWM , int16_t LastspeedPWM, uint8_t PeriodCount);
 int16_t TURNPWMOut(int16_t NewAangPWM , int16_t LastAangPWM, uint8_t PeriodCount);
 int16_t AAangPWMOut(int16_t NewAangPWM , int16_t LastAangPWM, uint8_t PeriodCount);

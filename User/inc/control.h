@@ -12,10 +12,6 @@
 #define REDUCE_COUNT 20
 
 
-void Road_Data_Update(CCD_Info *ccd, uint8 LeftValue, uint8 RightValue);
-void Road_Judge(CCD_Info *ccd, Car_State *state);
-int16 Queue_Mean(Info_queue *queue);
-int16 Queue_Variance(Info_queue *queue);
 void print_road(Car_State *state);
 
 

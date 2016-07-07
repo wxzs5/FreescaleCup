@@ -1,3 +1,10 @@
+[DebugChecksum]
+Checksum=1561368141
+[Exceptions]
+StopOnUncaught=_ 0
+StopOnThrow=_ 0
+[CodeCoverage]
+Enabled=_ 0
 [Stack]
 FillEnabled=0
 OverflowWarningsEnabled=1
@@ -8,37 +15,6 @@ UseTrigger=1
 TriggerName=main
 LimitSize=0
 ByteLimit=50
-[InterruptLog]
-LogEnabled=0
-SumEnabled=0
-GraphEnabled=0
-ShowTimeLog=1
-ShowTimeSum=1
-SumSortOrder=0
-[DataLog]
-LogEnabled=0
-SumEnabled=0
-GraphEnabled=0
-ShowTimeLog=1
-ShowTimeSum=1
-[Interrupts]
-Enabled=1
-[MemConfig]
-Base=1
-Manual=0
-Ddf=1
-TypeViol=0
-Stop=1
-[Simulator]
-Freq=10000000
-MultiCoreRunAll=1
-[DebugChecksum]
-Checksum=-1869975902
-[Exceptions]
-StopOnUncaught=_ 0
-StopOnThrow=_ 0
-[CodeCoverage]
-Enabled=_ 0
 [CallStack]
 ShowArgs=0
 [Disassembly]
@@ -71,5 +47,8 @@ mode=0
 [Breakpoints2]
 Count=0
 [Aliases]
-Count=0
-SuppressDialog=0
+A0=_ "E:\Freescale\WesternComV3.0-stable\App\main.c" ""
+A1=_ "E:\Freescale\WesternComV3.0-stable\Chip\src\IAR\system_MK60DZ10.c" ""
+A2=_ "E:\Freescale\WesternComV3.0-stable\Chip\src\MK60_wdog.c" ""
+Count=3
+SuppressDialog=1

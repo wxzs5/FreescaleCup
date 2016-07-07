@@ -38,9 +38,9 @@ typedef enum MSmode
 
 //目前代码仅支持 I2C主机模式
 extern uint32  i2c_init(I2Cn_e i2cn, uint32 baud);                               //初始化I2C
-extern void    i2c_write_reg(I2Cn_e, uint8 SlaveID, uint8 reg, uint8 Data);      //写入数据到寄存器
+extern uint8    i2c_write_reg(I2Cn_e, uint8 SlaveID, uint8 reg, uint8 Data);      //写入数据到寄存器
 extern uint8   i2c_read_reg (I2Cn_e, uint8 SlaveID, uint8 reg);                  //读取寄存器的数据
-extern void oled_i2c_write(I2Cn_e i2cn, uint8 Data);
-
+extern uint8 oled_i2c_write(I2Cn_e i2cn, uint8 Data);
+void i2c_delay(void);
 
 #endif  //__MK60_I2C_H__
