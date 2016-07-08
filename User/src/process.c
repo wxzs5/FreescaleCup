@@ -13,6 +13,8 @@ int32 Speed_Average;
 float Cal_Speed_L;
 float Cal_Speed_R;
 
+uint8 write_sd_flag = 0;
+
 uint8 check_flag = 0;
 
 uint8 reduce_spe_flag = 0;   //PID减速时间标志
@@ -32,6 +34,13 @@ void Car_stop()      //停车函数      (注意要更换新的停车函数，st
 		ftm_pwm_duty(MOTOR_FTM, MOTOR2_PWM, 0); //L    给占空比正转
 		ftm_pwm_duty(MOTOR_FTM, MOTOR3_PWM, 0); //R    给占空比正转
 		ftm_pwm_duty(MOTOR_FTM, MOTOR4_PWM, 0);
+#if TESTSD
+		if (write_sd_flag)
+		{
+			write_sd_flag = 0;
+			mySDWrite_Para_End();
+		}
+#endif
 	}
 }
 
@@ -62,7 +71,15 @@ void   Steer_Process()
 		Center_Board_Value = 64;
 	}
 	Calservo = SERVOCENTER + (int32) (Pid_Calculate_Servo(&PidServo, Center_Board_Value, 64));
-	if (!stop_flag) ftm_pwm_duty(FTM3, SERVO, Calservo);
+	if (!stop_flag)
+	{
+		ftm_pwm_duty(FTM3, SERVO, Calservo);
+#if TESTSD
+		mySD_Write_CCD(&CCD1_info);
+		mySD_Write_CCD(&CCD1_info);
+		mySD_Write_Contr_Data(&PidServo, &ServoFuzzy);
+#endif
+	}
 
 }
 
@@ -98,6 +115,9 @@ void   Motor_Process()
 		MotorSpeedOut(Cal_Speed_L, Cal_Speed_R);
 
 		Send_Motor_Info();
+#if TESTSD
+		mySD_Write_Status();
+#endif
 	}
 }
 

@@ -88,6 +88,50 @@ void mySDWrite_Para(void)
 
 /*************************************************************************
 *                             我要过六级
+*  函数名称:mySDWrite_Para
+*  功能说明:
+*  参数说明:
+*
+*  函数返回:
+*  修改时间:
+*  备     注:
+*************************************************************************/
+void mySDWrite_Para_End(void)
+{
+  res = f_open(&Car_Parmeter_file, "0:/Param.txt", FA_OPEN_ALWAYS | FA_WRITE | FA_READ);  //打开文件，如果没有就创建，带读写打开
+
+  if ( res == FR_DISK_ERR)
+  {
+    myOLED_Clear();
+    myOLED_String(4, 10, "No SD Card!");
+    return;
+  }
+  else if ( res == FR_OK )
+  {
+    myOLED_Clear();
+    myOLED_String(4, 10, "Save successful!");
+  }
+  else
+  {
+    myOLED_Clear();
+    myOLED_String(4, 10, "SD return Invalid value!");
+    return;
+  }
+  memset(Parameters, 0, Parameter_Size);
+  mySD_Load_Parameter();
+
+  f_lseek(&Car_Parmeter_file, 0);                      //把指针指向文件顶部
+  f_puts(Parameters, &Car_Parmeter_file);                     //往文件里写入字符串
+
+  f_sync(&Car_Parmeter_file);                          //刚才写入了数据，实际上数据并没真正完成写入，需要调用此函数同步或者关闭文件，才会真正写入
+
+  f_close(&Car_Parmeter_file);                         //关闭参数文件，一定要和参数打开配对
+  f_close(&Car_RunData_file);
+}
+
+
+/*************************************************************************
+*                             我要过六级
 *  函数名称:mySD_Load_Parameter
 *  功能说明:把修改的参数放入SD卡中
 *  参数说明:
@@ -116,12 +160,12 @@ void mySD_Load_Parameter(void)
   Parameters[13] = (uint16)(Speed_Expect) % 256;
   Parameters[14] = Parameter_info.SD_Data_name_Change;
 
-  Parameters[15] = 0;
-  Parameters[16] = 0;
-  Parameters[17] = 0;
-  Parameters[18] = 0;
-  Parameters[19] = 0;
-  Parameters[20] = 0;
+  Parameters[15] = (int16)(ServoFuzzy.kp * 1000) / 256;
+  Parameters[16] = (int16)(ServoFuzzy.kp * 1000) % 256;
+  Parameters[17] = (int16)(ServoFuzzy.ks * 1000) / 256;
+  Parameters[18] = (int16)(ServoFuzzy.ks * 1000) % 256;
+  Parameters[19] = (int16)(ServoFuzzy.kd * 1000) / 256;
+  Parameters[20] = (int16)(ServoFuzzy.kd * 1000) % 256;
   Parameters[21] = 0;
   Parameters[22] = 0;
   Parameters[23] = 0;
@@ -156,6 +200,10 @@ void mySD_Get_Parameter(void)
 
   Speed_Expect = (float)(Parameters[12] << 8 | Parameters[13]);
   Parameter_info.SD_Data_name_Change = Parameters[14] ;
+
+  ServoFuzzy.kp = (float)(0.001 * (int16)(Parameters[15] << 8 | Parameters[16]));
+  ServoFuzzy.ks = (float)(0.001 * (int16)(Parameters[17] << 8 | Parameters[18]));
+  ServoFuzzy.kd = (float)(0.001 * (int16)(Parameters[19] << 8 | Parameters[20]));
 }
 
 /*************************************************************************
@@ -240,17 +288,18 @@ void mySD_RunData_Init()
     myOLED_String(4, 10, "SD return Invalid value!");
     return;
   }
+  f_lseek(&Car_RunData_file, 0);
   DELAY_MS(200);
 }
 
 /*************************************************************************
 *                             我要过六级
 *  函数名称:mySD_Write_CCD
-*  功能说明:初始化小车运行数据文件
+*  功能说明:写入CCD信息
 *  参数说明:
 *
 *  函数返回:
-*  修改时间:2016-7-4
+*  修改时间:2016-7-8
 *  备     注:
 *************************************************************************/
 void mySD_Write_CCD(CCD_Info *ccd)
@@ -286,23 +335,22 @@ void mySD_Write_CCD(CCD_Info *ccd)
 /*************************************************************************
 *                             我要过六级
 *  函数名称:mySD_Write_Contr_Data
-*  功能说明:初始化小车运行数据文件
+*  功能说明:写入控制信息
 *  参数说明:
 *
 *  函数返回:
-*  修改时间:2016-7-4
+*  修改时间:2016-7-8
 *  备     注:
 *************************************************************************/
-void mySD_Write_Contr_Data(Pidsuite *Pid)
+void mySD_Write_Contr_Data(Pidsuite *Pid, Fuzzysuite *fuzzy)
 {
   int16 temp = 0;
-  f_puts("\n Pid output info\n", &Car_RunData_file);
-  f_putc(Pid->ID, &Car_RunData_file);
-  temp = (int16)(Pid->kp * 1000);
+  f_puts("\n Control info\n", &Car_RunData_file);
+  temp = (int16)(Pid->kpi * 1000);
   f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
   temp = (int16)(Pid->ki * 1000);
   f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
-  temp = (int16)(Pid->kd * 1000);
+  temp = (int16)(Pid->kdi * 1000);
   f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
   temp = (int16)(Pid->error);
   f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
@@ -314,7 +362,54 @@ void mySD_Write_Contr_Data(Pidsuite *Pid)
   f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
   temp = (int16)(Pid->out);
   f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(fuzzy->kp * 1000);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(fuzzy->ks * 1000);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(fuzzy->kd * 1000);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(fuzzy->outP);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(fuzzy->outSpeed);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(fuzzy->outD);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(fuzzy->errstart);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(fuzzy->ecstart);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(fuzzy->errMeShip[0]);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(fuzzy->errMeShip[1]);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(fuzzy->ecMeShip[0]);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(fuzzy->ecMeShip[1]);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
   f_sync(&Car_RunData_file);
 }
 
+
+/*************************************************************************
+*                             我要过六级
+*  函数名称:mySD_Write_Contr_Data
+*  功能说明:写入小车基本信息
+*  参数说明:
+*
+*  函数返回:
+*  修改时间:2016-7-4
+*  备     注:
+*************************************************************************/
+void mySD_Write_Status(void)
+{
+  int16 temp = 0;
+  f_puts("\n Status info\n", &Car_RunData_file);
+  temp = (int16)(Speed_Expect);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(Speed_Val1_L);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  temp = (int16)(Speed_Val2_R);
+  f_putc((uint8)(temp >> 8), &Car_RunData_file); f_putc((uint8)(temp & 0x00ff), &Car_RunData_file);
+  f_sync(&Car_RunData_file);
+}
 

@@ -34,9 +34,9 @@ void Init_all()
   Pid_Init();                                    //Pid Calculate parameters initialize
   gpio_init(PTC3, GPO, 0);
   myCCD_DataInit(&CCD1_info);
-
+  CCD1_info.ID = 1;
   myCCD_DataInit(&CCD2_info);
-
+  CCD2_info.ID = 2;
   Fuzzy_Init();
 
   Init_uart4();
@@ -53,15 +53,15 @@ void Init_all()
 
   gpio_init(PTA16, GPO, 0);
 
-
-
   Init_PORT();
 
   Init_PORT_C();
 
   myOLED_Init();
 
-  // mySD_Init_Parameter();
+#if TESTSD
+  mySD_Init_Parameter();
+#endif
 
   EnableInterrupts;//中断允许
 
@@ -69,23 +69,27 @@ void Init_all()
   Init_TLY();
 #endif
 
+#if TESTSD
+
   /***********  //lcd菜单初始化选择，注意*******/
-  /* while (lcd_menu_display_init(&Menu))
-   {
-     if (1 == Parameter_info.OLED_NoAction_Flag) //当按键没有反应的时候计时退出
-     {
-       if (Parameter_info.OLED_NoAction_Counter > 0)
-       {
-         Parameter_info.OLED_NoAction_Counter--;
-       }
-       else if (Parameter_info.OLED_NoAction_Counter <= 0)
-       {
-         break;//直接跳出OLED等待
-       }
-     }
-   }*/
-  // mySDWrite_Para();
-  // mySD_RunData_Init();
+  while (lcd_menu_display_init(&Menu))
+  {
+    if (1 == Parameter_info.OLED_NoAction_Flag) //当按键没有反应的时候计时退出
+    {
+      if (Parameter_info.OLED_NoAction_Counter > 0)
+      {
+        Parameter_info.OLED_NoAction_Counter--;
+      }
+      else if (Parameter_info.OLED_NoAction_Counter <= 0)
+      {
+        break;//直接跳出OLED等待
+      }
+    }
+  }
+  mySDWrite_Para();
+  mySD_RunData_Init();
+#endif
+
   Init_PIT0();
   Init_PIT1();   //初始化电机控制定时
   DELAY_MS(1000);

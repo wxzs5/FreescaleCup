@@ -5,7 +5,7 @@ Pidsuite PidServo = {0};
 Pidsuite PidSpeedLeft = {0};
 Pidsuite PidSpeedRight = {0};
 
-float Speed_Expect = 40;
+float Speed_Expect = 295;
 
 
 void Pid_Init(void)
@@ -20,7 +20,7 @@ void Pid_Init(void)
   PidSpeedLeft.outD                = 0;
   PidSpeedLeft.outI                = 0;
   PidSpeedLeft.outP                = 0;
-  PidSpeedLeft.temp                = 0.47; //差速的参数
+  PidSpeedLeft.temp                = 0.01; //差速的参数
 
   PidSpeedRight.kp                 = 21;
   PidSpeedRight.ki                 = 11;
@@ -32,11 +32,11 @@ void Pid_Init(void)
   PidSpeedRight.outD               = 0;
   PidSpeedRight.outI               = 0;
   PidSpeedRight.outP               = 0;
-  PidSpeedRight.temp               = 0.47;//差速的参数
+  PidSpeedRight.temp               = 0.01;//差速的参数
 
-  PidServo.kp                      = 3.95;
+  PidServo.kp                      = 3.9;
   PidServo.ki                      = 0;
-  PidServo.kd                      = 10;
+  PidServo.kd                      = 6.7;
   PidServo.error                   = 0;
   PidServo.error_pre               = 0;
   PidServo.error_pre_pre           = 0;

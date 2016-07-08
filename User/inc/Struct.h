@@ -4,9 +4,6 @@
 
 
 /*-----------------------选择使用各个功能辅助模块-------------------*/
-//#define LabVIEW_Control_Enable	(1)					//使用上位机
-//#define	DMA_Enable (2)								//开DMA
-//#define   Remote_Control_Enable		(3)				//遥控器控制使能
 //#define   RemRoad_Control_Enable	(4)	//记忆算法使能,注意，此算法不能关闭，否则可能导致坡道问题
 //#define   PROTECT_CAR_ENABLE		(5)				//出界保护
 //#define   GetRoadCondition_Enable	(6)				//获取赛道类型
@@ -40,7 +37,6 @@ typedef struct
 	float outD;         //< pid微分部分，调试用
 	float out;
 	float temp;  //留一个临时变量为PID调节过程中打印参数
-	uint8 ID;
 } Pidsuite;
 
 
@@ -73,7 +69,7 @@ typedef struct
 typedef enum Road_Type_	//--------------------------------赛道种类(手动设定是否包含坡道，路障)
 {
 	None,					//纯竞速，没有坡道，路障(预赛可能用上)
-	Ramp_Only,				//只有坡道(预赛可能用上)
+	Obstacle_Only,				//只有坡道(预赛可能用上)
 	All						//全部类型都有
 } Road_Type;
 

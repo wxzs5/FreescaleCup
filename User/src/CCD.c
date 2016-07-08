@@ -52,7 +52,7 @@ void CCD2_init(void)
 {
   gpio_init(PTE24, GPO, 1);        //SI
   gpio_init(PTE25, GPO, 1);        //CLK
-  adc_init(ADC0_DM0);       
+  adc_init(ADC0_DM0);
 
 }
 
@@ -284,6 +284,6 @@ void SendImageData(uint8 * ImageData)
 *********************************************************************************/
 void SamplingDelay(void)
 {
-    asm("nop");
-    asm("nop");
+  asm("nop");
+  asm("nop");
 }
