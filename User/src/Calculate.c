@@ -3,8 +3,6 @@
 *     Copyright (c) 2015,Ibrahim
 *     All rights reserved.
 *
-*     本程序没有版权欢迎借阅，或给我提出问题及改进意见
-*     联系人Ibrahim 联系方式：1711125768@qq.com
 *********************************************************************************
 * @file       PIT0.c
 * @brief      野火K60 平台主程序
@@ -106,24 +104,20 @@ void myCCD_DataInit(CCD_Info * CCD_info)
 void myCCD_FilterAndBinarization(CCD_Info *CCD1_info, CCD_Info *CCD2_info)
 {
   uint8 ii = 0;
-  uint8 AD1_MAX = 0;
-  uint8 AD1_MIN = 255;
+  uint8 AD1_MAX = 0, AD2_MAX = 0;
+  uint8 AD1_MIN = 255, AD2_MIN = 255;
   uint16 ADD_buf = 0;
-  uint8 BinaryEdgeValue = 150;
+  uint8 BinaryEdgeValue1 = 150, BinaryEdgeValue2 = 150;
 
   //进行CCD数据采集滤波
   for (ii = 0; ii < 128; ii++)//60us
   {
     CCD1_info->Pixel[ii] = (CCD1_info->PixelOri[0][ii] + CCD1_info->PixelOri[1][ii]) >> 1;
-    if (CCD1_info->Pixel[ii] > AD1_MAX)
-    {
-      AD1_MAX = CCD1_info->Pixel[ii];
-    }
-    if (CCD1_info->Pixel[ii] < AD1_MIN)
-    {
-      AD1_MIN = CCD1_info->Pixel[ii];
-    }
+    if (CCD1_info->Pixel[ii] > AD1_MAX) AD1_MAX = CCD1_info->Pixel[ii];
+    if (CCD1_info->Pixel[ii] < AD1_MIN) AD1_MIN = CCD1_info->Pixel[ii];
     CCD2_info->Pixel[ii] = (CCD2_info->PixelOri[0][ii] + CCD2_info->PixelOri[1][ii]) >> 1;
+    if (CCD2_info->Pixel[ii] > AD2_MAX) AD2_MAX = CCD2_info->Pixel[ii];
+    if (CCD2_info->Pixel[ii] < AD2_MIN) AD2_MIN = CCD2_info->Pixel[ii];
 
     //移动CCD1原始数据队列
     CCD1_info->PixelOri[1][ii] = CCD1_info->PixelOri[0][ii];
@@ -162,44 +156,39 @@ void myCCD_FilterAndBinarization(CCD_Info *CCD1_info, CCD_Info *CCD2_info)
   CCD1_info->AD_MAX[0] = AD1_MAX;
   CCD1_info->AD_MIN[0] = AD1_MIN;
 
+  CCD2_info->AD_MAX[3] = CCD2_info->AD_MAX[2];
+  CCD2_info->AD_MAX[2] = CCD2_info->AD_MAX[1];
+  CCD2_info->AD_MAX[1] = CCD2_info->AD_MAX[0];
+
+  CCD2_info->AD_MIN[3] = CCD2_info->AD_MIN[2];
+  CCD2_info->AD_MIN[2] = CCD2_info->AD_MIN[1];
+  CCD2_info->AD_MIN[1] = CCD2_info->AD_MIN[0];
+  //更新AD_MAX,AD_MIN队列
+  CCD2_info->AD_MAX[0] = AD2_MAX;
+  CCD2_info->AD_MIN[0] = AD2_MIN;
+
   //计算CCD1二值化的分界值
   ADD_buf = (   CCD1_info->AD_MAX[3] + CCD1_info->AD_MAX[2] + CCD1_info->AD_MAX[1] + CCD1_info->AD_MAX[0]
                 + CCD1_info->AD_MIN[3] + CCD1_info->AD_MIN[2] + CCD1_info->AD_MIN[1] + CCD1_info->AD_MIN[0]
             ) >> 3;
-  if (ADD_buf < 255)
-  {
-    BinaryEdgeValue = (uint8)ADD_buf;
-  }
-  else
-  {
-    BinaryEdgeValue = 255;
-  }
-  /*ADD_buf = (AD1_MAX + AD1_MIN)/2;
-  if(ADD_buf < 255 && ADD_buf > 0)
-  {
-    BinaryEdgeValue = (uint8)ADD_buf;
-  }
-  else
-  {
-    BinaryEdgeValue = 255;
-  }*/
+  if (ADD_buf < 255) BinaryEdgeValue1 = (uint8)ADD_buf;
+  else BinaryEdgeValue1 = 255;
 
+  //计算CCD2二值化的分界值
+  ADD_buf = (   CCD2_info->AD_MAX[3] + CCD2_info->AD_MAX[2] + CCD2_info->AD_MAX[1] + CCD2_info->AD_MAX[0]
+                + CCD2_info->AD_MIN[3] + CCD2_info->AD_MIN[2] + CCD2_info->AD_MIN[1] + CCD2_info->AD_MIN[0]
+            ) >> 3;
+  if (ADD_buf < 255) BinaryEdgeValue2 = (uint8)ADD_buf;
+  else BinaryEdgeValue2 = 255;
 
   //限制二值化边界值的最大值最小值(阈值在750左右)
-  if (BinaryEdgeValue < CCD_Binary_MIN)
-  {
-    BinaryEdgeValue = CCD_Binary_MIN;
-  }
-  if (BinaryEdgeValue > CCD_Binary_MAX)
-  {
-    BinaryEdgeValue = CCD_Binary_MAX;
-  }
+  MYRANGE(BinaryEdgeValue1, CCD_Binary_MAX, CCD_Binary_MIN);
 
   //CCD数据的二值化
   for (ii = 0; ii < 128; ii++)
   {
-    CCD1_info->PixelBinary[ii] = (CCD1_info->Pixel[ii] >= BinaryEdgeValue) ? 1 : 0;//CCD1数据二值化
-    CCD2_info->PixelBinary[ii] = (CCD2_info->Pixel[ii] >= BinaryEdgeValue) ? 1 : 0;//CCD2数据二值化
+    CCD1_info->PixelBinary[ii] = (CCD1_info->Pixel[ii] >= BinaryEdgeValue1) ? 1 : 0;//CCD1数据二值化
+    CCD2_info->PixelBinary[ii] = (CCD2_info->Pixel[ii] >= BinaryEdgeValue2) ? 1 : 0;//CCD2数据二值化
   }
 }
 /*******************************************************************************
@@ -286,7 +275,7 @@ void myCCD_GetBeginLineError( CCD_Info *CCD1_info,
 
     //CCD搜边线和偏差计算
     myCCD_CCD1_GetLineError(CCD1_info, Speed_info);
-    myCCD_CCD2_GetLineError(CCD1_info, CCD2_info, Speed_info);
+    myCCD_CCD2_GetLineError(CCD2_info);
     ii--;
   } while (ii > 0);
 
@@ -317,7 +306,7 @@ void myCCD_DataHandle(  CCD_Info *CCD1_info,
 
   //CCD搜边线和偏差计算
   myCCD_CCD1_GetLineError(CCD1_info, Speed_info);
-  myCCD_CCD2_GetLineError(CCD1_info, CCD2_info, Speed_info);
+  myCCD_CCD2_GetLineError(CCD2_info);
 }
 /*********************************************************************************
 *                               我要过六级                                       *
@@ -331,8 +320,6 @@ void myCCD_CCD1_GetLineError(CCD_Info *CCD1_info, Speed_Info *Speed_info)
 {
   int16 CentralLinePixel_Now = CCD1_info->CentralLine[0];//从上次的中点开始搜线
   int16 LinePixel_Temp = CentralLinePixel_Now;
-  //uint8 Cross_Flag_buf = CCD1_info->Cross_Flag;
-  //uint8 AddLine_Flag_buf = CCD1_info->AddLine_Flag;
 
   int16 Left_temp = 0, Right_temp = 0;
   int16 ii = 0;
@@ -448,7 +435,6 @@ void myCCD_CCD1_GetLineError(CCD_Info *CCD1_info, Speed_Info *Speed_info)
         CCD1_info->Cross_Flag = 1;
         CCD1_info->LeftLine[0] = CCD1_info->LeftLine[2];
         CCD1_info->RightLine[0] = CCD1_info->RightLine[2];
-
       }
       else
       {
@@ -491,24 +477,160 @@ void myCCD_CCD1_GetLineError(CCD_Info *CCD1_info, Speed_Info *Speed_info)
       CCD1_info->RoadWidth[3] = CCD1_info->RoadWidth[2];
       CCD1_info->RoadWidth[2] = CCD1_info->RoadWidth[1];
       CCD1_info->RoadWidth[1] = CCD1_info->RoadWidth[0];
-
       CCD1_info->RoadWidth[0] = CCD1_info->RightLine[0] - CCD1_info->LeftLine[0];
     }
   }
 }
 
+
+
+
 /*************************************************************************
-*         零   度   偏   移
+*         我要过六级
 *
 *  函数名称:myCCD_CCD2_GetLineError
 *  功能说明:CCD2搜寻中线,求得偏差
 *  参数说明:
 *  函数返回:无
-*  修改时间:2014-06-17
+*  修改时间:2014-7-8
 *  备    注: 从上次的中点往两边搜索低电平
 *************************************************************************/
-void myCCD_CCD2_GetLineError(CCD_Info * CCD1_info, CCD_Info * CCD2_info, Speed_Info * Speed_info)
+void myCCD_CCD2_GetLineError(CCD_Info * CCD2_info)
 {
+  int16 CentralLinePixel_Now = CCD2_info->CentralLine[0];//从上次的中点开始搜线
+  int16 LinePixel_Temp = CentralLinePixel_Now;
+  int16 Left_temp = 0, Right_temp = 0;
+  int16 ii = 0;
 
+  //清零标记
+  CCD2_info->LossLine_Flag = 0;
+  CCD2_info->Cross_Flag  = 0;
+  CCD2_info->AddLine_Flag = 0;
+  CCD2_info->LeftLossLineFlag = 1;
+  CCD2_info->RightLossLineFlag = 1;
+
+  /*------------------左边线------------------------*/
+  for (ii = LinePixel_Temp; ii > 3; ii--)
+  {
+    if ((CCD2_info->PixelBinary[ii - 2] == 0) && (CCD2_info->PixelBinary[ii - 1] == 0) && (CCD2_info->PixelBinary[ii] == 1))
+    {
+      Left_temp = ii;
+      CCD2_info->LeftLossLineFlag = 0;
+      break;
+    }
+  }
+  if (Left_temp == 3)
+  {
+    CCD2_info->LeftLossLineFlag = 1;
+  }
+
+  /*-------------------右边线------------------------*/
+  for (ii = LinePixel_Temp; ii < 125; ii++)
+  {
+    if ((CCD2_info->PixelBinary[ii] == 1) && (CCD2_info->PixelBinary[ii + 1] == 0) && (CCD2_info->PixelBinary[ii + 2] == 0))
+    {
+      Right_temp = ii;
+      CCD2_info->RightLossLineFlag = 0;
+      break;
+    }
+  }
+  if (Right_temp == 125)
+  {
+    CCD2_info->RightLossLineFlag = 1;
+  }
+
+  /*------------------------------移动队列---------------------------------*/
+  for (ii = Line_SIZE - 1; ii > 0; ii--)
+  {
+    CCD2_info->LeftLine[ii]    = CCD2_info->LeftLine[ii - 1];
+    CCD2_info->RightLine[ii]   = CCD2_info->RightLine[ii - 1];
+    CCD2_info->CentralLine[ii] = CCD2_info->CentralLine[ii - 1];
+    CCD2_info->LineError[ii]   = CCD2_info->LineError[ii - 1];
+    CCD2_info->LineError_D[ii] = CCD2_info->LineError_D[ii - 1];
+  }
+
+  /*------------------------------普通弯道往左补线-------------------------------*/
+  if ((CCD2_info->LeftLossLineFlag == 1) && (CCD2_info->RightLossLineFlag == 0))//限制右边界范围
+  {
+    // Bell_On;
+    CCD2_info->AddLine_Flag = 1;
+    CCD2_info->LeftLine[0]  = Right_temp -  (CCD2_info->RoadWidth[0]);
+    CCD2_info->RightLine[0] = Right_temp;
+    if (((CCD2_info->LeftLine[0] + CCD2_info->RightLine[0]) >> 1) > CCD2_info->CCD_PhotoCenter)//防止在弯道入十字的时候补线错误
+    {
+      CCD2_info->LeftLine[0] = CCD2_info->LeftLine[1];
+      CCD2_info->RightLine[0] = CCD2_info->RightLine[1];
+    }
+  }
+  /*------------------------------普通弯道往右补线-------------------------------*/
+  if ((CCD2_info->LeftLossLineFlag == 0) && (CCD2_info->RightLossLineFlag == 1))//限制左边界范围
+  {
+
+//    Bell_On;
+    CCD2_info->AddLine_Flag = 1;
+    CCD2_info->RightLine[0] = Left_temp + (CCD2_info->RoadWidth[0]);
+    CCD2_info->LeftLine[0]  = Left_temp;
+
+    if (((CCD2_info->LeftLine[0] + CCD2_info->RightLine[0]) >> 1) < CCD2_info->CCD_PhotoCenter)//防止在弯道入十字的时候补线错误
+    {
+      CCD2_info->LeftLine[0] = CCD2_info->LeftLine[1];
+      CCD2_info->RightLine[0] = CCD2_info->RightLine[1];
+    }
+  }
+
+  /*------------------------------十字道和正常赛道-------------------------------*/
+  if (CCD2_info->AddLine_Flag == 0)//没有进行补线
+  {
+    //正常赛道
+    if ((CCD2_info->LeftLossLineFlag == 0) && (CCD2_info->RightLossLineFlag == 0))
+    {
+//      Bell_Off;
+      CCD2_info->LeftLine[0] = Left_temp;
+      CCD2_info->RightLine[0] = Right_temp;
+      /*if ((1 == Speed_info->DistanceOf1Cm_Flag) && (CCD2_info->CCD_Ready_Num < CCD1_DataReady_Num))//1cm到了,清零1cm标志放在更新摇头舵机偏差队列之后
+      {
+        CCD2_info->CCD_Ready_Num++;//CCD1数据有效次数自加
+      }*/
+      //CCD2_info->LeftLoseLine_Flag = 0;
+      //CCD2_info->RightLoseLine_Flag = 0;
+    }
+    else//可能是十字道,坡道和全黑丢线,停止更新左右边界值
+    {
+      CCD2_info->LossLine_Flag = 1;
+      // Bell_On;
+      //判断十字道，十字道不清除CCD1的有效次数
+      if (  (1 == CCD2_info->PixelBinary[LinePixel_Temp])          //此处要加坡道！！！！！！！！！
+            && (1 == CCD2_info->PixelBinary[LinePixel_Temp - 3])
+            && (1 == CCD2_info->PixelBinary[LinePixel_Temp + 3]))//不是坡道则为十字道或者全黑丢线
+      {
+        CCD2_info->Cross_Flag = 1;
+        CCD2_info->LeftLine[0] = CCD2_info->LeftLine[2];
+        CCD2_info->RightLine[0] = CCD2_info->RightLine[2];
+      }
+      else CCD2_info->CCD_Ready_Num = 0;
+    }
+  }
+
+  /*------------------------------更新队列-----------------------------------------*/
+  if ((CCD2_info->LossLine_Flag != 1) && (CCD2_info->RightLine[0] - CCD2_info->LeftLine[0]) >= ROAD_WIDETH_1_MIN)//限制路宽
+  {
+    CCD2_info->CentralLine[0] = (CCD2_info->LeftLine[0] + CCD2_info->RightLine[0]) / 2;
+    CCD2_info->LineError[0] = CCD2_info->CentralLine[0] - CCD2_info->CCD_PhotoCenter;
+    CCD2_info->LineError_D[0] = CCD2_info->LineError[0] - CCD2_info->LineError[8];
+
+    if ((Right_temp - Left_temp) <= ROAD_WIDETH_2_MAX)//路宽符合规定再更新路宽，1cm更新一次
+    {
+      CCD2_info->RoadWidth[9] = CCD2_info->RoadWidth[8];
+      CCD2_info->RoadWidth[8] = CCD2_info->RoadWidth[7];
+      CCD2_info->RoadWidth[7] = CCD2_info->RoadWidth[6];
+      CCD2_info->RoadWidth[6] = CCD2_info->RoadWidth[5];
+      CCD2_info->RoadWidth[5] = CCD2_info->RoadWidth[4];
+      CCD2_info->RoadWidth[4] = CCD2_info->RoadWidth[3];
+      CCD2_info->RoadWidth[3] = CCD2_info->RoadWidth[2];
+      CCD2_info->RoadWidth[2] = CCD2_info->RoadWidth[1];
+      CCD2_info->RoadWidth[1] = CCD2_info->RoadWidth[0];
+      CCD2_info->RoadWidth[0] = CCD2_info->RightLine[0] - CCD2_info->LeftLine[0];
+    }
+  }
 }
 

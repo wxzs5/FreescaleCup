@@ -8,7 +8,7 @@
 #define MAX_NUM 32
 
 
-#define Bell_On gpio_set(PTC3,0)
+#define Bell_On gpio_set(PTC3,1)
 #define Bell_Off gpio_set(PTC3,0)
 
 void Init_all();

@@ -60,11 +60,19 @@ void   Steer_Process()
 	{
 		Center_Board_Value = (CCD1_info.LeftLine[0] + CCD1_info.RightLine[0]) / 2;
 	}
-	else if ( ( CCD1_info.Cross_Flag == 1 ) || ( Gyro_info.RampUpDown == 1 ) )
+	else if ( CCD1_info.Cross_Flag == 1 )
 	{
 		//Center_Board_Value = 64;
-		Center_Board_Value = (CCD1_info.LeftLine[0] + CCD1_info.RightLine[0]) / 2;
-		Bell_On;
+		if (CCD2_info.Cross_Flag != 1)
+		{
+			Center_Board_Value = (CCD2_info.LeftLine[0] + CCD2_info.RightLine[0]) / 2;
+			Bell_On;
+		}
+		else
+		{
+			Center_Board_Value = (CCD1_info.LeftLine[0] + CCD1_info.RightLine[0]) / 2;
+		}
+
 	}
 	if (Gyro_info.RampUpDown == 1)
 	{
@@ -113,7 +121,6 @@ void   Motor_Process()
 		Cal_Speed_R = Pid_Calculate_Speed(&PidSpeedRight, Speed_Val2_R, Speed_Expect_R);
 
 		MotorSpeedOut(Cal_Speed_L, Cal_Speed_R);
-
 		Send_Motor_Info();
 #if TESTSD
 		mySD_Write_Status();
@@ -127,7 +134,7 @@ void Send_CCD_Imag()      //发送到蓝宙CCD上位机
 {
 	if (stop_flag)
 	{
-		if (ccd_switch_flag) SendImageData(&CCD1_info.Pixel[0]);                                //CCD上传到蓝宙上位机函数
+		if (ccd_switch_flag) SendImageData(CCD1_info.PixelBinary);                                //CCD上传到蓝宙上位机函数
 		else SendImageData(&CCD2_info.Pixel[0]);
 	}
 }
