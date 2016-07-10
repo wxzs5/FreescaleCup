@@ -3,7 +3,8 @@
 
 uint8 stop_flag = 1;  //目前的停车
 
-uint32 Calservo;
+int32 Calservo = 0;
+int32 Calservo_Expect;
 int32 Coderval;
 
 int32 Speed_Expect_L;
@@ -63,6 +64,8 @@ void   Steer_Process()
 	else if ( CCD1_info.Cross_Flag == 1 )
 	{
 		//Center_Board_Value = 64;
+		Car_state.pre = Car_state.now;      //下坡
+		Car_state.now = In_Crossing;
 		if (CCD2_info.Cross_Flag != 1)
 		{
 			Center_Board_Value = (CCD2_info.LeftLine[0] + CCD2_info.RightLine[0]) / 2;
@@ -78,10 +81,32 @@ void   Steer_Process()
 	{
 		Center_Board_Value = 64;
 	}
-	Calservo = SERVOCENTER + (int32) (Pid_Calculate_Servo(&PidServo, Center_Board_Value, 64));
+	// Calservo = Calservo_Expect;
+	Calservo_Expect =  (int32) (Pid_Calculate_Servo(&PidServo, Center_Board_Value, 64));
+	Calservo = Calservo * 0.4 + Calservo_Expect * 0.6;
+
+	// if (PidServo.error > 45)
+	// {
+	// 	Calservo = Calservo_Expect;
+	// 	Calservo_Expect = SERVOCENTER - 90;
+	// }
+	// if (PidServo.error < - 45)
+	// {
+
+	// 	Calservo_Expect = SERVOCENTER + 90;
+	// }
 	if (!stop_flag)
 	{
-		ftm_pwm_duty(FTM3, SERVO, Calservo);
+		ftm_pwm_duty(FTM3, SERVO, SERVOCENTER + Calservo);
+		if (check_flag < 1300)
+		{
+			check_flag++;
+			if (check_flag == 1300)
+			{
+				enable_irq(PORTC_IRQn);
+				check_flag = 51;  //停止起跑线计数
+			}
+		}
 #if TESTSD
 		mySD_Write_CCD(&CCD1_info);
 		mySD_Write_CCD(&CCD1_info);
@@ -128,7 +153,25 @@ void   Motor_Process()
 	}
 }
 
-
+void Car_State_Judge()
+{
+	static int32 Stop_Counter = 0;
+	if ((PidServo.temp < 4) && (PidServo.error < 10))
+	{
+		Stop_Counter++;
+	}
+	else
+	{
+		Stop_Counter = 0;
+		Car_state.pre = Car_state.now;
+		Car_state.now = In_Curva;
+	}
+	if (Stop_Counter >= 10)
+	{
+		Car_state.pre = Car_state.now;
+		Car_state.now = In_Straight;
+	}
+}
 
 void Send_CCD_Imag()      //发送到蓝宙CCD上位机
 {
@@ -170,10 +213,10 @@ void Send_Motor_Info()    //发送电机信息匿名上位机
 		push(0, (int16)( Speed_Expect + (int32)(ServoFuzzy.outSpeed) ) );
 		push(1, (int16)Speed_Expect_L);
 		push(2, (int16)(Speed_Expect_R));
-		push(3, (int16)(Speed_Average));
+		push(3, (int16)(Calservo));
 		push(4, (int16)(Speed_Val1_L));
 		push(5, (int16)Speed_Val2_R);
-		push(6, (int16)Cal_Speed_L);
+		push(6, (int16)(K_Speed_Diff * 1000));
 		push(7, (int16)Speed_Expect);
 		push(8, 2);
 		Data_Send((uint8 *)SendBuf);

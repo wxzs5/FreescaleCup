@@ -37,6 +37,7 @@ void main()
     {
       TIME0flag_10ms = 0 ;
       Steer_Process();
+      Car_State_Judge();
     }
 
     if (TIME0flag_15ms == 1)
@@ -61,15 +62,15 @@ void main()
       Send_CCD_Imag();
 
       //注意：此处应加上起跑线检测计数
-      //   if (check_flag < 10)
-      //   {
-      //     check_flag++;
-      //     if (check_flag == 10)
-      //     {
-      //       enable_irq(PORTC_IRQn);
-      //       check_flag = 51;  //停止起跑线计数
-      //     }
-      //   }
+      /*if (check_flag < 100)
+      {
+        check_flag++;
+        if (check_flag == 100)
+        {
+          enable_irq(PORTC_IRQn);
+          check_flag = 51;  //停止起跑线计数
+        }
+      }*/
     }
 
   } //for(;;)

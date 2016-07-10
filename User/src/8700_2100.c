@@ -154,7 +154,7 @@ void Imu_calculate()
 
   for (int i = 0; i < GYRO_LENGTH; i++) //70长度
     Gyro_info.Gyro_Sum += Gyro_info.Gyroscope_Fifo[i];
-  Gyro_info.Gyro_Sum - 65; //0偏
+  Gyro_info.Gyro_Sum -= 65; //0偏
 
   if (Gyro_info.Need_Delay_Counter > 0)
     Gyro_info.Need_Delay_Counter--;
@@ -168,8 +168,11 @@ void Imu_calculate()
     Gyro_info.Ramp_Over_0_1st = 1;
     Gyro_info.Ramp_Less_0 = 0;
     Gyro_info.Ramp_Over_0_2nd = 0;
+
+    Car_state.pre = Car_state.now;      //上坡
+    Car_state.now = Ramp_Up;
   }
-  if ( ( Gyro_info.Gyro_Sum < -Gyro_info.RampThresholdValue) &&
+  if ( ( Gyro_info.Gyro_Sum < -(Gyro_info.RampThresholdValue+500)) &&
        ( Gyro_info.Ramp_Over_0_1st == 1) &&
        ( Gyro_info.Ramp_Less_0 == 0) &&
        ( Gyro_info.Ramp_Over_0_2nd == 0) )
@@ -179,6 +182,8 @@ void Imu_calculate()
     Gyro_info.Ramp_Less_0 = 1;
     Gyro_info.Ramp_Over_0_2nd = 0;
 
+    Car_state.pre = Car_state.now;      //下坡
+    Car_state.now = Ramp_Down;
   }
   if ( ( Gyro_info.Gyro_Sum > Gyro_info.RampThresholdValue) &&
        ( Gyro_info.Ramp_Over_0_1st == 1) &&

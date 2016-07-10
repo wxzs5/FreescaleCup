@@ -11,7 +11,7 @@ float Speed_Expect = 295;
 void Pid_Init(void)
 {
   PidSpeedLeft.kp                  = 21;
-  PidSpeedLeft.ki                  = 11;
+  PidSpeedLeft.ki                  = 12;
   PidSpeedLeft.kd                  = 0;
   PidSpeedLeft.error               = 0;
   PidSpeedLeft.error_pre           = 0;
@@ -23,7 +23,7 @@ void Pid_Init(void)
   PidSpeedLeft.temp                = 0.01; //差速的参数
 
   PidSpeedRight.kp                 = 21;
-  PidSpeedRight.ki                 = 11;
+  PidSpeedRight.ki                 = 12;
   PidSpeedRight.kd                 = 0;
   PidSpeedRight.error              = 0;
   PidSpeedRight.error_pre          = 0;
@@ -50,8 +50,6 @@ void Pid_Init(void)
 
 float Pid_Calculate_Servo(Pidsuite *Pid, int16 Measured, int16 Expect)
 {
-  float kp , kd;
-
   Pid->error_pre_pre = Pid->error_pre;
   Pid->error_pre = Pid->error;
   Pid->error = Expect - Measured;

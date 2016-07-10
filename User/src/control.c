@@ -12,9 +12,6 @@ void print_road(Car_State *state)
     else if (state->now == Into_Curva) printf("Into_Curva->");
     else if (state->now == In_Curva) printf("In_Curva->");
     else if (state->now == Into_Obstacle) printf("Into_Obstacle->");
-    else if (state->now == In_Obstacle) printf("In_Obstacle->");
-    else if (state->now == Out_Obstacle) printf("Out_Obstacle->");
-    else if (state->now == Pre_Into_Obstacle) printf("Pre_Into_Obstacle->");
-    else if (state->now == In_Crossing)printf("In_Crossing->");
+    else printf("In_Crossing->");
   }
 }

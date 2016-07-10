@@ -255,17 +255,9 @@ uint8 i2c_write_reg(I2Cn_e i2cn, uint8 SlaveID, uint8 reg, uint8 Data)
     i2c_Stop(i2cn);
 
     i2c_delay();                                        //延时太短的话，可能写出错
+    
+    return 0;
 }
 
 
-uint8 oled_i2c_write(I2Cn_e i2cn, uint8 Data)
-{
 
-    i2c_Start(i2cn);                                    //发送启动信号
-
-    i2c_write_byte(i2cn, Data);                         //发送需要写入的数据
-
-    i2c_Stop(i2cn);
-
-    i2c_delay();                                        //延时太短的话，可能写出错
-}

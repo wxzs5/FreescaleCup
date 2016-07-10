@@ -47,7 +47,7 @@ void myCCD_DataInit(CCD_Info * CCD_info)
   }
 
   CCD_info->CCD_PhotoCenter = 64;
-  CCD_info->CCD_ObstacleShift = 2;          //默认偏移两个点
+  CCD_info->CCD_ObstacleShift = 22;          //默认偏移两个点
 
   for (ii = 0; ii < Line_SIZE; ii++)
   {
@@ -305,8 +305,34 @@ void myCCD_DataHandle(  CCD_Info *CCD1_info,
   Filter_binary(CCD1_info, CCD2_info);
 
   //CCD搜边线和偏差计算
+
   myCCD_CCD1_GetLineError(CCD1_info, Speed_info);
   myCCD_CCD2_GetLineError(CCD2_info);
+  switch (myCCD_GetObstacle(CCD1_info, CCD2_info))
+  {
+  case 1:
+  {
+    CCD1_info->CentralLine[0] = CCD1_info->CentralLine[0] + CCD1_info->CCD_ObstacleShift;
+    Car_state.pre = Car_state.now;
+    Car_state.now = Into_Obstacle;
+    Bell_On;
+    break;
+  }
+  case 2:
+  {
+    CCD1_info->CentralLine[0] = CCD1_info->CentralLine[0] - CCD1_info->CCD_ObstacleShift;
+    Car_state.pre = Car_state.now;
+    Car_state.now = Into_Obstacle;
+    Bell_On;
+    break;
+  }
+  case 0:
+  {
+    break;
+  }
+  default:            //不需要处理 cancel
+    break;
+  }
 }
 /*********************************************************************************
 *                               我要过六级                                       *
@@ -414,6 +440,8 @@ void myCCD_CCD1_GetLineError(CCD_Info *CCD1_info, Speed_Info *Speed_info)
 //      Bell_Off;
       CCD1_info->LeftLine[0] = Left_temp;
       CCD1_info->RightLine[0] = Right_temp;
+      CCD1_info->LossLine_Flag = 0;
+      CCD1_info->CCD_Ready_Num++;//CCD1数据有效次数自加
 
       /*if ((1 == Speed_info->DistanceOf1Cm_Flag) && (CCD1_info->CCD_Ready_Num < CCD1_DataReady_Num))//1cm到了,清零1cm标志放在更新摇头舵机偏差队列之后
       {
@@ -429,8 +457,8 @@ void myCCD_CCD1_GetLineError(CCD_Info *CCD1_info, Speed_Info *Speed_info)
       // Bell_On;
       //判断十字道，十字道不清除CCD1的有效次数
       if (  (1 == CCD1_info->PixelBinary[LinePixel_Temp])          //此处要加坡道！！！！！！！！！
-            && (1 == CCD1_info->PixelBinary[LinePixel_Temp - 3])
-            && (1 == CCD1_info->PixelBinary[LinePixel_Temp + 3]))//不是坡道则为十字道或者全黑丢线
+            && (1 == CCD1_info->PixelBinary[LinePixel_Temp - 5])
+            && (1 == CCD1_info->PixelBinary[LinePixel_Temp + 5]))//不是坡道则为十字道或者全黑丢线
       {
         CCD1_info->Cross_Flag = 1;
         CCD1_info->LeftLine[0] = CCD1_info->LeftLine[2];
@@ -587,12 +615,7 @@ void myCCD_CCD2_GetLineError(CCD_Info * CCD2_info)
 //      Bell_Off;
       CCD2_info->LeftLine[0] = Left_temp;
       CCD2_info->RightLine[0] = Right_temp;
-      /*if ((1 == Speed_info->DistanceOf1Cm_Flag) && (CCD2_info->CCD_Ready_Num < CCD1_DataReady_Num))//1cm到了,清零1cm标志放在更新摇头舵机偏差队列之后
-      {
-        CCD2_info->CCD_Ready_Num++;//CCD1数据有效次数自加
-      }*/
-      //CCD2_info->LeftLoseLine_Flag = 0;
-      //CCD2_info->RightLoseLine_Flag = 0;
+      CCD2_info->LossLine_Flag = 0;
     }
     else//可能是十字道,坡道和全黑丢线,停止更新左右边界值
     {
@@ -604,10 +627,14 @@ void myCCD_CCD2_GetLineError(CCD_Info * CCD2_info)
             && (1 == CCD2_info->PixelBinary[LinePixel_Temp + 3]))//不是坡道则为十字道或者全黑丢线
       {
         CCD2_info->Cross_Flag = 1;
-        CCD2_info->LeftLine[0] = CCD2_info->LeftLine[2];
-        CCD2_info->RightLine[0] = CCD2_info->RightLine[2];
       }
-      else CCD2_info->CCD_Ready_Num = 0;
+      //判断CCD全黑有效次数
+      else if (   (0 == CCD2_info->PixelBinary[LinePixel_Temp])          //此处要加坡道！！！！！！！！！
+                  && (0 == CCD2_info->PixelBinary[LinePixel_Temp - 5])
+                  && (0 == CCD2_info->PixelBinary[LinePixel_Temp + 5]))
+      {
+        CCD2_info->CCD_Ready_Num = 0;
+      }
     }
   }
 
@@ -631,6 +658,50 @@ void myCCD_CCD2_GetLineError(CCD_Info * CCD2_info)
       CCD2_info->RoadWidth[1] = CCD2_info->RoadWidth[0];
       CCD2_info->RoadWidth[0] = CCD2_info->RightLine[0] - CCD2_info->LeftLine[0];
     }
+  }
+}
+
+/*********************************************************************************
+*                               我要过六级                                       *
+**********************************************************************************
+* @file       CCD.c
+* @brief      void myCCD_DataInit(CCD_Info * CCD_info);
+* @version    v5.3
+* @date       2016-6-24
+*********************************************************************************/
+uint8 myCCD_GetObstacle(  CCD_Info *CCD1_info,
+                          CCD_Info *CCD2_info
+                       )
+{
+  if (  (CCD1_info->LossLine_Flag == 0)
+        && (CCD2_info->LossLine_Flag == 0))
+    //CCD1,CCD2没有丢边
+  {
+    if ((CCD1_info->RoadWidth[0] - CCD1_info->RoadWidth[6]) < -15) //CCD2路宽有突变
+    {
+      if ((CCD1_info->LeftLine[0] - CCD1_info->LeftLine[6] >= 15)
+          && (ABS(CCD1_info->RightLine[0] - CCD1_info->RightLine[6]) < 5))//CCD1和CCD2左边界相同，右边界不同
+      {
+        return 1;//路障在左边
+      }
+      else if ((CCD1_info->RightLine[0] - CCD1_info->RightLine[6] >= 15)
+               && (ABS(CCD1_info->LeftLine[0] - CCD1_info->LeftLine[6]) < 5))//CCD1和CCD2右边界相同，左边界不同
+      {
+        return 2;//路障在右边
+      }
+      else
+      {
+        return 0;
+      }
+    }
+    else
+    {
+      return 0;
+    }
+  }
+  else
+  {
+    return 0;
   }
 }
 

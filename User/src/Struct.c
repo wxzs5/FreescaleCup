@@ -5,9 +5,7 @@ uint16 StopType = 0;   //停车类型
 
 Parameter_Info  Parameter_info                 = {0};
 Car_State  Car_state                                     = {In_Straight};
-Car_State     Car_state_Pre                           = {In_Straight};
 Car_Mode Car_mode                                   = {SelfDef};//初始化为安全速度
-Road_Type    Road_type                                = {All};//默认赛道种类为全有(即：坡道,人字和路障)
 
 menu Menu = {0};
 

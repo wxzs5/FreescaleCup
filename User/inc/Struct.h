@@ -39,18 +39,14 @@ typedef struct
 	float temp;  //留一个临时变量为PID调节过程中打印参数
 } Pidsuite;
 
-
 typedef enum
 {
-	NeedJudge,			//需再判断
+	// NeedJudge,			//需再判断
 	In_Straight,             //在直道
 	Into_Curva,             //进弯道
 	In_Curva,                 //弯道
 	In_Crossing,             //十字
-	Pre_Into_Obstacle,       //在直道
 	Into_Obstacle,             //在直道
-	In_Obstacle,             //在直道
-	Out_Obstacle,             //在直道
 	Ramp_Up,			//上坡
 	Ramp_Down,			//下坡
 	Stop			//停车
@@ -60,18 +56,8 @@ typedef struct
 {
 	Car_State_e now;
 	Car_State_e pre;
-	int8 direc_now;
-	int8 direc_pre;
 } Car_State;
 
-
-
-typedef enum Road_Type_	//--------------------------------赛道种类(手动设定是否包含坡道，路障)
-{
-	None,					//纯竞速，没有坡道，路障(预赛可能用上)
-	Obstacle_Only,				//只有坡道(预赛可能用上)
-	All						//全部类型都有
-} Road_Type;
 
 typedef enum Car_Mode_//----------------------------------------选择速度模式(比赛时速度等级不同)
 {
@@ -286,9 +272,7 @@ extern Pidsuite PidSpeedRight;
 //新版
 extern Parameter_Info  Parameter_info;
 extern Car_State  	Car_state;
-extern Car_State 	Car_state_Pre;
 extern Car_Mode    Car_mode;
-extern Road_Type 	Road_type;
 extern menu Menu;
 
 

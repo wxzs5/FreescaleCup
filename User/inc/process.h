@@ -3,7 +3,7 @@
 
 
 
-extern uint32 Calservo;
+extern int32 Calservo;
 
 extern int32 Speed_Expect_L;
 extern int32 Speed_Expect_R;
@@ -26,6 +26,7 @@ extern uint8 stop_flag ;
 void Car_stop();    //停车函数
 void Steer_Process();   //舵机处理
 void Motor_Process();   //电机处理
+void Car_State_Judge();
 void Send_CCD_Imag();   //发送CCD信息到蓝宙上位机
 void Send_Steer_Info();   //发送舵机信息匿名上位机
 void Send_Motor_Info();   //发送电机信息匿名上位机

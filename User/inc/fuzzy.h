@@ -20,9 +20,9 @@
 
 #define 	EC_RNB		 -12
 #define 	EC_RNM		 -8
-#define 	EC_RNS		 -4
+#define 	EC_RNS		 -5
 #define 	EC_RZO		  0
-#define 	EC_RPS		        4
+#define 	EC_RPS		        5
 #define 	EC_RPM		  8
 #define 	EC_RPB		        12
 

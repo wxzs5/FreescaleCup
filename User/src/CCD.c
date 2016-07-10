@@ -254,7 +254,7 @@ void SendHex(uint8 hex)
 void SendImageData(uint8 * ImageData)
 {
 
-  uint8 i, temp;
+  uint8 i;
   uint8 crc = 0;
 
   /* Send Data */

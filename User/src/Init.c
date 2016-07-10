@@ -135,7 +135,7 @@ void Init_PORT_C(void)
   port_init(PTC2, ALT1 | IRQ_FALLING | PF);
 
   set_vector_handler(PORTC_VECTORn , PORTC_IRQHandler);
-  enable_irq(PORTC_IRQn);
+  // enable_irq(PORTC_IRQn);
 
 }
 /*!
@@ -157,11 +157,16 @@ void PORTC_IRQHandler(void)
  */
 void stop_IRQProcess(void)
 {
-  if (PTC0_IN == 0 && PTC1_IN == 1 && PTC2_IN == 0)
+  if ((PTC0_IN == 0 && PTC1_IN == 1 && PTC2_IN == 0) ||
+      (PTC0_IN == 1 && PTC1_IN == 1 && PTC2_IN == 0) ||
+      (PTC0_IN == 0 && PTC1_IN == 1 && PTC2_IN == 1))
   {
-    Speed_Expect = 0;
-    // disable_irq(PORTC_IRQn);
-    // check_flag = 0;
+    if ( Car_state.now == In_Straight )
+    {
+      Speed_Expect = 0;
+      // disable_irq(PORTC_IRQn);
+      // check_flag = 0;
+    }
   }
   else
   {
