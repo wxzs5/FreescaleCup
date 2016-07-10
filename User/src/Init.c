@@ -39,6 +39,8 @@ void Init_all()
   CCD2_info.ID = 2;
   Fuzzy_Init();
 
+  myData_Init();
+
   Init_uart4();
 
   CCD1_init();
@@ -136,6 +138,7 @@ void Init_PORT_C(void)
 
   set_vector_handler(PORTC_VECTORn , PORTC_IRQHandler);
   // enable_irq(PORTC_IRQn);
+  disable_irq(PORTC_IRQn);
 
 }
 /*!
@@ -157,13 +160,15 @@ void PORTC_IRQHandler(void)
  */
 void stop_IRQProcess(void)
 {
-  if ((PTC0_IN == 0 && PTC1_IN == 1 && PTC2_IN == 0) ||
-      (PTC0_IN == 1 && PTC1_IN == 1 && PTC2_IN == 0) ||
-      (PTC0_IN == 0 && PTC1_IN == 1 && PTC2_IN == 1))
+  if (PTC0_IN == 1 || PTC1_IN == 1 || PTC2_IN == 1)
+    // ||(PTC0_IN == 1 && PTC1_IN == 1 && PTC2_IN == 0) ||
+    // (PTC0_IN == 0 && PTC1_IN == 1 && PTC2_IN == 1))
   {
     if ( Car_state.now == In_Straight )
     {
-      Speed_Expect = 0;
+      // Speed_Expect = 0;
+      // PidSpeedLeft.temp = 0;
+      // PidSpeedRight.temp = 0;
       // disable_irq(PORTC_IRQn);
       // check_flag = 0;
     }

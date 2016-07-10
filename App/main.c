@@ -43,7 +43,7 @@ void main()
     if (TIME0flag_15ms == 1)
     {
       TIME0flag_15ms = 0 ;
-      Send_Steer_Info();
+      // Send_Steer_Info();
     }
 
     if (TIME0flag_20ms == 1)
@@ -61,16 +61,6 @@ void main()
       TIME0flag_100ms = 0 ;
       Send_CCD_Imag();
 
-      //注意：此处应加上起跑线检测计数
-      /*if (check_flag < 100)
-      {
-        check_flag++;
-        if (check_flag == 100)
-        {
-          enable_irq(PORTC_IRQn);
-          check_flag = 51;  //停止起跑线计数
-        }
-      }*/
     }
 
   } //for(;;)

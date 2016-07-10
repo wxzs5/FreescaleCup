@@ -113,13 +113,13 @@ void Gyro_read()
   i2c_delay();
   temp[3] =  i2c_read_reg(I2C0, SlaveAddress2100, OUT_Y_LSB_REG);
   i2c_delay();
-  temp[4] =  i2c_read_reg(I2C0, SlaveAddress2100, OUT_Z_MSB_REG);
-  i2c_delay();
-  temp[5] =  i2c_read_reg(I2C0, SlaveAddress2100, OUT_Z_LSB_REG);
-  i2c_delay();
-  Gyro_data.x = (((int16)((0x0000 | (temp[0] << 8)) + temp[1])) - 51) * -0.01563; //jiaodu bushi hudu
+  //temp[4] =  i2c_read_reg(I2C0, SlaveAddress2100, OUT_Z_MSB_REG);
+  //i2c_delay();
+  //temp[5] =  i2c_read_reg(I2C0, SlaveAddress2100, OUT_Z_LSB_REG);
+  //i2c_delay();
+  //Gyro_data.x = (((int16)((0x0000 | (temp[0] << 8)) + temp[1])) - 51) * -0.01563; //jiaodu bushi hudu
   Gyro_data.y = (((int16)((0x0000 | (temp[2] << 8)) + temp[3])) + 92) * -0.01563; //*15.63/1000
-  Gyro_data.z = (((int16)((0x0000 | (temp[4] << 8)) + temp[5])) + 4) * 0.01563;
+  //Gyro_data.z = (((int16)((0x0000 | (temp[4] << 8)) + temp[5])) + 4) * 0.01563;
 // Gyro_data.x = ((0x0000 | (temp[0]<<8)) + temp[1])*0.0002725;
 
 }
@@ -130,7 +130,7 @@ void Imu_calculate()
   static float gyro_z_tmp[4];
   static int gyro_z_counter = 0;
   Gyro_read();
-  Acc_read();
+  //Acc_read();
 
 //z轴四次平均
   gyro_z_tmp[gyro_z_counter] = Gyro_data.z;
@@ -172,7 +172,7 @@ void Imu_calculate()
     Car_state.pre = Car_state.now;      //上坡
     Car_state.now = Ramp_Up;
   }
-  if ( ( Gyro_info.Gyro_Sum < -(Gyro_info.RampThresholdValue+500)) &&
+  if ( ( Gyro_info.Gyro_Sum < -(Gyro_info.RampThresholdValue + 500)) &&
        ( Gyro_info.Ramp_Over_0_1st == 1) &&
        ( Gyro_info.Ramp_Less_0 == 0) &&
        ( Gyro_info.Ramp_Over_0_2nd == 0) )

@@ -12,7 +12,7 @@ extern int32 Speed_Average;
 extern float Cal_Speed_L;
 extern float Cal_Speed_R;
 
-extern uint8 check_flag;
+extern uint32 check_flag;
 
 extern uint8 reduce_spe_flag;
 
