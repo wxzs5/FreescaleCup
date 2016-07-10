@@ -57,9 +57,9 @@ void Fuzzy_Init()
   ServoFuzzy.outP           = 0;
   ServoFuzzy.outSpeed       = 0;
   ServoFuzzy.outD           = 0;
-  ServoFuzzy.ks               = 1;
+  ServoFuzzy.ks               = 0;
   ServoFuzzy.kp              = 1.1;
-  ServoFuzzy.kd              = 1;
+  ServoFuzzy.kd              = 0.35;
   ServoFuzzy.id              = 0;
 }
 

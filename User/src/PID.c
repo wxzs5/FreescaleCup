@@ -34,9 +34,9 @@ void Pid_Init(void)
   PidSpeedRight.outP               = 0;
   PidSpeedRight.temp               = 0.01;//差速的参数
 
-  PidServo.kp                      = 3.9;
+  PidServo.kp                      = 3.75;
   PidServo.ki                      = 0;
-  PidServo.kd                      = 6.7;
+  PidServo.kd                      = 6.5;
   PidServo.error                   = 0;
   PidServo.error_pre               = 0;
   PidServo.error_pre_pre           = 0;
