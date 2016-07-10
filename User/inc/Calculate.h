@@ -39,5 +39,6 @@ void myCCD_CCD2_GetLineError(CCD_Info *CCD2_info);
 
 uint8 myCCD_GetObstacle(CCD_Info *CCD1_info, CCD_Info *CCD2_info);
 
+uint8 myCCD_detect_startline(CCD_Info *CCD1_info, CCD_Info *CCD2_info);
 
 #endif

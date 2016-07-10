@@ -104,7 +104,7 @@ void   Steer_Process()
 			if (check_flag == 1300)
 			{
 				enable_irq(PORTC_IRQn);
-				check_flag = 51;  //停止起跑线计数
+				check_flag = 1301;  //停止起跑线计数
 			}
 		}
 #if TESTSD

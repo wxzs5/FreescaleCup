@@ -333,6 +333,19 @@ void myCCD_DataHandle(  CCD_Info *CCD1_info,
   default:            //不需要处理 cancel
     break;
   }
+  // switch (myCCD_detect_startline(CCD1_info, CCD2_info))
+  // {
+  // case 1:
+  // {
+  //   Speed_Expect = 0;
+  // }
+  // case 0:
+  // {
+  //   break;
+  // }
+  // default:            //不需要处理 cancel
+  //   break;
+  // }
 }
 /*********************************************************************************
 *                               我要过六级                                       *
@@ -677,14 +690,14 @@ uint8 myCCD_GetObstacle(  CCD_Info *CCD1_info,
         && (CCD2_info->LossLine_Flag == 0))
     //CCD1,CCD2没有丢边
   {
-    if ((CCD1_info->RoadWidth[0] - CCD1_info->RoadWidth[6]) < -15) //CCD2路宽有突变
+    if ((CCD1_info->RoadWidth[0] - CCD1_info->RoadWidth[6]) < -12) //CCD2路宽有突变
     {
-      if ((CCD1_info->LeftLine[0] - CCD1_info->LeftLine[6] >= 15)
+      if ((CCD1_info->LeftLine[0] - CCD1_info->LeftLine[6] >= 10)
           && (ABS(CCD1_info->RightLine[0] - CCD1_info->RightLine[6]) < 5))//CCD1和CCD2左边界相同，右边界不同
       {
         return 1;//路障在左边
       }
-      else if ((CCD1_info->RightLine[0] - CCD1_info->RightLine[6] >= 15)
+      else if ((CCD1_info->RightLine[6] - CCD1_info->RightLine[0] >= 10)
                && (ABS(CCD1_info->LeftLine[0] - CCD1_info->LeftLine[6]) < 5))//CCD1和CCD2右边界相同，左边界不同
       {
         return 2;//路障在右边
@@ -705,3 +718,87 @@ uint8 myCCD_GetObstacle(  CCD_Info *CCD1_info,
   }
 }
 
+/*********************************************************************************
+*                               我要过六级                                       *
+**********************************************************************************
+* @file       CCD.c
+* @brief      uint8 myCCD_detect_startline(CCD_Info *CCD2_info)
+* @version    v5.3
+* @date       2016-6-24
+*********************************************************************************/
+uint8 myCCD_detect_startline(CCD_Info *CCD1_info, CCD_Info *CCD2_info)
+{
+  int16 CentralLinePixel_Now = CCD2_info->CentralLine[0];//从上次的中点开始搜线
+  int16 LinePixel_Temp = CentralLinePixel_Now;
+
+  int16 Left_temp[3] = {0}, Right_temp[3] = {0};
+  int16 ii = 0 , line_counter = 0;
+  uint8 Left_startline_flag = 0, Right_startline_flag = 0 ;
+
+  if (       CCD2_info->LossLine_Flag == 0
+             && CCD2_info->AddLine_Flag == 0
+             && CCD1_info->LossLine_Flag == 0
+             && CCD1_info->AddLine_Flag == 0 ) //CCD1,CCD2没有丢边,且摇头很小
+  {
+    if ((CCD2_info->RoadWidth[0] - CCD2_info->RoadWidth[1]) < -30) //CCD1路宽有突变
+    {
+      /*------------------左边线------------------------*/
+      for (ii = LinePixel_Temp; ii > 3; ii--)
+      {
+        if ((CCD2_info->PixelBinary[ii - 2] == 0) && (CCD2_info->PixelBinary[ii - 1] == 0) && (CCD2_info->PixelBinary[ii] == 1))
+        {
+          Left_temp[line_counter] = ii;
+          line_counter++;
+        }
+      }
+      if (line_counter == 1)
+      {
+        Left_startline_flag = 1;
+      }
+      else
+      {
+        Left_startline_flag = 0;
+      }
+      line_counter = 0;
+      /*-------------------右边线------------------------*/
+      for (ii = LinePixel_Temp; ii < 125; ii++)
+      {
+        if ((CCD2_info->PixelBinary[ii] == 1) && (CCD2_info->PixelBinary[ii + 1] == 0) && (CCD2_info->PixelBinary[ii + 2] == 0))
+        {
+          Right_temp[line_counter] = ii;
+          line_counter++;
+        }
+      }
+      if (line_counter == 1)
+      {
+        Right_startline_flag = 1;
+      }
+      else
+      {
+        Right_startline_flag = 0;
+      }
+      line_counter = 0;
+
+      /*-------------------寻线结束------------------------*/
+      if (Right_startline_flag == 1 && Left_startline_flag == 1)
+      {
+        if (ABS((Left_temp[0] + Right_temp[0]) / 2 - (Left_temp[1] + Right_temp[1]) / 2) < 5)
+        {
+          return 1;
+        }
+        else
+        {
+          return 0;
+        }
+      }
+      else
+      {
+        return 0;
+      }
+    }
+  }
+  else
+  {
+    return 0;
+  }
+}

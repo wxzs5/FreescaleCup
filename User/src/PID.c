@@ -56,7 +56,7 @@ float Pid_Calculate_Servo(Pidsuite *Pid, int16 Measured, int16 Expect)
 
   Pid->temp = Pid->error - Pid->error_pre_pre;
   MYRANGE(Pid->temp, 12, -12);
-  Fuzzy_Cal(&ServoFuzzy, Pid->error, Pid->temp);
+  if (Car_state.now != Ramp_Up && Car_state.now != Ramp_Down) Fuzzy_Cal(&ServoFuzzy, Pid->error, Pid->temp);
   Pid->kpi = Pid->kp + ServoFuzzy.outP;
   Pid->kdi = Pid->kd + ServoFuzzy.outD;
 

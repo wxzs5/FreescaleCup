@@ -18,13 +18,13 @@
 #define 	RPM		  30
 #define 	RPB		        52
 
-#define 	EC_RNB		 -12
-#define 	EC_RNM		 -8
-#define 	EC_RNS		 -5
+#define 	EC_RNB		 -13
+#define 	EC_RNM		 -9
+#define 	EC_RNS		 -6
 #define 	EC_RZO		  0
-#define 	EC_RPS		        5
-#define 	EC_RPM		  8
-#define 	EC_RPB		        12
+#define 	EC_RPS		        6
+#define 	EC_RPM		  9
+#define 	EC_RPB		        13
 
 typedef struct
 {

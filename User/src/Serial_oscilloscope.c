@@ -196,8 +196,8 @@ void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num)
 		temp = ( (uint16)(*(data_buf + 20) << 8) | *(data_buf + 21) );
 		if (temp != 65535)
 		{
-			PidSpeedLeft.temp = 0.001 * ( temp - 30000);
-			if (PidSpeedLeft.temp < 0) PidSpeedLeft.temp = -(30 + PidSpeedLeft.temp);
+			PidSpeedLeft.temp = 0.0001 * ( temp - 30000);
+			if (PidSpeedLeft.temp < 0) PidSpeedLeft.temp = -(3 + PidSpeedLeft.temp);
 		}
 
 		ANO_DT_Send_Check(*(data_buf + 2), sum);
