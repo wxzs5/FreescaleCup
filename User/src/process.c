@@ -82,8 +82,9 @@ void   Steer_Process()
 	{
 		Center_Board_Value = 64;
 	}
-	Calservo_Expect =  (int32) (Pid_Calculate_Servo(&PidServo, Center_Board_Value, 64));
-	Calservo = Calservo * 0.4 + Calservo_Expect * 0.6;
+	// Calservo_Expect =  (int32) (Pid_Calculate_Servo(&PidServo, Center_Board_Value, 64));
+	// Calservo = Calservo * 0.4 + Calservo_Expect * 0.6;
+	Calservo = (int32)(Pid_Calculate_Servo(&PidServo, Center_Board_Value, 64));
 	gpio_set(PTA16, 0);
 	// if (PidServo.error > 45)
 	// {
