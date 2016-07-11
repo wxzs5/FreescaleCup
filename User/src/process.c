@@ -55,6 +55,9 @@ void   Steer_Process()
 	//Center_Board_Value = CCD1_info.CentralLine[0];
 	if (CCD1_info.LossLine_Flag != 1)
 	{
+		if (CCD1_info.Cross_state == 1) CCD1_info.Cross_state = 2;
+		else if (CCD1_info.Cross_state == 3)CCD1_info.Cross_state = 0;
+
 		Center_Board_Value = CCD1_info.CentralLine[0];
 		Bell_Off;
 	}
@@ -67,20 +70,25 @@ void   Steer_Process()
 		//Center_Board_Value = 64;
 		Car_state.pre = Car_state.now;      //下坡
 		Car_state.now = In_Crossing;
-		// if (CCD2_info.Cross_Flag != 1)
-		// {
-		// 	Center_Board_Value = (CCD2_info.LeftLine[0] + CCD2_info.RightLine[0]) / 2;
-		// 	Bell_On;
-		// }
-		// else
-		// {
-		Center_Board_Value = (CCD1_info.LeftLine[0] + CCD1_info.RightLine[0]) / 2;
-		// }
 
+		// Center_Board_Value = (CCD1_info.LeftLine[0] + CCD1_info.RightLine[0]) / 2;
+		if (CCD1_info.Cross_state == 0)
+		{
+			CCD1_info.Cross_state = 1;
+			Center_Board_Value = (CCD1_info.LeftLine[0] + CCD1_info.RightLine[0]) / 2;
+		}
+		else if (CCD1_info.Cross_state == 2)
+		{
+			Bell_On;
+			CCD1_info.Cross_state = 3;
+			if (CCD1_info.CentralLine[6] - 64 < -5) Center_Board_Value = 64 - CCD1_info.CCD_CrossShift;
+			else if (CCD1_info.CentralLine[6] - 64 > 5) Center_Board_Value = 64 + CCD1_info.CCD_CrossShift;
+			else Center_Board_Value = (CCD1_info.LeftLine[0] + CCD1_info.RightLine[0]) / 2;
+		}
 	}
 	if (Gyro_info.RampUpDown == 1)
 	{
-		Center_Board_Value = 64;
+		Center_Board_Value = CCD2_info.CentralLine[0];
 	}
 	// Calservo_Expect =  (int32) (Pid_Calculate_Servo(&PidServo, Center_Board_Value, 64));
 	// Calservo = Calservo * 0.4 + Calservo_Expect * 0.6;
@@ -99,13 +107,13 @@ void   Steer_Process()
 	if (!stop_flag)
 	{
 		ftm_pwm_duty(FTM3, SERVO, SERVOCENTER + Calservo);
-		if (check_flag < 1300)
+		if (check_flag < 1400)
 		{
 			check_flag++;
-			if (check_flag == 1300)
+			if (check_flag == 1400)
 			{
 				enable_irq(PORTC_IRQn);
-				check_flag = 1301;  //停止起跑线计数
+				check_flag = 1401;  //停止起跑线计数
 			}
 		}
 #if TESTSD
@@ -196,7 +204,7 @@ void Send_CCD_Imag()      //发送到蓝宙CCD上位机
 {
 	// if (stop_flag)
 	// {
-	// 	if (ccd_switch_flag) SendImageData(CCD1_info.PixelBinary);                                //CCD上传到蓝宙上位机函数
+	// 	if (ccd_switch_flag) SendImageData(CCD1_info.Pixel[0]);                                //CCD上传到蓝宙上位机函数
 	// 	else SendImageData(&CCD2_info.Pixel[0]);
 	// }
 }

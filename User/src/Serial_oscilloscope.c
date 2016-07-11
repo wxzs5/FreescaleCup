@@ -211,8 +211,11 @@ void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num)
 			else Speed_Expect = temp - 1000;
 		}
 		temp =  (uint16)(*(data_buf + 6) << 8) | *(data_buf + 7);
-		if (temp != 65535) Tune_Mode = 0;
-
+		if (temp < 200)
+		{
+			if (temp < 100) CCD1_info.CCD_CrossShift = -temp;
+			else CCD1_info.CCD_CrossShift = temp - 100;
+		}
 		temp =  (uint16)(*(data_buf + 8) << 8) | *(data_buf + 9);
 		if (temp != 65535) Tune_Mode = 4;
 

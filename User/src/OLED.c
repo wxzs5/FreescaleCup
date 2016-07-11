@@ -877,34 +877,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 		}
 	}
 	break;//end of Go
-	case 4:  // ChkCCD
-	{
-		if (Menu->Clear)
-		{
-			myOLED_Clear();
-			Menu->Clear = 0;
-		}
-		myOLED_String(4, 1, "*");
-		myOLED_String(6, 10, "Go");
-		myOLED_String(4, 10, "ChkCCD");
-		myOLED_String(2, 10, "ChkRp");
-		myOLED_String(4, 50, "CheckCCD");
-
-		switch (Menu->choice_flag % 100 / 10)
-		{
-		case 1:  //第二层
-		{
-			myOLED_String(4, 40, "*");
-			Menu->Ready_Go =  0;
-			Car_mode = CheckCCD;
-		}
-		break;
-		default:
-			break;
-		}
-	}
-	break;//end of ChkCCD
-	case 5: //ChkRp
+	case 4: //ChkRp
 	{
 		if (Menu->Clear)
 		{
@@ -931,7 +904,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 	break;//end of ChkRp
 	default :
 	{
-		Menu->choice_flag  %= 600;
+		Menu->choice_flag  %= 500;
 	}
 	break;
 	}

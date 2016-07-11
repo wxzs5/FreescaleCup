@@ -84,6 +84,9 @@ typedef struct CCD_Info_//--------------------------------CCD数据
 
 	int16 CCD_PhotoCenter;        //图像的中心点
 	int16 CCD_ObstacleShift;      //路障的时候图像偏移点数
+	int16 CCD_CrossShift;       //十字时偏离的点数
+	int16 Cross_state;            //过十字的状态
+	int16 Cross_Shift_Counter;
 
 	int16  LeftLine[Line_SIZE];   //左边界队列
 	int16  CentralLine[Line_SIZE];  //中线队列
@@ -160,38 +163,19 @@ typedef struct Speed_Info_//-------------------------------------------------速
 	int16 DistanceOfObstacle_Counter;		//路障1cm距离计数
 	int16 DistanceOfSpeedMode3_Counter;	//3档高速1cm距离计数
 	int16 DistanceOfSpeedMode3_Max;		//使用3档的最大高速距离
-	int16 DistanceOfRoadInvalid_Counter;	//道路无效最长距离,超过距离则强制有效
-	int16 DistanceOfCCD1GetSL_Counter;	//CCD1预判起跑线后的最长检测距离
 
 	uint8 SpeedCalculate_Enable;			//计算速度使能
-
-	int16 Error_K;
-	int16 Error_D_K;
 
 } Speed_Info;
 
 typedef struct Parameter_Info_//------------------------------------------一些参数
 {
-	uint8 Parameter_OK;
-	uint8 UART_RecvData;				//用于串口数据接收
 	float StartEndLine_Fifo[10][2];		//起跑线队列,10行2列，第一列记录红外管标号，第二列记录采集时间
 
 	float AD_MultK_f;
 	float CCD1_AD_TargetValue;			//CCD电压放大的目标值
 	int16 CCD1_Binary_MAX;			//CCD阈值上限
 	int16 CCD1_Binary_MIN;			//CCD阈值下限
-
-	uint8 GetRamp_Enable;				//检测坡道使能(TRUE/FALSE)
-	uint8 GetStartEndLine_Enable;		//检测起跑线使能(TRUE/FALSE)
-	uint8 GetStartEndLine_Flag;		//检测起跑线标记（1/0）
-	uint8 GetObstacle_Enable;			//检测路障使能(TRUE/FALSE)
-	uint8 RoadInvalid_Enable;			//检测道路有效无效判断(TRUE/FALSE)
-	uint8 GetStartEndLine_SameLight_Enable;//起跑线检测同侧红外管使能
-	uint8 CCD1GetSL_Enable;			//CCD1识别起跑线使能
-	uint8 WheelOutOfWay_Enable;		//判断轮子出界使能
-
-	int16 RampJgeInAdvce_Num;			//坡道预判计数
-	int16 Obstacle_OK_Num;			//路障判断次数计数，连续几次检测到路障才认为是路障
 
 	int16 Mode_HighSpeedDistance;		//高速距离
 
@@ -214,35 +198,11 @@ typedef struct Parameter_Info_//------------------------------------------一些
 	uint8 RampReady_Distance;			//预判坡道超过该距离还未判断到坡道则清除预判标记，防止预判错误时长时间减速
 	uint8 RampReady_FLag;				//坡道预判标记
 	uint8 LongStraight_Flag;
-	uint8 CCD1_GetedStartEndLine_Flag;//CCD1识别到起跑线标记
 
 	uint8 SD_Data_name_Change;  //SD卡存储信息
 
 } Parameter_Info;
 
-#ifdef  RemRoad_Control_Enable
-
-typedef struct RemSpeedUpDown_Info_//-----------------------------------记忆算法结构体
-{
-	uint8 Ramp_Counter;				//坡道计数
-	uint16 RampSpeedUp[2][3];			//有2个坡道
-	uint8 Ramp_Num[2];
-	int16 RampRemDistance[4];
-
-	uint8 Cross_Counter;				//十字道计数
-	uint16 CrossSpeedUp[16][3];		//有16个十字道
-	uint8 Cross_Num[2];
-	int16 CrossRemDistance[4];
-
-	uint8 Obstacle_Counter;			//路障计数
-	uint16 ObstacleSpeedUp[2][3];	//有2个路障
-	uint8 Obstacle_Num[2];
-	int16 ObstacleRemDistance[4];
-
-	uint8 RemRoad_Enable;				//记忆算法使能（TRUE/FALSE）
-} RemSpeedUpDown_Info;
-
-#endif
 
 typedef struct Flash_Info_//------------------------------------------------Flash操作
 {
@@ -284,9 +244,7 @@ extern Speed_Info Speed_info;
 extern Gyro_Info Gyro_info;
 extern Flash_Info Flash_info;
 
-#ifdef  RemRoad_Control_Enable
-extern RemSpeedUpDown_Info RemSpeedUpDown_info;
-#endif
+
 
 
 //函数声明

@@ -160,15 +160,15 @@ void PORTC_IRQHandler(void)
  */
 void stop_IRQProcess(void)
 {
-  if (PTC0_IN == 1 || PTC1_IN == 1 || PTC2_IN == 1)
-    // ||(PTC0_IN == 1 && PTC1_IN == 1 && PTC2_IN == 0) ||
-    // (PTC0_IN == 0 && PTC1_IN == 1 && PTC2_IN == 1))
+  if ((PTC0_IN == 0 && PTC1_IN == 1 && PTC2_IN == 0)
+      || (PTC0_IN == 1 && PTC1_IN == 1 && PTC2_IN == 0)
+      || (PTC0_IN == 0 && PTC1_IN == 1 && PTC2_IN == 1))
   {
     if ( Car_state.now == In_Straight )
     {
-      // Speed_Expect = 0;
-      // PidSpeedLeft.temp = 0;
-      // PidSpeedRight.temp = 0;
+      Speed_Expect = 0;
+      PidSpeedLeft.temp = 0;
+      PidSpeedRight.temp = 0;
       // disable_irq(PORTC_IRQn);
       // check_flag = 0;
     }

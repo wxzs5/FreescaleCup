@@ -34,27 +34,6 @@
 #define   S_L Parameter_info.GetStartEndLine_Flag
 #define   CCDL  Parameter_info.CCD1GetSL_Enable
 
-#ifdef RemRoad_Control_Enable
-
-#define   S_Z1  RemSpeedUpDown_info.Cross_Num[0]
-#define   S_Z2  RemSpeedUpDown_info.Cross_Num[1]
-#define   SQ1   RemSpeedUpDown_info.CrossRemDistance[0]
-#define   SG1   RemSpeedUpDown_info.CrossRemDistance[1]
-#define   SQ2   RemSpeedUpDown_info.CrossRemDistance[2]
-#define   SG2   RemSpeedUpDown_info.CrossRemDistance[3]
-
-#define   P_D1  RemSpeedUpDown_info.Ramp_Num[0]
-#define   P_D2  RemSpeedUpDown_info.Ramp_Num[1]
-#define   PQ1   RemSpeedUpDown_info.RampRemDistance[0]
-#define   PG1   RemSpeedUpDown_info.RampRemDistance[1]
-#define   PQ2   RemSpeedUpDown_info.RampRemDistance[2]
-#define   PG2   RemSpeedUpDown_info.RampRemDistance[3]
-
-#define   Jiyi  RemSpeedUpDown_info.RemRoad_Enable
-#define   C_J Parameter_info.WheelOutOfWay_Enable
-#define   P_Y   CCD2_info.CCD_ObstacleShift
-
-#endif
 
 
 

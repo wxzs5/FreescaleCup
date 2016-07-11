@@ -48,6 +48,9 @@ void myCCD_DataInit(CCD_Info * CCD_info)
 
   CCD_info->CCD_PhotoCenter = 64;
   CCD_info->CCD_ObstacleShift = 22;          //默认偏移两个点
+  CCD_info->CCD_CrossShift = 10;
+  CCD_info->Cross_Shift_Counter = 4;
+  CCD_info->Cross_state = 0;
 
   for (ii = 0; ii < Line_SIZE; ii++)
   {

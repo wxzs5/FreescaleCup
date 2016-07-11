@@ -13,11 +13,8 @@ Speed_Info Speed_info = {0};
 
 Gyro_Info Gyro_info = {0};
 
-// DMA_Required_Variable DMA_Variable_1= {0};
 // Flash_Info Flash_info= {0};
-#ifdef  RemRoad_Control_Enable
-RemSpeedUpDown_Info RemSpeedUpDown_info = {0};
-#endif
+
 
 CCD_Info CCD1_info = {0};
 CCD_Info CCD2_info = {0};
@@ -36,7 +33,7 @@ CCD_Info CCD2_info = {0};
 *************************************************************************/
 void myData_Init()
 {
-    Speed_info.Obstacle_Speed = 290;
-    Speed_info.RampUp_Speed = 290;
-    Speed_info.RampDown_Speed = 280;
+    Speed_info.Obstacle_Speed = 250;
+    Speed_info.RampUp_Speed = 280;
+    Speed_info.RampDown_Speed = 260;
 }
