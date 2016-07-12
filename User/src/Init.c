@@ -71,30 +71,30 @@ void Init_all()
   Init_TLY();
 #endif
 
-#if TESTSD
 
-  /***********  //lcd菜单初始化选择，注意*******/
-  while (lcd_menu_display_init(&Menu))
-  {
-    if (1 == Parameter_info.OLED_NoAction_Flag) //当按键没有反应的时候计时退出
-    {
-      if (Parameter_info.OLED_NoAction_Counter > 0)
-      {
-        Parameter_info.OLED_NoAction_Counter--;
-      }
-      else if (Parameter_info.OLED_NoAction_Counter <= 0)
-      {
-        break;//直接跳出OLED等待
-      }
-    }
-  }
+  // /***********  //lcd菜单初始化选择，注意*******/
+  // while (lcd_menu_display_init(&Menu))
+  // {
+  //   if (1 == Parameter_info.OLED_NoAction_Flag) //当按键没有反应的时候计时退出
+  //   {
+  //     if (Parameter_info.OLED_NoAction_Counter > 0)
+  //     {
+  //       Parameter_info.OLED_NoAction_Counter--;
+  //     }
+  //     else if (Parameter_info.OLED_NoAction_Counter <= 0)
+  //     {
+  //       break;//直接跳出OLED等待
+  //     }
+  //   }
+  // }
+#if TESTSD
   mySDWrite_Para();
   mySD_RunData_Init();
 #endif
 
+  DELAY_MS(1000);
   Init_PIT0();
   Init_PIT1();   //初始化电机控制定时
-  DELAY_MS(1000);
 }
 
 void Init_uart4(void)
@@ -172,10 +172,6 @@ void stop_IRQProcess(void)
       // disable_irq(PORTC_IRQn);
       // check_flag = 0;
     }
-  }
-  else
-  {
-    return;
   }
 }
 

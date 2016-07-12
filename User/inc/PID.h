@@ -6,7 +6,7 @@
 #define SERVOCENTER 945
 
 extern float Speed_Expect;
-
+extern float Ramp_Kp;
 
 
 void Pid_Init(void);

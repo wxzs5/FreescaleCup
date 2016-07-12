@@ -36,7 +36,7 @@ void Init2100()
   i2c_delay();
   Gyro_info.counter = 0;
   Gyro_info.Gyro_Sum = 0;
-  Gyro_info.RampThresholdValue = 2000;
+  Gyro_info.RampThresholdValue = 1700;
   Gyro_info.Need_Delay_Counter = 0;
 
 }

@@ -656,11 +656,11 @@ uint8 lcd_menu_display_init(menu * Menu)
 		if (Menu->Clear) { myOLED_Clear(); Menu->Clear = 0;}
 		myOLED_String(4, 1, "*");
 		myOLED_String(6, 10, "ChkRp"); myOLED_String(6, 50, "S_P"); myOLED_Decimals(6, 87, PidServo.kp);
-		myOLED_String(2, 10, "Pid"); myOLED_String(5, 50, "S_I"); myOLED_Decimals(5, 87, PidServo.ki);
-		myOLED_String(4, 10, "Shudu"); myOLED_String(4, 50, "S_D"); myOLED_Decimals(4, 87, PidServo.kd);
-		myOLED_String(3, 50, "Diff"); myOLED_Decimals(3, 87, PidSpeedLeft.temp);
-		myOLED_String(2, 50, "SExp"); myOLED_Decimals(2, 87, Speed_Expect);
-		myOLED_String(1, 50, "TingC"); myOLED_Decimals(1, 87, stop_flag);
+		myOLED_String(2, 10, "Shudu"); myOLED_String(5, 50, "S_D"); myOLED_Decimals(5, 87, PidServo.kd);
+		myOLED_String(4, 10, "Pid"); myOLED_String(4, 50, "CrShi"); myOLED_Dec4(4, 87, Crshift);
+		myOLED_String(3, 50, "Diff"); myOLED_Decimals(3, 87, PidSpeedLeft.temp * 100);
+		myOLED_String(2, 50, "SExp"); myOLED_Dec(2, 87, (int16)Speed_Expect);
+		myOLED_String(1, 50, "RpThr"); myOLED_Dec(1, 87, Ramp);
 
 		switch (Menu->choice_flag % 100 / 10)
 		{
@@ -674,7 +674,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(6, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(PidServo.kp, 30, -30);
+				MAP(PidServo.kp, 2.8, 1.8);
 				break;
 			}
 			break;
@@ -688,7 +688,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(5, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(PidServo.ki, 30, -30);
+				MAP(PidServo.kd, 25, 12);
 				break;
 			}
 			break;
@@ -702,7 +702,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(4, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(PidServo.kd, 30, -30);
+				MAP(Crshift, 50, 0);
 				break;
 			}
 			break;
@@ -716,7 +716,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(3, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(PidSpeedLeft.temp, 30, -30);
+				MAP(PidSpeedLeft.temp, 0.015, 0.003);
 				break;
 			}
 			break;
@@ -730,7 +730,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(2, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(Speed_Expect, 500, 300);
+				MAP(Speed_Expect, 410, 260);
 				break;
 			}
 			break;
@@ -744,7 +744,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(1, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(stop_flag, 1, 0);
+				MAP(Ramp, 2500, 1000);
 				break;
 			}
 			break;
@@ -757,12 +757,14 @@ uint8 lcd_menu_display_init(menu * Menu)
 	{
 		if (Menu->Clear) { myOLED_Clear(); Menu->Clear = 0;}
 		myOLED_String(4, 1, "*");
-		myOLED_String(6, 10, "Pid"); myOLED_String(6, 50, "Zhi"); myOLED_Dec(6, 87, zhi);
-		myOLED_String(4, 10, "SuDu"); myOLED_String(5, 50, "Wan"); myOLED_Dec(5, 87, wan);
-		myOLED_String(2, 10, "Go"); myOLED_String(4, 50, "X-S"); myOLED_Dec(4, 87, x_s);
+		myOLED_String(6, 10, "Pid"); myOLED_String(6, 50, "D_T"); myOLED_Dec(6, 87, D_T);
+		myOLED_String(4, 10, "SuDu"); myOLED_String(5, 50, "Time"); myOLED_Dec(5, 87, Parameter_info.Time);
+		myOLED_String(2, 10, "Go"); myOLED_String(4, 50, "R_Kp"); myOLED_Decimals(4, 87, Ramp_Kp);
 		myOLED_String(3, 50, "Up"); myOLED_Dec(3, 87, Up);
 		myOLED_String(2, 50, "Dn"); myOLED_Dec(2, 87, Dn);
 		myOLED_String(1, 50, "LuZ"); myOLED_Dec(1, 87, LuZ);
+
+		//myOLED_String(5, 50, "x_s"); myOLED_Decimals(5, 87, Parameter_info.Snake_dead);
 		switch (Menu->choice_flag % 100 / 10)
 		{
 		case 1:  //第二层	直道	速度
@@ -775,11 +777,11 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(6, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(zhi, 450, 250);
+				MAP(D_T, 2500, 1200);
 				break;
 			}
 			break;
-		case 2: //第二层	弯道	速度
+		case 2: //第二层	运行时间
 			myOLED_String(5, 40, "*");
 			switch (Menu->choice_flag % 10)
 			{
@@ -789,11 +791,12 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(5, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(wan, 400, 200);
+				MAP(Parameter_info.Time, 2800, 1400);
+				//MAP(Parameter_info.Snake_dead, 0.3, 0);
 				break;
 			}
 			break;
-		case 3:  ////第二层	小S 速度
+		case 3:  ////第二层
 			myOLED_String(4, 40, "*");
 			switch (Menu->choice_flag % 10)
 			{
@@ -803,7 +806,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(4, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(x_s, 400, 200);
+				MAP(Ramp_Kp, 2, 0);
 				break;
 			}
 			break;
@@ -817,7 +820,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(3, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(Up, 400, 200);
+				MAP(Up, 350, 200);
 				break;
 			}
 			break;
@@ -831,7 +834,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(2, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(Dn, 400, 200);
+				MAP(Dn, 350, 200);
 				break;
 			}
 			break;
@@ -845,7 +848,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 				myOLED_String(1, 77, "*");
 				Menu->Tun_Res = adc_once(ADC1_DM1, ADC_8bit);
 				MYRANGE(Menu->Tun_Res, 140, 40);
-				MAP(LuZ, 400, 200);
+				MAP(LuZ, 350, 200);
 				break;
 			}
 		default:
@@ -863,14 +866,16 @@ uint8 lcd_menu_display_init(menu * Menu)
 		myOLED_String(4, 1, "*");
 		myOLED_String(6, 10, "Shudu");
 		myOLED_String(4, 10, "Go");
-		myOLED_String(2, 10, "ChkCCD");
+		myOLED_String(2, 10, "ChkRp");
 		myOLED_String(4, 50, "Ready--Go");
+		myOLED_String(2, 50, "STOP"); myOLED_Dec(2, 87, stop_flag);
 		switch (Menu->choice_flag % 100 / 10)
 		{
 		case 1:  //第二层
 			myOLED_String(4, 40, "*");
 			Menu->Ready_Go =  0;
 			Car_mode = SelfDef;
+			myOLED_Clear();
 			break;
 		default:
 			break;
@@ -885,7 +890,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 			Menu->Clear = 0;
 		}
 		myOLED_String(4, 1, "*");
-		myOLED_String(6, 10, "ChkCCD");
+		myOLED_String(6, 10, "Go");
 		myOLED_String(4, 10, "ChkRp");
 		myOLED_String(2, 10, "Pid");
 		myOLED_String(4, 50, "CheckRp");
@@ -896,6 +901,7 @@ uint8 lcd_menu_display_init(menu * Menu)
 			myOLED_String(4, 40, "*");
 			Menu->Ready_Go =  0;
 			Car_mode = CheckRamp;
+			stop_flag = 1;
 			break;
 		default:
 			break;

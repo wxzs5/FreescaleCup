@@ -1,5 +1,6 @@
 #include "include.h"
 
+
 Fuzzysuite ServoFuzzy;
 
 
@@ -190,7 +191,7 @@ void Fuzzy_Cal(Fuzzysuite *Fuzzy, float error, float ec)
                                 );
 }
 
-#include "include.h"
+
 
 Fuzzysuite ServoFuzzy;
 

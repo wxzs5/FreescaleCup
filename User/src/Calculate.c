@@ -48,7 +48,7 @@ void myCCD_DataInit(CCD_Info * CCD_info)
 
   CCD_info->CCD_PhotoCenter = 64;
   CCD_info->CCD_ObstacleShift = 22;          //默认偏移两个点
-  CCD_info->CCD_CrossShift = 10;
+  CCD_info->CCD_CrossShift = 30;
   CCD_info->Cross_Shift_Counter = 4;
   CCD_info->Cross_state = 0;
 
@@ -111,6 +111,7 @@ void myCCD_FilterAndBinarization(CCD_Info *CCD1_info, CCD_Info *CCD2_info)
   uint8 AD1_MIN = 255, AD2_MIN = 255;
   uint16 ADD_buf = 0;
   uint8 BinaryEdgeValue1 = 150, BinaryEdgeValue2 = 150;
+
 
   //进行CCD数据采集滤波
   for (ii = 0; ii < 128; ii++)//60us
@@ -311,30 +312,68 @@ void myCCD_DataHandle(  CCD_Info *CCD1_info,
 
   myCCD_CCD1_GetLineError(CCD1_info, Speed_info);
   myCCD_CCD2_GetLineError(CCD2_info);
-  switch (myCCD_GetObstacle(CCD1_info, CCD2_info))
+
+  if (CCD1_info->LossLine_Flag != 1)
   {
-  case 1:
-  {
-    CCD1_info->CentralLine[0] = CCD1_info->CentralLine[0] + CCD1_info->CCD_ObstacleShift;
-    Car_state.pre = Car_state.now;
-    Car_state.now = Into_Obstacle;
-    Bell_On;
-    break;
+    if (CCD1_info->Cross_state == 1) CCD1_info->Cross_state = 2;
+    else if (CCD1_info->Cross_state == 3)CCD1_info->Cross_state = 0;
+
+    Center_Board_Value = CCD1_info->CentralLine[0];
+    Bell_Off;
   }
-  case 2:
+  else if (CCD1_info->AddLine_Flag == 1)
   {
-    CCD1_info->CentralLine[0] = CCD1_info->CentralLine[0] - CCD1_info->CCD_ObstacleShift;
-    Car_state.pre = Car_state.now;
-    Car_state.now = Into_Obstacle;
-    Bell_On;
-    break;
+    Center_Board_Value = (CCD1_info->LeftLine[0] + CCD1_info->RightLine[0]) / 2;
   }
-  case 0:
+  else if ( CCD1_info->Cross_Flag == 1 )
   {
-    break;
+    //Center_Board_Value = 64;
+    Car_state.pre = Car_state.now;      //下坡
+    Car_state.now = In_Crossing;
+
+    // Center_Board_Value = (CCD1_info.LeftLine[0] + CCD1_info.RightLine[0]) / 2;
+    if (CCD1_info->Cross_state == 0)
+    {
+      CCD1_info->Cross_state = 1;
+      Center_Board_Value = (CCD1_info->LeftLine[0] + CCD1_info->RightLine[0]) / 2;
+    }
+    else if (CCD1_info->Cross_state == 2)
+    {
+      // Bell_On;
+      CCD1_info->Cross_state = 3;
+      if (CCD1_info->CentralLine[6] - 64 < -5) Center_Board_Value = 64 - CCD1_info->CCD_CrossShift;
+      else if (CCD1_info->CentralLine[6] - 64 > 5) Center_Board_Value = 64 + CCD1_info->CCD_CrossShift;
+      else Center_Board_Value = (CCD1_info->LeftLine[0] + CCD1_info->RightLine[0]) / 2;
+    }
   }
-  default:            //不需要处理 cancel
-    break;
+  if (Gyro_info.RampUpDown != 1)
+  {
+    //障碍处理
+    switch (myCCD_GetObstacle(CCD1_info, CCD2_info))
+    {
+    case 1:
+    {
+      CCD1_info->CentralLine[0] = CCD1_info->CentralLine[0] + CCD1_info->CCD_ObstacleShift;
+      Car_state.pre = Car_state.now;
+      Car_state.now = Into_Obstacle;
+      Bell_On;
+      break;
+    }
+    case 2:
+    {
+      CCD1_info->CentralLine[0] = CCD1_info->CentralLine[0] - CCD1_info->CCD_ObstacleShift;
+      Car_state.pre = Car_state.now;
+      Car_state.now = Into_Obstacle;
+      Bell_On;
+      break;
+    }
+    case 0:
+    {
+      break;
+    }
+    default:            //不需要处理 cancel
+      break;
+    }
   }
   // switch (myCCD_detect_startline(CCD1_info, CCD2_info))
   // {

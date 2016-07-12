@@ -7,6 +7,7 @@
 #define   OLED_RST  PTA19
 
 
+#define   Crshift   CCD1_info.CCD_CrossShift
 #define   zhi  Speed_info.Straight_Speed
 #define   wan  Speed_info.Cur_Speed
 #define   x_s  Speed_info.Snake_Speed
@@ -17,24 +18,16 @@
 #define  SExp  Speed_Expect;
 #define   Chfile Parameter_info.SD_Data_name_Change
 
-
 #define   D_T  Parameter_info.DebugTime
 #define   Po_T Parameter_info.GetRampTime
 #define   LuZ_T  Parameter_info.GetObstacleTime
-#define   S_T Parameter_info.GetStartEndLineTime
 
-#define   jl_3  Speed_info.DistanceOfSpeedMode3_Max
 #define   Po_S1 Speed_info.DistanceOfRampUp[0]
 #define   Po_S2 Speed_info.DistanceOfRampUp[1]
 #define   Po_X  Speed_info.DistanceOfRampDown
 
 #define   R_tp  Road_type
 #define   Ramp  Gyro_info.RampThresholdValue
-#define   Wu_x  Parameter_info.RoadInvalid_Enable
-#define   S_L Parameter_info.GetStartEndLine_Flag
-#define   CCDL  Parameter_info.CCD1GetSL_Enable
-
-
 
 
 

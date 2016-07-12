@@ -17,6 +17,7 @@ float Cal_Speed_R;
 uint8 write_sd_flag = 0;
 
 uint32 check_flag = 0;
+uint16 Time_Counter = 0;
 
 uint8 reduce_spe_flag = 0;   //PID减速时间标志
 float Into_Cur_Speed = 100;
@@ -52,40 +53,7 @@ void   Steer_Process()
 	CCD1_ImageCapture(&CCD1_info);       //采集CCD1 AD值函数
 	CCD2_ImageCapture(&CCD2_info);       //采集CCD2 AD值函数
 	myCCD_DataHandle(&CCD1_info, &CCD2_info, &Speed_info);
-	//Center_Board_Value = CCD1_info.CentralLine[0];
-	if (CCD1_info.LossLine_Flag != 1)
-	{
-		if (CCD1_info.Cross_state == 1) CCD1_info.Cross_state = 2;
-		else if (CCD1_info.Cross_state == 3)CCD1_info.Cross_state = 0;
 
-		Center_Board_Value = CCD1_info.CentralLine[0];
-		Bell_Off;
-	}
-	else if (CCD1_info.AddLine_Flag == 1)
-	{
-		Center_Board_Value = (CCD1_info.LeftLine[0] + CCD1_info.RightLine[0]) / 2;
-	}
-	else if ( CCD1_info.Cross_Flag == 1 )
-	{
-		//Center_Board_Value = 64;
-		Car_state.pre = Car_state.now;      //下坡
-		Car_state.now = In_Crossing;
-
-		// Center_Board_Value = (CCD1_info.LeftLine[0] + CCD1_info.RightLine[0]) / 2;
-		if (CCD1_info.Cross_state == 0)
-		{
-			CCD1_info.Cross_state = 1;
-			Center_Board_Value = (CCD1_info.LeftLine[0] + CCD1_info.RightLine[0]) / 2;
-		}
-		else if (CCD1_info.Cross_state == 2)
-		{
-			Bell_On;
-			CCD1_info.Cross_state = 3;
-			if (CCD1_info.CentralLine[6] - 64 < -5) Center_Board_Value = 64 - CCD1_info.CCD_CrossShift;
-			else if (CCD1_info.CentralLine[6] - 64 > 5) Center_Board_Value = 64 + CCD1_info.CCD_CrossShift;
-			else Center_Board_Value = (CCD1_info.LeftLine[0] + CCD1_info.RightLine[0]) / 2;
-		}
-	}
 	if (Gyro_info.RampUpDown == 1)
 	{
 		Center_Board_Value = CCD2_info.CentralLine[0];
@@ -107,13 +75,24 @@ void   Steer_Process()
 	if (!stop_flag)
 	{
 		ftm_pwm_duty(FTM3, SERVO, SERVOCENTER + Calservo);
-		if (check_flag < 1400)
+		if (check_flag < Parameter_info.DebugTime)
 		{
 			check_flag++;
-			if (check_flag == 1400)
+			if (check_flag == Parameter_info.DebugTime)
 			{
 				enable_irq(PORTC_IRQn);
-				check_flag = 1401;  //停止起跑线计数
+				check_flag = Parameter_info.DebugTime + 1; //停止起跑线计数
+			}
+		}
+		//总的运行时间
+		if (Time_Counter < Parameter_info.Time)
+		{
+			Time_Counter++;
+			if (Time_Counter == Parameter_info.Time)
+			{
+				Speed_Expect = 0;
+				PidSpeedLeft.temp = 0;
+				Time_Counter = Parameter_info.Time + 1; //停止起跑线计数
 			}
 		}
 #if TESTSD
@@ -146,8 +125,8 @@ void   Motor_Process()
 		if ( K_Speed_Diff < -0.64 )
 			K_Speed_Diff = -0.64;
 
-		//if ( ( K_Speed_Diff < 0.01 ) && ( K_Speed_Diff > -0.01 ) ) //差速很小的时候就不差速了
-		//	K_Speed_Diff = 0;
+		if ( ( K_Speed_Diff < Parameter_info.Snake_dead ) && ( K_Speed_Diff > -Parameter_info.Snake_dead ) ) //差速很小的时候就不差速了
+			K_Speed_Diff = 0;
 		if (Car_state.now == Ramp_Up)
 		{
 			Speed_Expect_L =  Speed_info.RampUp_Speed * ( 1 - K_Speed_Diff );
@@ -202,11 +181,11 @@ void Car_State_Judge()
 
 void Send_CCD_Imag()      //发送到蓝宙CCD上位机
 {
-	// if (stop_flag)
-	// {
-	// 	if (ccd_switch_flag) SendImageData(CCD1_info.Pixel[0]);                                //CCD上传到蓝宙上位机函数
-	// 	else SendImageData(&CCD2_info.Pixel[0]);
-	// }
+	if (stop_flag)
+	{
+		if (ccd_switch_flag)SendImageData(&CCD1_info.PixelOri[0][0]);                                //CCD上传到蓝宙上位机函数
+		else SendImageData(&CCD2_info.Pixel[0]);
+	}
 }
 
 void Send_Steer_Info()    //发送给匿名上位机

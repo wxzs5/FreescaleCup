@@ -138,7 +138,7 @@ void CCD2_StartIntegration(void)
 *********************************************************************************/
 void CCD1_ImageCapture(CCD_Info *CCD_info)
 {
-  uint8 i;
+  uint8 i = 0;
   //extern uint8 AtemP ;
 
   CCD1_SI_SetVal();            /* SI  = 1 */
@@ -153,8 +153,12 @@ void CCD1_ImageCapture(CCD_Info *CCD_info)
   for (i = 0; i < 250; i++) {                   //更改250，让CCD的图像看上去比较平滑，
     SamplingDelay() ;  //200ns                  //把该值改大或者改小达到自己满意的结果。
   }
+  //Sampling Pixel 1
+  CCD_info->PixelOri[0][0] = adc_once(ADC0_DM1, ADC_8bit);
+  CCD1_CLK_ClrVal();           /* CLK = 0 */
+
   //Sampling Pixel 1~128
-  for (i = 0; i < 128; i++) {
+  for (i = 1; i < 128; i++) {
     SamplingDelay();
     SamplingDelay();
     CCD1_CLK_SetVal();         /* CLK = 1 */
@@ -183,7 +187,7 @@ void CCD1_ImageCapture(CCD_Info *CCD_info)
 *********************************************************************************/
 void CCD2_ImageCapture(CCD_Info *CCD_info)
 {
-  uint8 i;
+  uint8 i = 0;
   //extern uint8 AtemP ;
 
   CCD2_SI_SetVal();            /* SI  = 1 */
@@ -198,9 +202,12 @@ void CCD2_ImageCapture(CCD_Info *CCD_info)
   for (i = 0; i < 250; i++) {                   //更改250，让CCD的图像看上去比较平滑，
     SamplingDelay() ;  //200ns                  //把该值改大或者改小达到自己满意的结果。
   }
+  //Sampling Pixel 1
+  CCD_info->PixelOri[0][0] = adc_once(ADC0_DM0, ADC_8bit);
+  CCD1_CLK_ClrVal();           /* CLK = 0 */  
 
   //Sampling Pixel 1~128
-  for (i = 0; i < 128; i++) {
+  for (i = 1; i < 128; i++) {
     SamplingDelay();
     SamplingDelay();
     CCD2_CLK_SetVal();         /* CLK = 1 */
@@ -272,7 +279,7 @@ void SendImageData(uint8 * ImageData)
   // }
 
   for (i = 0; i < 128; i++) {
-    SendHex(*ImageData * 255);
+    SendHex(*ImageData);
     *ImageData++;
   }
 

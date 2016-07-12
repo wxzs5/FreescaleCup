@@ -67,8 +67,6 @@ typedef enum Car_Mode_//----------------------------------------选择速度模�
 	Low1,
 	Low2,
 	SelfDef,				//自定义速度
-	CheckCCD,				//调试(前瞻)模式
-	CheckSL,				//调试起跑线模式
 	CheckRamp				//调试坡道模式
 } Car_Mode;
 
@@ -179,11 +177,11 @@ typedef struct Parameter_Info_//------------------------------------------一些
 
 	int16 Mode_HighSpeedDistance;		//高速距离
 
-	float	Time;						//行驶时间(秒)
+	int16	Time;						//行驶时间(秒)
 	float   GetStartEndLineTime;		//起跑线检测倒计时，超过该时间才检测起跑线
 	float	GetRampTime;				//开始检测坡道的时间
 	float   GetObstacleTime;			//开始检测路障的时间
-	float	DebugTime;					//调试时间(秒)
+	int16	DebugTime;					//调试时间(秒)
 	float	LoseLineTime;				//丢线停车时间
 	int32 RoadDistance;				//行驶距离(厘米)
 	int16 StopSpeed;					//停车前一刻速度
@@ -198,6 +196,7 @@ typedef struct Parameter_Info_//------------------------------------------一些
 	uint8 RampReady_Distance;			//预判坡道超过该距离还未判断到坡道则清除预判标记，防止预判错误时长时间减速
 	uint8 RampReady_FLag;				//坡道预判标记
 	uint8 LongStraight_Flag;
+	float Snake_dead;
 
 	uint8 SD_Data_name_Change;  //SD卡存储信息
 

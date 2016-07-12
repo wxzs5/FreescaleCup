@@ -13,6 +13,7 @@ extern float Cal_Speed_L;
 extern float Cal_Speed_R;
 
 extern uint32 check_flag;
+extern uint16 Time_Counter;
 
 extern uint8 reduce_spe_flag;
 
