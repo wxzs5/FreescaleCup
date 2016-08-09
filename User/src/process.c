@@ -181,10 +181,16 @@ void Car_State_Judge()
 
 void Send_CCD_Imag()      //发送到蓝宙CCD上位机
 {
+	static uint8 ccd_count = 0;
 	if (stop_flag)
 	{
-		if (ccd_switch_flag)SendImageData(&CCD1_info.PixelOri[0][0]);                                //CCD上传到蓝宙上位机函数
-		else SendImageData(&CCD2_info.Pixel[0]);
+		// ccd_count++;
+		// ccd_count = ccd_count % 2;
+		// if (ccd_count)SendImageData(&CCD1_info.PixelOri[0][0], 1);                              //CCD上传到蓝宙上位机函数
+		// else SendImageData(&CCD2_info.PixelOri[0][0], 2);
+
+		SendImageData(&CCD1_info.PixelOri[0][0], 1);                              //CCD上传到蓝宙上位机函数
+		SendImageData(&CCD2_info.PixelOri[0][0], 2);
 	}
 }
 
@@ -216,14 +222,14 @@ void Send_Motor_Info()    //发送电机信息匿名上位机
 {
 	if (Tune_Mode == 2)  //Send Data to ANO Lab
 	{
-		push(0, (int16)( Speed_Expect + (int32)(ServoFuzzy.outSpeed) ) );
+		push(0, (int16)( Speed_Expect /*+ (int32)(ServoFuzzy.outSpeed) */) );
 		push(1, (int16)Speed_Expect_L);
 		push(2, (int16)(Speed_Expect_R));
-		push(3, (int16)(Calservo));
+		push(3, (int16)((Speed_Val1_L + Speed_Val1_L) / 2));
 		push(4, (int16)(Speed_Val1_L));
 		push(5, (int16)Speed_Val2_R);
 		push(6, (int16)(K_Speed_Diff * 1000));
-		push(7, (int16)Speed_Expect);
+		push(7, (int16)Cal_Speed_L);
 		push(8, 2);
 		Data_Send((uint8 *)SendBuf);
 	}

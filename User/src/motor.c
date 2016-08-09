@@ -37,10 +37,10 @@ void Init_ftm_motor()
   //FTM 的管脚 可在  fire_port_cfg.h
   //宏定义FTM0_PRECISON   改为  1000u
   //PWM数值反转。
-  ftm_pwm_init(FTM0, MOTOR1_PWM, 20000, 0);              //初始化 电机 PWM
-  ftm_pwm_init(FTM0, MOTOR2_PWM, 20000, 0);              //初始化 电机 PWM
-  ftm_pwm_init(FTM0, MOTOR3_PWM, 20000, 0);              //初始化 电机 PWM
-  ftm_pwm_init(FTM0, MOTOR4_PWM, 20000, 0);              //初始化 电机 PWM
+  ftm_pwm_init(FTM0, MOTOR1_PWM, 10000, 0);              //初始化 电机 PWM
+  ftm_pwm_init(FTM0, MOTOR2_PWM, 10000, 0);              //初始化 电机 PWM
+  ftm_pwm_init(FTM0, MOTOR3_PWM, 10000, 0);              //初始化 电机 PWM
+  ftm_pwm_init(FTM0, MOTOR4_PWM, 10000, 0);              //初始化 电机 PWM
 
   ftm_pwm_init(FTM3, SERVO, 50, SERVOCENTER);                //初始化 电机 PWM
 

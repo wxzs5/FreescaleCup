@@ -72,7 +72,7 @@ void Init_all()
 #endif
 
 
-  // /***********  //lcd菜单初始化选择，注意*******/
+  /***********  //lcd菜单初始化选择，注意*******/
   // while (lcd_menu_display_init(&Menu))
   // {
   //   if (1 == Parameter_info.OLED_NoAction_Flag) //当按键没有反应的时候计时退出

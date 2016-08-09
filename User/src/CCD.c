@@ -204,7 +204,7 @@ void CCD2_ImageCapture(CCD_Info *CCD_info)
   }
   //Sampling Pixel 1
   CCD_info->PixelOri[0][0] = adc_once(ADC0_DM0, ADC_8bit);
-  CCD1_CLK_ClrVal();           /* CLK = 0 */  
+  CCD1_CLK_ClrVal();           /* CLK = 0 */
 
   //Sampling Pixel 1~128
   for (i = 1; i < 128; i++) {
@@ -258,33 +258,44 @@ void SendHex(uint8 hex)
 * @version    v5.3
 * @date       2016-6-24
 *********************************************************************************/
-void SendImageData(uint8 * ImageData)
+void SendImageData(uint8 * ImageData, uint8 id)
 {
 
   uint8 i;
   uint8 crc = 0;
 
   /* Send Data */
-  uart_putchar(UART4, '*');
-  uart_putchar(UART4, 'L');
-  uart_putchar(UART4, 'D');
+  // uart_putchar(UART4, '*');
+  // uart_putchar(UART4, 'L');
+  // uart_putchar(UART4, 'D');
 
-  SendHex(0);
-  SendHex(0);
-  SendHex(0);
-  SendHex(0);
+  // SendHex(0);
+  // SendHex(0);
+  // SendHex(0);
+  // SendHex(0);
 
   // for (i = 0; i < 128; i++) {
   //   SendHex(*ImageData++);
   // }
-
+  if (id == 1)
+  {
+    uart_putchar(UART4, '*');
+    uart_putchar(UART4, 'z');
+  }
+  else
+  {
+    uart_putchar(UART4, '*');
+    uart_putchar(UART4, 'y');
+  }
   for (i = 0; i < 128; i++) {
-    SendHex(*ImageData);
+    uart_putchar(UART4, *ImageData);
     *ImageData++;
   }
 
-  SendHex(crc);
-  uart_putchar(UART4, '#');
+
+
+  // SendHex(crc);
+  // uart_putchar(UART4, '#');
 }
 /*********************************************************************************
 *                               我要过六级                                       *

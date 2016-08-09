@@ -23,7 +23,7 @@ void CCD2_ImageCapture(CCD_Info *CCD_info);
 
 void SamplingDelay(void) ;
 void SendHex(uint8 hex) ;
-void SendImageData(uint8 * ImageData) ;
+void SendImageData(uint8 * ImageData, uint8 id) ;
 
 
 

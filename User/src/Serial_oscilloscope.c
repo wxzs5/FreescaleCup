@@ -237,9 +237,8 @@ void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num)
 		{
 			ServoFuzzy.kd = 0.001 * ( temp - 30000);
 			if (ServoFuzzy.kd < 0) ServoFuzzy.kd = -(30 + ServoFuzzy.kd);
-
-			ANO_DT_Send_Check(*(data_buf + 2), sum);
 		}
+		ANO_DT_Send_Check(*(data_buf + 2), sum);
 	}
 	//***********************模糊表*****************************/
 	if (*(data_buf + 2) == 0X12)								//

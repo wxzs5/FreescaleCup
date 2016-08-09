@@ -33,11 +33,11 @@ CCD_Info CCD2_info = {0};
 *************************************************************************/
 void myData_Init()
 {
-    Speed_info.Obstacle_Speed = 250;
+    Speed_info.Obstacle_Speed = 100;
     Speed_info.RampUp_Speed = 280;
     Speed_info.RampDown_Speed = 260;
 
-    Parameter_info.DebugTime = 1400;
-    Parameter_info.Time = 1800;
+    Parameter_info.DebugTime = 1700;
+    Parameter_info.Time = 1900;
     Parameter_info.Snake_dead = 0.05;
 }

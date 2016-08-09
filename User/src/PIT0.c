@@ -84,7 +84,7 @@ void PIT0_IRQHandler(void)
 
 void Init_PIT1()
 {
-  pit_init_ms(PIT1, 15);                                //初始化PIT0，定时时间为： 5ms
+  pit_init_ms(PIT1, 5);                                //初始化PIT0，定时时间为： 5ms
   set_vector_handler(PIT1_VECTORn , PIT1_IRQHandler);     //设置PIT0的中断服务函数为 PIT0_IRQHandler
   enable_irq (PIT1_IRQn);                                 //使能PIT0中断
 }
