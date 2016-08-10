@@ -569,3 +569,74 @@ void uart3_test_handler(void)
 
     }
 }
+
+
+
+
+/**
+ * @brief  配置UART模块的中断或DMA属性
+ * @code
+ *   //配置UART0模块开启接收中断功能
+ *   UART_ITDMAConfig(HW_UART0, kUART_IT_Rx, true);
+ * @endcode
+ * @param[in]  instance      芯片串口端口
+ *              @arg HW_UART0 芯片的UART0端口
+ *              @arg HW_UART1 芯片的UART1端口
+ *              @arg HW_UART2 芯片的UART2端口
+ *              @arg HW_UART3 芯片的UART3端口
+ *              @arg HW_UART4 芯片的UART4端口
+ *              @arg HW_UART5 芯片的UART5端口
+ * \attention 具体的UART资源依芯片而不同，请参见相应的引脚复用说明
+ * @param[in]  status      使能开关
+ *              \arg 0 disable
+ *              \arg 1  enable
+ * @param[in]  config 工作模式选择
+ *              @arg kUART_IT_Tx
+ *              @arg kUART_DMA_Tx
+ *              @arg kUART_IT_Rx
+ *              @arg kUART_DMA_Rx
+ * @retval None
+ */
+void UART_ITDMAConfig(UARTn_e uratn, UART_ITDMAConfig_Type config, uint8 status)
+{
+    //IP_CLK_ENABLE(instance);
+    switch(config)
+    {
+        case kUART_IT_Tx:
+            (status)?
+            (UART_C2_REG(UARTN[uratn]) |= UART_C2_TIE_MASK):
+            (UART_C2_REG(UARTN[uratn]) &= ~UART_C2_TIE_MASK);
+            enable_irq((IRQn_t)((uratn << 1) + UART0_RX_TX_IRQn));                  //使能IRQ中断
+            break; 
+        case kUART_IT_Rx:
+            (status)?
+            (UART_C2_REG(UARTN[uratn]) |= UART_C2_RIE_MASK):
+            (UART_C2_REG(UARTN[uratn]) &= ~UART_C2_RIE_MASK);
+            enable_irq((IRQn_t)((uratn << 1) + UART0_RX_TX_IRQn));                  //使能IRQ中断
+            break;
+        case kUART_DMA_Tx:
+            (status)?
+            (UART_C2_REG(UARTN[uratn]) |= UART_C2_TIE_MASK):
+            (UART_C2_REG(UARTN[uratn]) &= ~UART_C2_TIE_MASK);
+            (status)?
+            (UART_C5_REG(UARTN[uratn]) |= UART_C5_TDMAS_MASK):
+            (UART_C5_REG(UARTN[uratn]) &= ~UART_C5_TDMAS_MASK);
+            break;
+        case kUART_DMA_Rx:
+            (status)?
+            (UART_C2_REG(UARTN[uratn]) |= UART_C2_RIE_MASK):
+            (UART_C2_REG(UARTN[uratn]) &= ~UART_C2_RIE_MASK);
+            (status)?
+            (UART_C5_REG(UARTN[uratn]) |= UART_C5_RDMAS_MASK):
+            (UART_C5_REG(UARTN[uratn]) &= ~UART_C5_RDMAS_MASK);
+            break;
+        case kUART_IT_IdleLine:
+            (status)?
+            (UART_C2_REG(UARTN[uratn]) |= UART_C2_ILIE_MASK):
+            (UART_C2_REG(UARTN[uratn]) &= ~UART_C2_ILIE_MASK);
+            enable_irq((IRQn_t)((uratn << 1) + UART0_RX_TX_IRQn)); 
+            break;
+        default:
+            break;
+    }
+}

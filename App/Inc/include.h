@@ -64,4 +64,6 @@
 #include "8700_2100.h"
 #include "SD.h"
 
+#include "CH_dma.h"
+
 #endif  //__INCLUDE_H__

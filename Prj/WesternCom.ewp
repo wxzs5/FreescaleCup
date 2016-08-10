@@ -2002,7 +2002,7 @@
         <name>$PROJ_DIR$\..\Board\inc\VCAN_TSL1401.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\Board\inc\VCAN_UI_VAR.h</name>
+        <name>$PROJ_DIR$\..\Board\inc\vcan_ui_var.h</name>
       </file>
     </group>
     <group>
@@ -2164,7 +2164,7 @@
         <name>$PROJ_DIR$\..\Chip\inc\MK60_DWT.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\Chip\inc\MK60_flash.h</name>
+        <name>$PROJ_DIR$\..\Chip\inc\MK60_FLASH.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\Chip\inc\MK60_flexbus.h</name>
@@ -2407,6 +2407,9 @@
         <name>$PROJ_DIR$\..\User\inc\CCD.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\User\inc\CH_dma.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\User\inc\control.h</name>
       </file>
       <file>
@@ -2456,6 +2459,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\User\src\CCD.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\User\src\CH_dma.c</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\User\src\control.c</name>

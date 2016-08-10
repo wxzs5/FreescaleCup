@@ -93,6 +93,11 @@ void myCCD_DataInit(CCD_Info *CCD_info)
   CCD_info->LossLine_Flag = 0;    //丢线标记
   CCD_info->Cross_Flag = 0;     //十字道标记
   CCD_info->RoadInvalid_Flag = 0;
+
+  CCD_info->Left_Mean = 0;
+  CCD_info->Left_Variance = 0;
+  CCD_info->Right_Mean = 0;
+  CCD_info->Right_Variance = 0;
 }
 
 /*********************************************************************************
@@ -115,10 +120,12 @@ void myCCD_FilterAndBinarization(CCD_Info *CCD1_info, CCD_Info *CCD2_info)
   //进行CCD数据采集滤波
   for (ii = 0; ii < 128; ii++)//60us
   {
-    CCD1_info->Pixel[ii] = (CCD1_info->PixelOri[0][ii] + CCD1_info->PixelOri[1][ii]) >> 1;
+    //CCD1_info->Pixel[ii] = (CCD1_info->PixelOri[0][ii] + CCD1_info->PixelOri[1][ii]) >> 1;
+    CCD1_info->Pixel[ii] = CCD1_info->PixelOri[0][ii];
     if (CCD1_info->Pixel[ii] > AD1_MAX) AD1_MAX = CCD1_info->Pixel[ii];
     if (CCD1_info->Pixel[ii] < AD1_MIN) AD1_MIN = CCD1_info->Pixel[ii];
-    CCD2_info->Pixel[ii] = (CCD2_info->PixelOri[0][ii] + CCD2_info->PixelOri[1][ii]) >> 1;
+    //CCD2_info->Pixel[ii] = (CCD2_info->PixelOri[0][ii] + CCD2_info->PixelOri[1][ii]) >> 1;
+    CCD2_info->Pixel[ii] = CCD2_info->PixelOri[0][ii];
     if (CCD2_info->Pixel[ii] > AD2_MAX) AD2_MAX = CCD2_info->Pixel[ii];
     if (CCD2_info->Pixel[ii] < AD2_MIN) AD2_MIN = CCD2_info->Pixel[ii];
 
@@ -312,6 +319,9 @@ void myCCD_DataHandle(  CCD_Info *CCD1_info,
   myCCD_CCD1_GetLineError(CCD1_info, Speed_info);
   myCCD_CCD2_GetLineError(CCD2_info);
 
+  Queue_Mean(CCD1_info);
+  Queue_Variance(CCD1_info);
+
   if (CCD1_info->LossLine_Flag != 1)
   {
     if (CCD1_info->Cross_state == 1) CCD1_info->Cross_state = 2;
@@ -421,10 +431,15 @@ void myCCD_CCD1_GetLineError(CCD_Info *CCD1_info, Speed_Info *Speed_info)
       break;
     }
   }
-  if (Left_temp == 3)
+  /*if (Left_temp == 3)
   {
     CCD1_info->LeftLossLineFlag = 1;
-  }
+  }*/
+  if (ii == 3)
+  {
+    Left_temp = ii;
+    CCD1_info->LeftLossLineFlag = 1;
+  } 
 
   /*-------------------右边线------------------------*/
   for (ii = LinePixel_Temp; ii < 125; ii++)
@@ -436,10 +451,15 @@ void myCCD_CCD1_GetLineError(CCD_Info *CCD1_info, Speed_Info *Speed_info)
       break;
     }
   }
-  if (Right_temp == 125)
+  /*if (Right_temp == 125)
   {
     CCD1_info->RightLossLineFlag = 1;
-  }
+  }*/
+  if (ii == 125)
+  {
+    Right_temp = ii;
+    CCD1_info->RightLossLineFlag = 1;
+  } 
 
   /*------------------------------移动队列---------------------------------*/
   for (ii = Line_SIZE - 1; ii > 0; ii--)
@@ -515,8 +535,10 @@ void myCCD_CCD1_GetLineError(CCD_Info *CCD1_info, Speed_Info *Speed_info)
             && (1 == CCD1_info->PixelBinary[LinePixel_Temp + 5]))//不是坡道则为十字道或者全黑丢线
       {
         CCD1_info->Cross_Flag = 1;
-        CCD1_info->LeftLine[0] = CCD1_info->LeftLine[2];
-        CCD1_info->RightLine[0] = CCD1_info->RightLine[2];
+        CCD1_info->LeftLine[0] = Left_temp;
+        CCD1_info->RightLine[0] = Right_temp;
+        //CCD1_info->LeftLine[0] = CCD1_info->LeftLine[2];
+        //CCD1_info->RightLine[0] = CCD1_info->RightLine[2];
       }
       else
       {
@@ -843,3 +865,52 @@ uint8 myCCD_detect_startline(CCD_Info *CCD1_info, CCD_Info *CCD2_info)
     return 0;
   }
 }
+
+
+/*********************************************************************************
+*                               我要过六级                                       *
+**********************************************************************************
+* @file       Calculate.c
+* @brief      int16 Queue_Mean(Info_queue * queue)
+* @version    v5.3
+* @date       2016-6-24
+*********************************************************************************/
+void Queue_Mean(CCD_Info *CCD_info)
+{
+  int16 result_L = 0;
+  int16 result_R = 0;
+  uint8 i = 0;
+  for (i = 0; i < Line_SIZE; i++)
+  {
+    result_L += CCD_info->LeftLine[i];
+    result_R += CCD_info->RightLine[i];
+  }
+  CCD_info->Left_Mean = result_L / Line_SIZE;
+  CCD_info->Right_Mean = result_R / Line_SIZE;
+}
+
+
+/*********************************************************************************
+*                               我要过六级                                       *
+**********************************************************************************
+* @file       Calculate.c
+* @brief      int16 Queue_Variance(Info_queue * queue)
+* @version    v5.3
+* @date       2016-6-24
+*********************************************************************************/
+void Queue_Variance(CCD_Info *CCD_info)
+{
+  int16 result_L = 0;
+  int16 result_R = 0;
+  for (int i = 0; i < Line_SIZE; i++)
+  {
+    result_L += (CCD_info->LeftLine[i] - CCD_info->Left_Mean) * (CCD_info->LeftLine[i] - CCD_info->Left_Mean);
+    result_R += (CCD_info->RightLine[i] - CCD_info->Right_Mean) * (CCD_info->RightLine[i] - CCD_info->Right_Mean);
+  }
+  CCD_info->Left_Variance = result_L / Line_SIZE;
+  CCD_info->Right_Variance = result_R / Line_SIZE;
+}
+
+
+
+

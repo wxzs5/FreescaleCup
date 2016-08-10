@@ -11,8 +11,9 @@ void Data_Send(uint8 *data);
 void ANO_Send_Data(uint8 *Buff, uint8 len);
 void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num);
 void ANO_DT_Data_Receive_Prepare(uint8 data);
+void ANO_DT_Send_PID();
 static void ANO_DT_Send_Check(uint8 head, uint8 check_sum);
-
+void ANO_DT_Send_Speed();
 
 
 #define    UartDataNum  34

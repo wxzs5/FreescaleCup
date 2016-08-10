@@ -261,8 +261,8 @@ void SendHex(uint8 hex)
 void SendImageData(uint8 * ImageData, uint8 id)
 {
 
-  uint8 i;
-  uint8 crc = 0;
+  uint8 sub1 = 'y', sub2 = 'z';
+  uint8 head = '*';
 
   /* Send Data */
   // uart_putchar(UART4, '*');
@@ -279,20 +279,20 @@ void SendImageData(uint8 * ImageData, uint8 id)
   // }
   if (id == 1)
   {
-    uart_putchar(UART4, '*');
-    uart_putchar(UART4, 'z');
+    UART_SendWithDMA(HW_DMA_CH2, &head, 1);
+    while (DMA_IsMajorLoopComplete(HW_DMA_CH2));
+    UART_SendWithDMA(HW_DMA_CH2, &sub2, 1);
+    while (DMA_IsMajorLoopComplete(HW_DMA_CH2));
   }
   else
   {
-    uart_putchar(UART4, '*');
-    uart_putchar(UART4, 'y');
+    UART_SendWithDMA(HW_DMA_CH2, &head, 1);
+    while (DMA_IsMajorLoopComplete(HW_DMA_CH2));
+    UART_SendWithDMA(HW_DMA_CH2, &sub1, 1);
+    while (DMA_IsMajorLoopComplete(HW_DMA_CH2));
   }
-  for (i = 0; i < 128; i++) {
-    uart_putchar(UART4, *ImageData);
-    *ImageData++;
-  }
-
-
+  UART_SendWithDMA(HW_DMA_CH2, (const uint8_t*)ImageData, 128);
+  while (DMA_IsMajorLoopComplete(HW_DMA_CH2));
 
   // SendHex(crc);
   // uart_putchar(UART4, '#');
@@ -309,4 +309,28 @@ void SamplingDelay(void)
 {
   asm("nop");
   asm("nop");
+}
+/*!
+ *  @brief      山外多功能调试助手上位机，线性CCD显示函数
+ *  @param      ccdaddr    CCD图像起始地址
+ *  @param      ccdsize    CCD图像占用空间的大小
+ *  @since      v5.0
+*  Sample usage:
+             具体用法参考这帖子:
+            【山外线性CCD】上位机显示例程和超广角采集效果 - 智能车资料区
+             http://vcan123.com/forum.php?mod=viewthread&tid=6340&ctid=27
+ */
+void vcan_sendccd2(void *ccdaddr1, void *ccdaddr2, uint32_t ccdsize)
+{
+#define CMD_CCD     2
+  uint8_t cmdf[2] = {CMD_CCD, ~CMD_CCD};    //开头命令
+  uint8_t cmdr[2] = {~CMD_CCD, CMD_CCD};    //结尾命令
+
+  uart_putbuff(VCAN_PORT, cmdf, sizeof(cmdf));    //先发送命令
+
+  uart_putbuff(VCAN_PORT, (uint8_t *)ccdaddr1, ccdsize); //再发送图像
+
+  uart_putbuff(VCAN_PORT, (uint8_t *)ccdaddr2, ccdsize); //再发送图像
+
+  uart_putbuff(VCAN_PORT, cmdr, sizeof(cmdr));    //再发送命令
 }

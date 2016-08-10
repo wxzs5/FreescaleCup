@@ -20,7 +20,7 @@ uint32 check_flag = 0;
 uint16 Time_Counter = 0;
 
 uint8 reduce_spe_flag = 0;   //PID减速时间标志
-float Into_Cur_Speed = 100;
+
 
 uint8 send_data_cnt = 0;                   //发送数据的计数器
 
@@ -75,6 +75,7 @@ void   Steer_Process()
 	if (!stop_flag)
 	{
 		ftm_pwm_duty(FTM3, SERVO, SERVOCENTER + Calservo);
+		Send_Steer_Info();
 		if (check_flag < Parameter_info.DebugTime)
 		{
 			check_flag++;
@@ -189,8 +190,8 @@ void Send_CCD_Imag()      //发送到蓝宙CCD上位机
 		// if (ccd_count)SendImageData(&CCD1_info.PixelOri[0][0], 1);                              //CCD上传到蓝宙上位机函数
 		// else SendImageData(&CCD2_info.PixelOri[0][0], 2);
 
-		SendImageData(&CCD1_info.PixelOri[0][0], 1);                              //CCD上传到蓝宙上位机函数
-		SendImageData(&CCD2_info.PixelOri[0][0], 2);
+		SendImageData(&CCD1_info.Pixel[0], 1);                              //CCD上传到蓝宙上位机函数
+		SendImageData(&CCD2_info.Pixel[0], 2);
 	}
 }
 
@@ -222,10 +223,10 @@ void Send_Motor_Info()    //发送电机信息匿名上位机
 {
 	if (Tune_Mode == 2)  //Send Data to ANO Lab
 	{
-		push(0, (int16)( Speed_Expect /*+ (int32)(ServoFuzzy.outSpeed) */) );
-		push(1, (int16)Speed_Expect_L);
-		push(2, (int16)(Speed_Expect_R));
-		push(3, (int16)((Speed_Val1_L + Speed_Val1_L) / 2));
+		push(0, (int16)(CCD1_info.Left_Mean));//CCD1_info.Left_Mean
+		push(1, (int16)CCD1_info.Right_Mean);
+		push(2, (int16)(CCD1_info.Left_Variance));
+		push(3, (int16)(CCD1_info.Right_Variance));
 		push(4, (int16)(Speed_Val1_L));
 		push(5, (int16)Speed_Val2_R);
 		push(6, (int16)(K_Speed_Diff * 1000));

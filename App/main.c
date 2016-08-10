@@ -30,7 +30,6 @@ void main()
         Init_TLY();
         IIC_Count = 0;
       }
-      //Send_Steer_Info();
     }
 
     if (TIME0flag_10ms == 1)
@@ -60,7 +59,6 @@ void main()
     {
       TIME0flag_100ms = 0 ;
       Send_CCD_Imag();
-
     }
 
   } //for(;;)

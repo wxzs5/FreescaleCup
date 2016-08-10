@@ -11,7 +11,7 @@
 
 
 #define 	SPEED_FIFO_LENGTH		(20)
-#define     Line_SIZE   			(45)		//存储左右边界线，中线等的队列长度
+#define     Line_SIZE   			(15)		//存储左右边界线，中线等的队列长度45
 #define 	GYRO_LENGTH			(50)		//存储陀螺仪的AD电压值
 
 #define QRANGE(x)       ((x)<(0) ? ((Line_SIZE)-(1)) : ( (x)>((Line_SIZE)-(1)) ? (0):(x) ))   //用于限定队列循环指针的值
@@ -94,6 +94,10 @@ typedef struct CCD_Info_//--------------------------------CCD数据
 	int16  RoadWidth[10];				//路宽队列
 	//int16 LeftLossLinePixel;      //记录丢左边线时左边的点
 	//int16 RightLossLinePixel;     //记录丢右边线时右边的点
+	int16 Left_Mean;
+    int16 Left_Variance;
+	int16 Right_Mean;
+    int16 Right_Variance;
 
 	uint8 LeftLossLineFlag;       //左边丢线标志
 	uint8 RightLossLineFlag;      //右边丢线标志
@@ -132,6 +136,7 @@ typedef struct Speed_Info_//-------------------------------------------------速
 	int16 Obstacle_Speed;					//路障速度
 	int16 RampUp_Speed;					//上坡道速度
 	int16 RampDown_Speed;					//下坡道速度
+	int16 Into_Cur_Speed;
 
 	int16 SpeedAdd_3;						//3档的直道最高速度增加值
 	float SpeedMode3Add;					//3档速度增加值

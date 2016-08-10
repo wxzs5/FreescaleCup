@@ -11,7 +11,7 @@
 
 #include "include.h"
 
-uint8 Tune_Mode = 2;
+uint8 Tune_Mode = 1;
 uint8 data_to_send[50] = {0};       //发送缓存
 
 uint8   SendBuf[UartDataNum ] = {0};
@@ -33,8 +33,8 @@ void Data_Send(uint8 *pst)
 	data_to_send[_cnt++] = 0xAA;
 	data_to_send[_cnt++] = 0x02;
 	data_to_send[_cnt++] = 0;
-	data_to_send[_cnt++] = *pst++; //低8位
 	data_to_send[_cnt++] = *pst++; //高8位
+	data_to_send[_cnt++] = *pst++; //低8位
 	data_to_send[_cnt++] = *pst++;
 	data_to_send[_cnt++] = *pst++;
 	data_to_send[_cnt++] = *pst++;
@@ -61,13 +61,16 @@ void Data_Send(uint8 *pst)
 		sum += data_to_send[i];
 
 	data_to_send[_cnt++] = sum;
-	ANO_Send_Data((uint8 *)data_to_send, _cnt);
+	/*不用DMA串口的发送代码*/
+	//ANO_Send_Data((uint8 *)data_to_send, _cnt);
+	/*使用DMA串口的发送代码*/
+	UART_SendWithDMA(HW_DMA_CH2, (const uint8_t*)data_to_send, _cnt);
 }
 
 void ANO_Send_Data(uint8 *Buff, uint8 len)
 {
-	for (uint8 i = 0; i < len; i++)
-		uart_putchar(UART4, data_to_send[i]);
+UART_SendWithDMA(HW_DMA_CH2, Buff, len);
+
 }
 
 
@@ -136,7 +139,10 @@ void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num)
 		if (*(data_buf + 4) == 0X01) Tune_Mode = 1;
 		if (*(data_buf + 4) == 0X04) Tune_Mode = 2;
 		if (*(data_buf + 4) == 0X05) Tune_Mode = 3;
+		if (*(data_buf + 4) == 0X06) ANO_DT_Send_PID();
+		if (*(data_buf + 4) == 0X07)ANO_DT_Send_Speed();
 	}
+
 
 	if (*(data_buf + 2) == 0X10)								//PID1
 	{
@@ -244,135 +250,54 @@ void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num)
 	if (*(data_buf + 2) == 0X12)								//
 	{
 		//h0
-		temp = ((uint16) (* (data_buf + 4) << 8) | *(data_buf + 5));
-		if (temp <= 20)
+		temp = (uint8) (* (data_buf + 4) );
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[0][0] =     temp - 10;
-				if ( FRP[0][0] < 0) FRP[0][0] = -(10 + FRP[0][0] );
-			}
-			else
-			{
-				FRD[0][0] =     temp - 10;
-				if ( FRD[0][0] < 0) FRD[0][0] = -(10 + FRD[0][0] );
-			}
+			Speed_info.Straight_Speed = temp;
 		}
-		temp = ((uint16)(*(data_buf + 6) << 8) | *(data_buf + 7));
-		if (temp <= 20)
+		temp = (uint8)(*(data_buf + 5) );
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[0][1] =     temp - 10;
-				if ( FRP[0][1] < 0) FRP[0][1] = -(10 + FRP[0][1] );
-			}
-			else
-			{
-				FRD[0][1] =     temp - 10;
-				if ( FRD[0][1] < 0) FRD[0][1] = -(10 + FRD[0][1] );
-			}
+			Speed_info.Cur_Speed = temp;
 		}
-		temp = ((uint16)(*(data_buf + 8) << 8) | *(data_buf + 9));
-		if (temp <= 20)
+		temp = (uint8)(*(data_buf + 6)  );
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[0][2] =     temp - 10;
-				if ( FRP[0][2] < 0) FRP[0][2] = -(10 + FRP[0][2] );
-			}
-			else
-			{
-				FRD[0][2] =     temp - 10;
-				if ( FRD[0][2] < 0) FRD[0][2] = -(10 + FRD[0][2] );
-			}
+			Speed_info.Snake_Speed = temp;
 		}
 
 		//h1
-		temp = ((uint16) (* (data_buf + 10) << 8) | *(data_buf + 11));
-		if (temp <= 20)
+		temp = (uint8) (* (data_buf + 7)  );
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[1][0] =     temp - 10;
-				if ( FRP[1][0] < 0) FRP[1][0] = -(10 + FRP[1][0] );
-			}
-			else
-			{
-				FRD[1][0] =     temp - 10;
-				if ( FRD[1][0] < 0) FRD[1][0] = -(10 + FRD[1][0] );
-			}
+			Speed_info.Obstacle_Speed = temp;
 		}
-		temp = ((uint16)(*(data_buf + 12) << 8) | *(data_buf + 13));
-		if (temp <= 20)
+		temp = (uint8)(*(data_buf + 8)  );
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[1][1] =     temp - 10;
-				if ( FRP[1][1] < 0) FRP[1][1] = -(10 + FRP[1][1] );
-			}
-			else
-			{
-				FRD[1][1] =     temp - 10;
-				if ( FRD[1][1] < 0) FRD[1][1] = -(10 + FRD[1][1] );
-			}
+			Speed_info.RampUp_Speed = temp;
 		}
-		temp = ((uint16)(*(data_buf + 14) << 8) | *(data_buf + 15));
-		if (temp <= 20)
+		temp = (uint8)(*(data_buf + 9)  );
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[1][2] =     temp - 10;
-				if ( FRP[1][2] < 0) FRP[1][2] = -(10 + FRP[1][2] );
-			}
-			else
-			{
-				FRD[1][2] =     temp - 10;
-				if ( FRD[1][2] < 0) FRD[1][2] = -(10 + FRD[1][2] );
-			}
+			Speed_info.RampDown_Speed = temp;
 		}
 
 		//h2
-		temp = ((uint16) (* (data_buf + 16) << 8) | *(data_buf + 17));
-		if (temp <= 20)
+		temp = (uint8) (* (data_buf + 10)  );
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[2][0] =     temp - 10;
-				if ( FRP[2][0] < 0) FRP[2][0] = -(10 + FRP[2][0] );
-			}
-			else
-			{
-				FRD[2][0] =     temp - 10;
-				if ( FRD[2][0] < 0) FRD[2][0] = -(10 + FRD[2][0] );
-			}
+			Speed_info.Into_Cur_Speed = temp;
 		}
 		temp = ((uint16)(*(data_buf + 18) << 8) | *(data_buf + 19));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[2][1] =     temp - 10;
-				if ( FRP[2][1] < 0) FRP[2][1] = -(10 + FRP[2][1] );
-			}
-			else
-			{
-				FRD[2][1] =     temp - 10;
-				if ( FRD[2][1] < 0) FRD[2][1] = -(10 + FRD[2][1] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 20) << 8) | *(data_buf + 21));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[2][2] =     temp - 10;
-				if ( FRP[2][2] < 0) FRP[2][2] = -(10 + FRP[2][2] );
-			}
-			else
-			{
-				FRD[2][2] =     temp - 10;
-				if ( FRD[2][2] < 0) FRD[2][2] = -(10 + FRD[2][2] );
-			}
+
 		}
 
 		ANO_DT_Send_Check(*(data_buf + 2), sum);
@@ -383,134 +308,53 @@ void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num)
 	{
 		//h0
 		temp = ((uint16) (* (data_buf + 4) << 8) | *(data_buf + 5));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[4][0] =     temp - 10;
-				if ( FRP[4][0] < 0) FRP[4][0] = -(10 + FRP[4][0] );
-			}
-			else
-			{
-				FRD[4][0] =     temp - 10;
-				if ( FRD[4][0] < 0) FRD[4][0] = -(10 + FRD[4][0] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 6) << 8) | *(data_buf + 7));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[4][1] =     temp - 10;
-				if ( FRP[4][1] < 0) FRP[4][1] = -(10 + FRP[4][1] );
-			}
-			else
-			{
-				FRD[4][1] =     temp - 10;
-				if ( FRD[4][1] < 0) FRD[4][1] = -(10 + FRD[4][1] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 8) << 8) | *(data_buf + 9));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[4][2] =     temp - 10;
-				if ( FRP[4][2] < 0) FRP[4][2] = -(10 + FRP[4][2] );
-			}
-			else
-			{
-				FRD[4][2] =     temp - 10;
-				if ( FRD[4][2] < 0) FRD[4][2] = -(10 + FRD[4][2] );
-			}
+
 		}
 
 		//h1
 		temp = ((uint16) (* (data_buf + 10) << 8) | *(data_buf + 11));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[5][0] =     temp - 10;
-				if ( FRP[5][0] < 0) FRP[5][0] = -(10 + FRP[5][0] );
-			}
-			else
-			{
-				FRD[5][0] =     temp - 10;
-				if ( FRD[5][0] < 0) FRD[5][0] = -(10 + FRD[5][0] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 12) << 8) | *(data_buf + 13));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[5][1] =     temp - 10;
-				if ( FRP[5][1] < 0) FRP[5][1] = -(10 + FRP[5][1] );
-			}
-			else
-			{
-				FRD[5][1] =     temp - 10;
-				if ( FRD[5][1] < 0) FRD[5][1] = -(10 + FRD[5][1] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 14) << 8) | *(data_buf + 15));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[5][2] =     temp - 10;
-				if ( FRP[5][2] < 0) FRP[5][2] = -(10 + FRP[5][2] );
-			}
-			else
-			{
-				FRD[5][2] =     temp - 10;
-				if ( FRD[5][2] < 0) FRD[5][2] = -(10 + FRD[5][2] );
-			}
+
 		}
 
 		//h2
 		temp = ((uint16) (* (data_buf + 16) << 8) | *(data_buf + 17));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[6][0] =     temp - 10;
-				if ( FRP[6][0] < 0) FRP[6][0] = -(10 + FRP[6][0] );
-			}
-			else
-			{
-				FRD[6][0] =     temp - 10;
-				if ( FRD[6][0] < 0) FRD[6][0] = -(10 + FRD[6][0] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 18) << 8) | *(data_buf + 19));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[6][1] =     temp - 10;
-				if ( FRP[6][1] < 0) FRP[6][1] = -(10 + FRP[6][1] );
-			}
-			else
-			{
-				FRD[6][1] =     temp - 10;
-				if ( FRD[6][1] < 0) FRD[6][1] = -(10 + FRD[6][1] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 20) << 8) | *(data_buf + 21));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[6][2] =     temp - 10;
-				if ( FRP[6][2] < 0) FRP[6][2] = -(10 + FRP[6][2] );
-			}
-			else
-			{
-				FRD[6][2] =     temp - 10;
-				if ( FRD[6][2] < 0) FRD[6][2] = -(10 + FRD[6][2] );
-			}
+
 		}
 
 		ANO_DT_Send_Check(*(data_buf + 2), sum);
@@ -521,134 +365,53 @@ void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num)
 	{
 		//h0
 		temp = ((uint16) (* (data_buf + 4) << 8) | *(data_buf + 5));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[0][4] =     temp - 10;
-				if ( FRP[0][4] < 0) FRP[0][4] = -(10 + FRP[0][4] );
-			}
-			else
-			{
-				FRD[0][4] =     temp - 10;
-				if ( FRD[0][4] < 0) FRD[0][4] = -(10 + FRD[0][4] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 6) << 8) | *(data_buf + 7));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[0][5] =     temp - 10;
-				if ( FRP[0][5] < 0) FRP[0][5] = -(10 + FRP[0][5] );
-			}
-			else
-			{
-				FRD[0][5] =     temp - 10;
-				if ( FRD[0][5] < 0) FRD[0][5] = -(10 + FRD[0][5] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 8) << 8) | *(data_buf + 9));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[0][6] =     temp - 10;
-				if ( FRP[0][6] < 0) FRP[0][6] = -(10 + FRP[0][6] );
-			}
-			else
-			{
-				FRD[0][6] =     temp - 10;
-				if ( FRD[0][6] < 0) FRD[0][6] = -(10 + FRD[0][6] );
-			}
+
 		}
 
 		//h1
 		temp = ((uint16) (* (data_buf + 10) << 8) | *(data_buf + 11));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[1][4] =     temp - 10;
-				if ( FRP[1][4] < 0) FRP[1][4] = -(10 + FRP[1][4] );
-			}
-			else
-			{
-				FRD[1][4] =     temp - 10;
-				if ( FRD[1][4] < 0) FRD[1][4] = -(10 + FRD[1][4] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 12) << 8) | *(data_buf + 13));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[1][5] =     temp - 10;
-				if ( FRP[1][5] < 0) FRP[1][5] = -(10 + FRP[1][5] );
-			}
-			else
-			{
-				FRD[1][5] =     temp - 10;
-				if ( FRD[1][5] < 0) FRD[1][5] = -(10 + FRD[1][5] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 14) << 8) | *(data_buf + 15));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[1][6] =     temp - 10;
-				if ( FRP[1][6] < 0) FRP[1][6] = -(10 + FRP[1][6] );
-			}
-			else
-			{
-				FRD[1][6] =     temp - 10;
-				if ( FRD[1][6] < 0) FRD[1][6] = -(10 + FRD[1][6] );
-			}
+
 		}
 
 		//h2
 		temp = ((uint16) (* (data_buf + 16) << 8) | *(data_buf + 17));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[2][4] =     temp - 10;
-				if ( FRP[2][4] < 0) FRP[2][4] = -(10 + FRP[2][4] );
-			}
-			else
-			{
-				FRD[2][4] =     temp - 10;
-				if ( FRD[2][4] < 0) FRD[2][4] = -(10 + FRD[2][4] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 18) << 8) | *(data_buf + 19));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[2][5] =     temp - 10;
-				if ( FRP[2][5] < 0) FRP[2][5] = -(10 + FRP[2][5] );
-			}
-			else
-			{
-				FRD[2][5] =     temp - 10;
-				if ( FRD[2][5] < 0) FRD[2][5] = -(10 + FRD[2][5] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 20) << 8) | *(data_buf + 21));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[2][6] =     temp - 10;
-				if ( FRP[2][6] < 0) FRP[2][6] = -(10 + FRP[2][6] );
-			}
-			else
-			{
-				FRD[2][6] =     temp - 10;
-				if ( FRD[2][6] < 0) FRD[2][6] = -(10 + FRD[2][6] );
-			}
+
 		}
 
 		ANO_DT_Send_Check(*(data_buf + 2), sum);
@@ -659,134 +422,53 @@ void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num)
 	{
 		//h0
 		temp = ((uint16) (* (data_buf + 4) << 8) | *(data_buf + 5));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[4][4] =     temp - 10;
-				if ( FRP[4][4] < 0) FRP[4][4] = -(10 + FRP[4][4] );
-			}
-			else
-			{
-				FRD[4][4] =     temp - 10;
-				if ( FRD[4][4] < 0) FRD[4][4] = -(10 + FRD[4][4] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 6) << 8) | *(data_buf + 7));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[4][5] =     temp - 10;
-				if ( FRP[4][5] < 0) FRP[4][5] = -(10 + FRP[4][5] );
-			}
-			else
-			{
-				FRD[4][5] =     temp - 10;
-				if ( FRD[4][5] < 0) FRD[4][5] = -(10 + FRD[4][5] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 8) << 8) | *(data_buf + 9));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[4][6] =     temp - 10;
-				if ( FRP[4][6] < 0) FRP[4][6] = -(10 + FRP[4][6] );
-			}
-			else
-			{
-				FRD[4][6] =     temp - 10;
-				if ( FRD[4][6] < 0) FRD[4][6] = -(10 + FRD[4][6] );
-			}
+
 		}
 
 		//h1
 		temp = ((uint16) (* (data_buf + 10) << 8) | *(data_buf + 11));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[5][4] =     temp - 10;
-				if ( FRP[5][4] < 0) FRP[5][4] = -(10 + FRP[5][4] );
-			}
-			else
-			{
-				FRD[5][4] =     temp - 10;
-				if ( FRD[5][4] < 0) FRD[5][4] = -(10 + FRD[5][4] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 12) << 8) | *(data_buf + 13));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[5][5] =     temp - 10;
-				if ( FRP[5][5] < 0) FRP[5][5] = -(10 + FRP[5][5] );
-			}
-			else
-			{
-				FRD[5][5] =     temp - 10;
-				if ( FRD[5][5] < 0) FRD[5][5] = -(10 + FRD[5][5] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 14) << 8) | *(data_buf + 15));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[5][6] =     temp - 10;
-				if ( FRP[5][6] < 0) FRP[5][6] = -(10 + FRP[5][6] );
-			}
-			else
-			{
-				FRD[5][6] =     temp - 10;
-				if ( FRD[5][6] < 0) FRD[5][6] = -(10 + FRD[5][6] );
-			}
+
 		}
 
 		//h2
 		temp = ((uint16) (* (data_buf + 16) << 8) | *(data_buf + 17));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[6][4] =     temp - 10;
-				if ( FRP[6][4] < 0) FRP[6][4] = -(10 + FRP[6][4] );
-			}
-			else
-			{
-				FRD[6][4] =     temp - 10;
-				if ( FRD[6][4] < 0) FRD[6][4] = -(10 + FRD[6][4] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 18) << 8) | *(data_buf + 19));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[6][5] =     temp - 10;
-				if ( FRP[6][5] < 0) FRP[6][5] = -(10 + FRP[6][5] );
-			}
-			else
-			{
-				FRD[6][5] =     temp - 10;
-				if ( FRD[6][5] < 0) FRD[6][5] = -(10 + FRD[6][5] );
-			}
+
 		}
 		temp = ((uint16)(*(data_buf + 20) << 8) | *(data_buf + 21));
-		if (temp <= 20)
+		if (temp <= 130)
 		{
-			if (ServoFuzzy.id == 0)
-			{
-				FRP[6][6] =     temp - 10;
-				if ( FRP[6][6] < 0) FRP[6][6] = -(10 + FRP[6][6] );
-			}
-			else
-			{
-				FRD[6][6] =     temp - 10;
-				if ( FRD[6][6] < 0) FRD[6][6] = -(10 + FRD[6][6] );
-			}
+
 		}
 
 		ANO_DT_Send_Check(*(data_buf + 2), sum);
@@ -794,7 +476,7 @@ void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num)
 
 }
 
-static void ANO_DT_Send_Check(uint8 head, uint8 check_sum)
+static void ANO_DT_Send_Check(uint8 head, uint8 check_sum)  //发送校验
 {
 	data_to_send[0] = 0xAA;
 	data_to_send[1] = 0xAA;
@@ -810,4 +492,90 @@ static void ANO_DT_Send_Check(uint8 head, uint8 check_sum)
 	data_to_send[6] = sum;
 
 	ANO_Send_Data(data_to_send, 7);
+}
+
+
+void ANO_DT_Send_Speed()
+{
+	uint8 _cnt = 0;
+	int16 _temp;
+	data_to_send[_cnt++] = 0xAA;
+	data_to_send[_cnt++] = 0xAA;
+	data_to_send[_cnt++] = 0x10;
+	data_to_send[_cnt++] = 0;
+
+	_temp = (int16)(PidServo.kp * 1000);
+	data_to_send[_cnt++] = BYTE1(_temp);
+	data_to_send[_cnt++] = BYTE0(_temp);
+	_temp = (int16)(PidServo.kd * 1000);
+	data_to_send[_cnt++] = BYTE1(_temp);
+	data_to_send[_cnt++] = BYTE0(_temp);
+	_temp = (int16)(PidSpeedLeft.kp * 1000);
+	data_to_send[_cnt++] = BYTE1(_temp);
+	data_to_send[_cnt++] = BYTE0(_temp);
+	_temp = (int16)(PidSpeedLeft.ki * 1000);
+	data_to_send[_cnt++] = BYTE1(_temp);
+	data_to_send[_cnt++] = BYTE0(_temp);
+	_temp = (int16)(PidSpeedLeft.temp * 10000);
+	data_to_send[_cnt++] = BYTE1(_temp);
+	data_to_send[_cnt++] = BYTE0(_temp);
+	_temp = (int16)(Speed_Expect);
+	data_to_send[_cnt++] = BYTE1(_temp);
+	data_to_send[_cnt++] = BYTE0(_temp);
+	data_to_send[_cnt++] = 0;
+	data_to_send[_cnt++] = 0;
+	data_to_send[_cnt++] = 0;
+	data_to_send[_cnt++] = 0;
+	data_to_send[_cnt++] = 0;
+	data_to_send[_cnt++] = 0;
+
+	data_to_send[3] = _cnt - 4;
+
+	uint8 sum = 0;
+	for (uint8 i = 0; i < _cnt; i++)
+		sum += data_to_send[i];
+
+	data_to_send[_cnt++] = sum;
+
+	ANO_Send_Data(data_to_send, _cnt);
+}
+
+
+
+void ANO_DT_Send_PID()
+{
+	uint8 _cnt = 0;
+	data_to_send[_cnt++] = 0xAA;
+	data_to_send[_cnt++] = 0xAA;
+	data_to_send[_cnt++] = 0x12;
+	data_to_send[_cnt++] = 0;
+
+	data_to_send[_cnt++] = (uint8)Speed_info.Straight_Speed;
+	data_to_send[_cnt++] = (uint8)Speed_info.Cur_Speed;
+	data_to_send[_cnt++] = (uint8)Speed_info.Snake_Speed;
+	data_to_send[_cnt++] = (uint8)Speed_info.Obstacle_Speed;
+	data_to_send[_cnt++] = (uint8)Speed_info.RampUp_Speed;
+	data_to_send[_cnt++] = (uint8)Speed_info.RampDown_Speed;
+	data_to_send[_cnt++] = (uint8)Speed_info.Into_Cur_Speed;
+	data_to_send[_cnt++] = 0;
+	data_to_send[_cnt++] = 0;
+	data_to_send[_cnt++] = 0;
+	data_to_send[_cnt++] = 0;
+	data_to_send[_cnt++] = 0;
+	data_to_send[_cnt++] = 0;
+	data_to_send[_cnt++] = 0;
+	data_to_send[_cnt++] = 0;
+	data_to_send[_cnt++] = 0;
+	data_to_send[_cnt++] = 0;
+	data_to_send[_cnt++] = 0;
+
+	data_to_send[3] = _cnt - 4;
+
+	uint8 sum = 0;
+	for (uint8 i = 0; i < _cnt; i++)
+		sum += data_to_send[i];
+
+	data_to_send[_cnt++] = sum;
+
+	ANO_Send_Data(data_to_send, _cnt);
 }

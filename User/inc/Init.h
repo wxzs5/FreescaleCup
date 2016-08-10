@@ -18,7 +18,6 @@ void uart4_test_handler(void);
 void Init_PORT_C(void);
 void PORTC_IRQHandler(void);
 void stop_IRQProcess(void);
-void PORTE_IRQHandler(void);
 
 #endif
 

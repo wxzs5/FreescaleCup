@@ -25,6 +25,7 @@ void SamplingDelay(void) ;
 void SendHex(uint8 hex) ;
 void SendImageData(uint8 * ImageData, uint8 id) ;
 
+void vcan_sendccd2(void *ccdaddr1, void *ccdaddr2, uint32_t ccdsize);
 
 
 #endif

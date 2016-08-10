@@ -17,6 +17,19 @@
 #ifndef __MK60_UART_H__
 #define __MK60_UART_H__
 
+/**
+ * \enum UART_ITDMAConfig_Type
+ * \brief UART÷–∂œº∞DMA≈‰÷√
+ */
+typedef enum
+{
+    kUART_IT_Tx,                /**< ø™∆Ù√ø∑¢ÀÕ“ª÷°¥´ ‰ÕÍ≥…÷–∂œ */
+    kUART_DMA_Tx,               /**< ø™∆Ù√ø∑¢ÀÕ“ª÷°¥´ ‰ÕÍ≥…¥•∑¢DMA */
+    kUART_IT_Rx,                /**< ø™∆Ù√øΩ” ’“ª÷°¥´ ‰ÕÍ≥…÷–∂œ */
+    kUART_DMA_Rx,               /**< ø™∆Ù√øΩ” ’“ª÷°¥´ ‰ÕÍ≥…¥•∑¢DMA */
+    kUART_IT_IdleLine,
+}UART_ITDMAConfig_Type;
+
 typedef enum
 {
     UART0,
@@ -64,6 +77,7 @@ extern void uart_txc_irq_dis(UARTn_e);                         //πÿ¥Æø⁄∑¢ÀÕÕÍ≥…÷
 
 extern void uart3_test_handler(void);                        //÷–∂œ∑˛ŒÒ∫Ø ˝£¨Ωˆπ©≤Œøº£®–Ë”√ªß◊‘–– µœ÷£©
 
+void UART_ITDMAConfig(UARTn_e uratn, UART_ITDMAConfig_Type config, uint8 status);
 /********************************************************************/
 
 #endif /* __MK60_UART_H__ */

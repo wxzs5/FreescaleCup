@@ -14,15 +14,14 @@
 *********************************************************************************/
 #include "include.h"
 
-//extern float a[3], w[3], h[3], Angle[3];
-extern uint8  nrf_tx_buff[];
-
-int rx_buff_num = 0;
-int tx_buff_num = 0;
-char rx_buff[MAX_NUM] = {0};
-char tx_buff[MAX_NUM] = {0};
-
-
+/*********************************************************************************
+*                               我要过六级                                       *
+**********************************************************************************
+* @file       Init.c
+* @brief      void Init_all();
+* @version    v5.3
+* @date       2016-8-10
+*********************************************************************************/
 void Init_all()
 {
 #if   MK60F15
@@ -99,9 +98,17 @@ void Init_all()
 
 void Init_uart4(void)
 {
+  /*不用DMA串口的初始化代码*/
+  // uart_init (UART4, 460800);
+  // set_vector_handler(UART4_RX_TX_VECTORn, uart4_test_handler);
+  // uart_rx_irq_en(UART4);
+
+  /*使用DMA串口的初始化代码*/
   uart_init (UART4, 115200);
+  UART_ITDMAConfig(UART4, kUART_DMA_Tx, 1);
   set_vector_handler(UART4_RX_TX_VECTORn, uart4_test_handler);
   uart_rx_irq_en(UART4);
+  UART_DMASendConfig(UART4, HW_DMA_CH2);
 }
 
 
@@ -174,27 +181,3 @@ void stop_IRQProcess(void)
     }
   }
 }
-
-
-
-/*!
- *  @brief      PORTE中断服务函数
- *  @since      v5.0
- */
-void PORTE_IRQHandler(void)
-{
-  uint8  n;    //引脚号
-  uint32 flag;
-
-  flag = PORTE_ISFR;
-  PORTE_ISFR  = ~0;                                   //清中断标志位
-
-  n = 27;
-  if (flag & (1 << n))                                //PTE27触发中断
-  {
-    nrf_handler();
-  }
-}
-
-
-

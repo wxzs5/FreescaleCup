@@ -3,6 +3,8 @@
 
 #define CCD_Dark_Current 0      //CCD暗电流
 
+#define Queue_NUM 15
+
 #define     ROAD_WIDETH_1_MAX   90      //CCD1 直道上占55个点  33-88 55
 #define     ROAD_WIDETH_1_MIN   20
 
@@ -40,5 +42,9 @@ void myCCD_CCD2_GetLineError(CCD_Info *CCD2_info);
 uint8 myCCD_GetObstacle(CCD_Info *CCD1_info, CCD_Info *CCD2_info);
 
 uint8 myCCD_detect_startline(CCD_Info *CCD1_info, CCD_Info *CCD2_info);
+
+void Queue_Variance(CCD_Info *CCD_info);
+
+void Queue_Mean(CCD_Info *CCD_info);
 
 #endif
