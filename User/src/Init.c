@@ -176,6 +176,13 @@ void stop_IRQProcess(void)
       Speed_Expect = 0;
       PidSpeedLeft.temp = 0;
       PidSpeedRight.temp = 0;
+      Speed_info.Obstacle_Speed = 0;
+      Speed_info.RampUp_Speed = 0;
+      Speed_info.RampDown_Speed = 0;
+      Speed_info.Straight_Speed = 0;
+      Speed_info.Cur_Speed = 0;
+      Speed_info.Snake_Speed = 0;
+      Speed_info.Into_Cur_Speed = 0;
       // disable_irq(PORTC_IRQn);
       // check_flag = 0;
     }

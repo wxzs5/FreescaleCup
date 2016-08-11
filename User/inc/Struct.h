@@ -47,15 +47,18 @@ typedef enum
 	In_Curva,                 //弯道
 	In_Crossing,             //十字
 	Into_Obstacle,             //在直道
+	Out_Obstacle,
 	Ramp_Up,			//上坡
 	Ramp_Down,			//下坡
-	Stop			//停车
+	// Stop			//停车
 } Car_State_e;
 
 typedef struct
 {
 	Car_State_e now;
 	Car_State_e pre;
+	int8 direc_now;
+	int8 direc_pre;
 } Car_State;
 
 
@@ -95,17 +98,23 @@ typedef struct CCD_Info_//--------------------------------CCD数据
 	//int16 LeftLossLinePixel;      //记录丢左边线时左边的点
 	//int16 RightLossLinePixel;     //记录丢右边线时右边的点
 	int16 Left_Mean;
-    int16 Left_Variance;
+	int16 Left_Variance;
 	int16 Right_Mean;
-    int16 Right_Variance;
+	int16 Right_Variance;
+	int16 Ec_Left_Mean;
+	int16 Ec_Right_Mean;
+
+	int16 Little_Thres;
+	int16 Obstacle_Thres;
+	int16 Obstacle_Thres_Up;
+	int16 Curva_Thres;
+	int16 Curva_Thres_Up;
+	int16 Into_Curva_Time;
 
 	uint8 LeftLossLineFlag;       //左边丢线标志
 	uint8 RightLossLineFlag;      //右边丢线标志
-
 	int16  RoadWidthOfStraight;   //直道的路宽
-
 	uint8  CCD_Ready_Num;       //CCD数据有效次数
-
 	uint8 AddLine_Flag;       //补线标记
 	uint8 LossLine_Flag;        //CCD丢线标志
 	uint8 Cross_Flag;         //十字道标志
@@ -193,9 +202,7 @@ typedef struct Parameter_Info_//------------------------------------------一些
 
 	uint8 CCD_SampleOK_Flag;  		//CCD采样完成标志
 	uint8 StartEndLine_Flag; 			//检测到起跑线标志
-
 	uint8 LeftOrRightObstacle_Flag;	//路障标记(左边路障/右边路障)
-
 	int32 OLED_NoAction_Counter;		//按键没反应计数
 	uint8 OLED_NoAction_Flag;			//按键没有反应标志
 	uint8 RampReady_Distance;			//预判坡道超过该距离还未判断到坡道则清除预判标记，防止预判错误时长时间减速

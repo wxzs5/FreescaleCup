@@ -6,7 +6,7 @@ Pidsuite PidSpeedLeft = {0};
 Pidsuite PidSpeedRight = {0};
 
 float Speed_Expect = 100;
-float Ramp_Kp = 0.7;
+float Ramp_Kp = 0.6;
 
 void Pid_Init(void)
 {
@@ -20,7 +20,7 @@ void Pid_Init(void)
   PidSpeedLeft.outD                = 0;
   PidSpeedLeft.outI                = 0;
   PidSpeedLeft.outP                = 0;
-  PidSpeedLeft.temp                = 0.008; //差速的参数
+  PidSpeedLeft.temp                = 0.0035; //差速的参数
 
   PidSpeedRight.kp                 = 21;
   PidSpeedRight.ki                 = 12;
@@ -32,11 +32,11 @@ void Pid_Init(void)
   PidSpeedRight.outD               = 0;
   PidSpeedRight.outI               = 0;
   PidSpeedRight.outP               = 0;
-  PidSpeedRight.temp               = 0.008;//差速的参数
+  PidSpeedRight.temp               = 0.0035;//差速的参数
 
-  PidServo.kp                      = 2.35;
+  PidServo.kp                      = 2.20;
   PidServo.ki                      = 0;
-  PidServo.kd                      = 17.5;
+  PidServo.kd                      = 15.5;
   PidServo.error                   = 0;
   PidServo.error_pre               = 0;
   PidServo.error_pre_pre           = 0;
@@ -67,11 +67,11 @@ float Pid_Calculate_Servo(Pidsuite *Pid, int16 Measured, int16 Expect)
   }
 
   Pid->kdi = Pid->kd + ServoFuzzy.outD;
-  Pid->outP   = Pid->kpi * Pid->error;
+  Pid->outP   = Pid->kp * Pid->error;
 
 
   //Pid->outD = Pid->kd * Gyro_data.z;
-  Pid->outD = Pid->kdi * (Pid->error - Pid->error_pre);
+  Pid->outD = Pid->kd * (Pid->error - Pid->error_pre);
   // if (Pid->error > 15) Pid->outD =  0;
   // if (Pid->error < -15) Pid->outD = 0;
 

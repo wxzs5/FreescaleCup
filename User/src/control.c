@@ -8,186 +8,189 @@ void print_road(Car_State *state)
 {
   if (Tune_Mode == 0)
   {
-    if (state->now == In_Straight) printf("In_Straight->");
-    else if (state->now == Into_Curva) printf("Into_Curva->");
-    else if (state->now == In_Curva) printf("In_Curva->");
-    else if (state->now == Into_Obstacle) printf("Into_Obstacle->");
-    else printf("In_Crossing->");
+    // if (state->now == In_Straight) printf("In_Straight->");
+    // else if (state->now == Into_Curva) printf("Into_Curva->");
+    // else if (state->now == In_Curva) printf("In_Curva->");
+    // else if (state->now == Into_Obstacle) printf("Into_Obstacle->");
+    // else printf("In_Crossing->");
   }
 }
 
 
+/*************************èµ›é“çŠ¶æ€åˆ¤æ–­*************************/
+void Road_Judge(CCD_Info *ccd, Car_State *state)
+{
+  /**************1.åœ¨ç›´é“ä¸­****************/
+  if (state->now == In_Straight)
+  {
+
+    Speed_Expect = Speed_info.Straight_Speed;
+
+    if ((ccd->Left_Variance >= ccd->Curva_Thres || ccd->Right_Variance >= ccd->Curva_Thres  ) &&
+        (ccd->Left_Variance < ccd->Curva_Thres_Up || ccd->Right_Variance < ccd->Curva_Thres_Up ) )//&&
+      //ccd->Ec_Right_Mean * ccd->Ec_Left_Mean > 0)     //è¿›å¼¯
+    {
+
+      Speed_Expect = Speed_info.Into_Cur_Speed;
+
+      state->pre = state->now;
+      state->now = Into_Curva;
+      //æ–¹å‘åˆ¤æ–­
+      state->direc_pre = state->direc_now;
+      if (ccd->Right_Variance > ccd->Left_Variance) state->direc_now = 1;    //
+      else state->direc_now = -1;
+      print_road(state);
+    }
 
 
-/*********************************************************************************
-*                               ÎÒÒª¹ýÁù¼¶                                       *
-*******************************ÈüµÀ×´Ì¬ÅÐ¶Ï***************************************
-* @file       control.c
-* @brief      void Road_Judge(CCD_Info *CCD_info, 
-                              Speed_Info *Speed_info, 
-                              Car_State *state);
-* @version    v5.3
-* @date       2016-6-24
-*********************************************************************************/
-// void Road_Judge(CCD_Info *CCD_info, Speed_Info *Speed_info, Car_State *state)
-// {
-//   /**************1.ÔÚÖ±µÀÖÐ****************/
-//   if (state->now == In_Straight)
-//   {
-
-//     Speed_Temp = Speed_Expect;
-//     Servo_Temp = Servo_Expect;
-//     straight_count++;
-
-//     if ((ccd->Left.variance >= CURVA_THRES || ccd->Right.variance >= CURVA_THRES ) &&
-//         (ccd->Left.variance < CURVA_THRES_UP || ccd->Right.variance < CURVA_THRES_UP ) &&
-//         ccd->Ec_Right.mean * ccd->Ec_Left.mean > 0)     //½øÍä
-//     {
-//       state->pre = state->now;
-//       state->now = Into_Curva;
-//       //·½ÏòÅÐ¶Ï
-//       state->direc_pre = state->direc_now;
-//       if (ccd->Right.variance > ccd->Left.variance) state->direc_now = 1;    //
-//       else state->direc_now = -1;
-//       print_road(state);
-//     }
+    else if (ccd->Cross_Flag == 1) //è¿›åå­—
+    {
+      state->pre = state->now;
+      state->now = In_Crossing;
+      state->direc_pre = state->direc_now;
+      state->direc_now = 0;
+      print_road(state);
+    }
 
 
-//     else if (ccd->Left.lost_line && ccd->Right.lost_line) //½øÊ®×Ö
-//     {
-//       state->pre = state->now;
-//       state->now = In_Crossing;
-//       state->direc_pre = state->direc_now;
-//       state->direc_now = 0;
-//       print_road(state);
-//     }
+    /*****************************å•ç‹¬è®¨è®ºè¿›éšœç¢***************************/
+
+//æƒ…å†µ1   éšœç¢åœ¨å³è¾¹
+    else if (ccd->Left_Variance < ccd->Little_Thres &&
+             ccd->Right_Variance > ccd->Obstacle_Thres &&
+             ccd->Right_Variance < ccd->Obstacle_Thres_Up &&
+             ccd->Ec_Right_Mean < 0) //è¿›éšœç¢
+    {
+
+      Speed_Expect = Speed_info.Obstacle_Speed;
+
+      state->pre = state->now;
+      state->now = Into_Obstacle;
+      state->direc_pre = state->direc_now;
+      //æ–¹å‘åˆ¤æ–­
+      state->direc_now = 1;
+      print_road(state);
+    }
+
+    //æƒ…å†µ2
+    else if (ccd->Right_Variance < ccd->Little_Thres &&
+             ccd->Left_Variance > ccd->Obstacle_Thres &&
+             ccd->Left_Variance < ccd->Obstacle_Thres_Up &&
+             ccd->Ec_Left_Mean > 0) //è¿›éšœç¢
+    {
+
+      Speed_Expect = Speed_info.Obstacle_Speed;
+
+      state->pre = state->now;
+      state->now = Into_Obstacle;
+      state->direc_pre = state->direc_now;
+      //æ–¹å‘åˆ¤æ–­
+      state->direc_now = -1;
+      print_road(state);
+    }
+
+  }//In_Straight
+
+  /**************2.è¿›å¼¯ä¸­****************/
+  else if (state ->now == Into_Curva)
+  {
+    reduce_spe_flag++;
+    if (reduce_spe_flag == ccd->Into_Curva_Time)
+    {
+
+      Speed_Expect = Speed_info.Cur_Speed;
+
+      reduce_spe_flag = 0;
+      state->pre = state->now;
+      state->now = In_Curva;
+      state->direc_pre = state->direc_now;
+      if (ccd->Ec_Left_Mean > 0)state->direc_now = 1;
+      else state->direc_now = -1;
+      print_road(state);
+    }
+
+  }
+  /**************3.åœ¨å¼¯é“é‡Œ****************/
+  else if (state ->now == In_Curva)
+  {
+    if (ccd->Left_Variance < ccd->Little_Thres && ccd->Right_Variance < ccd->Little_Thres)  //è¿›ç›´é“
+    {
+
+      Speed_Expect = Speed_info.Straight_Speed;
+
+      state->pre = state->now;
+      state->now = In_Straight;
+      state->direc_pre = state->direc_now;
+      state->direc_now = 0;
+      print_road(state);
+    }
+
+  }
+
+  /**************4.åœ¨åå­—ä¸­****************/
+  else if (state ->now == In_Crossing)
+  {
+    if (!ccd->LossLine_Flag) //è¿›ç›´é“
+    {
+      state->pre = state->now;
+      state->now = In_Straight;
+      state->direc_pre = state->direc_now;
+      state->direc_now = 0;
+      print_road(state);
+    }
+  }
+
+  /**************5.å‰æ–¹éšœç¢****************/
+  else if (state ->now == Into_Obstacle)
+  {
+    if ((ccd->Left_Variance > ccd->Obstacle_Thres && ccd->Left_Variance < ccd->Obstacle_Thres_Up) ||
+        (ccd->Right_Variance > ccd->Obstacle_Thres && ccd->Right_Variance < ccd->Obstacle_Thres_Up))
+    {
+
+      Speed_Expect = Speed_info.Straight_Speed;
+
+      state->pre = state->now;
+      state->now = Out_Obstacle;
+      state->direc_pre = state->direc_now;
+      state->direc_now = 0;
+      print_road(state);
+    }
+  }
+  /**************6.åœ¨åå­—ä¸­****************/
+  else if (state ->now == Ramp_Down)
+  {
+    if (ccd->Left_Variance < ccd->Little_Thres && ccd->Right_Variance < ccd->Little_Thres)  //è¿›ç›´é“
+    {
+
+      Speed_Expect = Speed_info.Straight_Speed;
+
+      state->pre = state->now;
+      state->now = In_Straight;
+      state->direc_pre = state->direc_now;
+      state->direc_now = 0;
+      print_road(state);
+    }
+  }
+  /**************7.å‡ºéšœç¢****************/
+  else
+  {
+    if (ccd->Left_Variance < ccd->Little_Thres && ccd->Right_Variance < ccd->Little_Thres)  //è¿›ç›´é“
+    {
+
+      Speed_Expect = Speed_info.Straight_Speed;
+
+      state->pre = state->now;
+      state->now = In_Straight;
+      state->direc_pre = state->direc_now;
+      state->direc_now = 0;
+      print_road(state);
+    }
+  }
 
 
-//     if (have_obstacle)
-//     {
-//       /*****************************µ¥¶ÀÌÖÂÛ½øÕÏ°­***************************/
-
-// //Çé¿ö1   ÕÏ°­ÔÚÓÒ±ß
-//       if (ccd->Left.variance < LITTLE_THRES &&
-//           ccd->Right.variance > OBSTA_THRES &&
-//           ccd->Right.variance < OBSTA_THRES_UP &&
-//           ccd->Ec_Right.mean < 0) //½øÕÏ°­
-//       {
-//         state->pre = state->now;
-//         state->now = Into_Obstacle;
-//         state->direc_pre = state->direc_now;
-//         //·½ÏòÅÐ¶Ï
-//         state->direc_now = 1;
-//         print_road(state);
-//       }
-
-//       //Çé¿ö2
-//       else if (ccd->Right.variance < LITTLE_THRES &&
-//                ccd->Left.variance > OBSTA_THRES &&
-//                ccd->Left.variance < OBSTA_THRES_UP &&
-//                ccd->Ec_Left.mean > 0) //½øÕÏ°­
-//       {
-
-//         state->pre = state->now;
-//         state->now = Into_Obstacle;
-//         state->direc_pre = state->direc_now;
-//         //·½ÏòÅÐ¶Ï
-//         state->direc_now = -1;
-//         print_road(state);
-//       }
-//     }
-//   }//In_Straight
 
 
-//   /**************2.½øÍäÖÐ****************/
-//   else if (state ->now == Into_Curva)
-//   {
-//     if (Coderval > 450)Speed_Temp = Speed_Into_Curva;
-//     else if (Coderval > 400)Speed_Temp = 260;
-//     else if (Coderval > 350)Speed_Temp = 290;
-//     else Speed_Temp = 340;
-//     Servo_Temp = Servo_Expect;
-
-//     if (reduce_spe_flag == REDUCE_COUNT)
-//     {
-//       reduce_spe_flag = 0;
-//       state->pre = state->now;
-//       state->now = In_Curva;
-//       state->direc_pre = state->direc_now;
-//       if (ccd->Ec_Left.mean > 0)state->direc_now = 1;
-//       else state->direc_now = -1;
-//       print_road(state);
-//     }
-
-//   }
-//   /**************3.ÔÚÍäµÀÀï****************/
-//   else if (state ->now == In_Curva)
-//   {
-//     Speed_Temp = Speed_Curva;
-//     Servo_Temp = Servo_Expect;
-
-//     if (ccd->Left.variance < LITTLE_THRES && ccd->Right.variance < LITTLE_THRES)  //½øÖ±µÀ
-//     {
-//       state->pre = state->now;
-//       state->now = In_Straight;
-//       state->direc_pre = state->direc_now;
-//       state->direc_now = 0;
-//       print_road(state);
-//     }
-
-//   }
-
-//   /**************4.ÔÚÊ®×ÖÖÐ****************/
-//   else if (state ->now == In_Crossing)
-//   {
-//     Speed_Temp = Speed_Expect;
-//     Servo_Temp = Servo_Expect;
-
-//     if (!ccd->Left.lost_line && !ccd->Right.lost_line) //½øÖ±µÀ
-//     {
-//       state->pre = state->now;
-//       state->now = In_Straight;
-//       state->direc_pre = state->direc_now;
-//       state->direc_now = 0;
-//       print_road(state);
-//     }
-//   }
-
-//   /**************5.Ç°·½ÕÏ°­****************/
-//   else if (state ->now == Into_Obstacle)
-//   {
-//     if (Coderval > 450)Speed_Temp = 350;
-//     Speed_Temp = Speed_Expect;
-//     if (state->direc_now == 1)Servo_Temp = Servo_Obs_Right;
-//     else Servo_Temp = Servo_Obs_Left;
+}// Road_Judge(CCD_Info *ccd)
 
 
-//     if ((ccd->Left.variance > OBSTA_THRES && ccd->Left.variance < OBSTA_THRES_UP) ||
-//         (ccd->Right.variance > OBSTA_THRES && ccd->Right.variance < OBSTA_THRES_UP))
-//     {
-//       state->pre = state->now;
-//       state->now = Out_Obstacle;
-//       state->direc_pre = state->direc_now;
-//       state->direc_now = 0;
-//       print_road(state);
-//     }
-//   }
 
-//   /**************6.³öÕÏ°­****************/
-//   else
-//   {
-//     Speed_Temp = Speed_Expect;
-//     Servo_Temp = Servo_Expect;
-
-//     if (ccd->Left.variance < LITTLE_THRES && ccd->Right.variance < LITTLE_THRES)  //½øÖ±µÀ
-//     {
-//       state->pre = state->now;
-//       state->now = In_Straight;
-//       state->direc_pre = state->direc_now;
-//       state->direc_now = 0;
-//       print_road(state);
-//     }
-//   }
-
-
-// }// Road_Judge(CCD_Info *ccd)

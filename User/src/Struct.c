@@ -36,7 +36,7 @@ void myData_Init()
     Speed_info.Obstacle_Speed = 60;
     Speed_info.RampUp_Speed = 80;
     Speed_info.RampDown_Speed = 70;
-    Speed_info.Straight_Speed = 112;
+    Speed_info.Straight_Speed = 108;
     Speed_info.Cur_Speed = 108;
     Speed_info.Snake_Speed = 112;
     Speed_info.Into_Cur_Speed = 90;
@@ -44,4 +44,15 @@ void myData_Init()
     Parameter_info.DebugTime = 1700;
     Parameter_info.Time = 1900;
     Parameter_info.Snake_dead = 0.05;
+
+    CCD1_info.Little_Thres = 5;
+    CCD1_info.Obstacle_Thres = 45;
+    CCD1_info.Obstacle_Thres_Up = 100;
+    CCD1_info.Curva_Thres = 10;
+    CCD1_info.Curva_Thres_Up = 120;
+    CCD1_info.Into_Curva_Time = 20;
+
+    Car_state.now = In_Straight;
+    Car_state.pre = In_Straight;
+
 }

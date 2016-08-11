@@ -36,7 +36,7 @@ void main()
     {
       TIME0flag_10ms = 0 ;
       Steer_Process();
-      Car_State_Judge();
+      // Car_State_Judge();
     }
 
     if (TIME0flag_15ms == 1)

@@ -20,8 +20,6 @@ uint32 check_flag = 0;
 uint16 Time_Counter = 0;
 
 uint8 reduce_spe_flag = 0;   //PID减速时间标志
-
-
 uint8 send_data_cnt = 0;                   //发送数据的计数器
 
 float K_Speed_Diff = 0; //差速   差速的比例
@@ -49,11 +47,11 @@ void Car_stop()      //停车函数      (注意要更换新的停车函数，st
 /*************************舵机处理函数*************************/
 void   Steer_Process()
 {
-	gpio_set(PTA16, 1);
+	gpio_set(PTA16, 1);   //测运行时间
 	CCD1_ImageCapture(&CCD1_info);       //采集CCD1 AD值函数
 	CCD2_ImageCapture(&CCD2_info);       //采集CCD2 AD值函数
 	myCCD_DataHandle(&CCD1_info, &CCD2_info, &Speed_info);
-
+	Road_Judge(&CCD1_info, &Car_state);  //道路状态判断
 	if (Gyro_info.RampUpDown == 1)
 	{
 		Center_Board_Value = CCD2_info.CentralLine[0];
@@ -61,17 +59,7 @@ void   Steer_Process()
 	// Calservo_Expect =  (int32) (Pid_Calculate_Servo(&PidServo, Center_Board_Value, 64));
 	// Calservo = Calservo * 0.4 + Calservo_Expect * 0.6;
 	Calservo = (int32)(Pid_Calculate_Servo(&PidServo, Center_Board_Value, 64));
-	gpio_set(PTA16, 0);
-	// if (PidServo.error > 45)
-	// {
-	// 	Calservo = Calservo_Expect;
-	// 	Calservo_Expect = SERVOCENTER - 90;
-	// }
-	// if (PidServo.error < - 45)
-	// {
-
-	// 	Calservo_Expect = SERVOCENTER + 90;
-	// }
+	gpio_set(PTA16, 0);  //测运行时间
 	if (!stop_flag)
 	{
 		ftm_pwm_duty(FTM3, SERVO, SERVOCENTER + Calservo);
@@ -160,36 +148,31 @@ void   Motor_Process()
 	}
 }
 
-void Car_State_Judge()
-{
-	static int32 Stop_Counter = 0;
-	if ((PidServo.temp < 4) && (PidServo.error < 10))
-	{
-		Stop_Counter++;
-	}
-	else
-	{
-		Stop_Counter = 0;
-		Car_state.pre = Car_state.now;
-		Car_state.now = In_Curva;
-	}
-	if (Stop_Counter >= 10)
-	{
-		Car_state.pre = Car_state.now;
-		Car_state.now = In_Straight;
-	}
-}
+// void Car_State_Judge()
+// {
+// 	static int32 Stop_Counter = 0;
+// 	if ((PidServo.temp < 4) && (PidServo.error < 10))
+// 	{
+// 		Stop_Counter++;
+// 	}
+// 	else
+// 	{
+// 		Stop_Counter = 0;
+// 		Car_state.pre = Car_state.now;
+// 		Car_state.now = In_Curva;
+// 	}
+// 	if (Stop_Counter >= 10)
+// 	{
+// 		Car_state.pre = Car_state.now;
+// 		Car_state.now = In_Straight;
+// 	}
+// }
 
 void Send_CCD_Imag()      //发送到蓝宙CCD上位机
 {
 	static uint8 ccd_count = 0;
 	if (stop_flag)
 	{
-		// ccd_count++;
-		// ccd_count = ccd_count % 2;
-		// if (ccd_count)SendImageData(&CCD1_info.PixelOri[0][0], 1);                              //CCD上传到蓝宙上位机函数
-		// else SendImageData(&CCD2_info.PixelOri[0][0], 2);
-
 		SendImageData(&CCD1_info.Pixel[0], 1);                              //CCD上传到蓝宙上位机函数
 		SendImageData(&CCD2_info.Pixel[0], 2);
 	}
@@ -203,7 +186,7 @@ void Send_Steer_Info()    //发送给匿名上位机
 		push(1, 64);
 		push(2, (int16)(PidServo.kpi * 1000));
 		push(3, (int16)(PidServo.kdi * 1000));
-		push(4, (int16)(PidServo.error));
+		push(4, (int16)(PidSpeedLeft.temp * 1000));
 		push(5, (int16)(PidServo.temp));
 		push(6, (int16)(ServoFuzzy.outP * 1000));
 		push(7, (int16)(ServoFuzzy.outD * 1000));
@@ -212,10 +195,17 @@ void Send_Steer_Info()    //发送给匿名上位机
 	}
 	if (!stop_flag && Tune_Mode == 4)
 	{
-		// push(0, (int16)ccd1_info.LeftLine.variance); push(1, (int16)ccd1_info.LeftLine.mean); push(2, (int16)(ccd1_info.RightLine.variance)); push(3, (int16)(ccd1_info.RightLine.mean));
-		// push(4, (int16)ccd1_info.Ec_Left.mean); push(5, (int16)ccd1_info.Ec_Right.mean); push(6, (int16)ccd1_info.Ec_Left.node[qhead]);
-		// push(7, (int16)ccd1_info.Ec_Right.node[qhead]); push(8, 4);
-		// Data_Send((uint8 *)SendBuf);
+		push(0, (int16)CCD1_info.Left_Variance);
+		push(1, (int16)CCD1_info.Left_Mean);
+		push(2, (int16)(CCD1_info.Right_Variance));
+		push(3, (int16)(CCD1_info.Right_Mean));
+		push(4, (int16)CCD1_info.Ec_Left_Mean);
+		push(5, (int16)CCD1_info.Ec_Right_Mean);
+		push(6, (int16)Speed_Expect);
+		push(7, (int16)(Speed_Val1_L + Speed_Val2_R) / 2);
+		push(8, 4);
+		Data_Send((uint8 *)SendBuf);
+
 	}
 }
 

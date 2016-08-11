@@ -47,7 +47,7 @@ void myCCD_DataInit(CCD_Info *CCD_info)
 
   CCD_info->CCD_PhotoCenter = 64;
   CCD_info->CCD_ObstacleShift = 22;          //默认偏移两个点
-  CCD_info->CCD_CrossShift = 30;
+  CCD_info->CCD_CrossShift = 25;
   CCD_info->Cross_Shift_Counter = 4;
   CCD_info->Cross_state = 0;
 
@@ -319,8 +319,8 @@ void myCCD_DataHandle(  CCD_Info *CCD1_info,
   myCCD_CCD1_GetLineError(CCD1_info, Speed_info);
   myCCD_CCD2_GetLineError(CCD2_info);
 
-  Queue_Mean(CCD1_info);
-  Queue_Variance(CCD1_info);
+  Queue_Mean(CCD1_info);           //CCD1计算均值
+  Queue_Variance(CCD1_info);        //CCD计算方差
 
   if (CCD1_info->LossLine_Flag != 1)
   {
@@ -431,15 +431,11 @@ void myCCD_CCD1_GetLineError(CCD_Info *CCD1_info, Speed_Info *Speed_info)
       break;
     }
   }
-  /*if (Left_temp == 3)
-  {
-    CCD1_info->LeftLossLineFlag = 1;
-  }*/
   if (ii == 3)
   {
     Left_temp = ii;
     CCD1_info->LeftLossLineFlag = 1;
-  } 
+  }
 
   /*-------------------右边线------------------------*/
   for (ii = LinePixel_Temp; ii < 125; ii++)
@@ -451,15 +447,11 @@ void myCCD_CCD1_GetLineError(CCD_Info *CCD1_info, Speed_Info *Speed_info)
       break;
     }
   }
-  /*if (Right_temp == 125)
-  {
-    CCD1_info->RightLossLineFlag = 1;
-  }*/
   if (ii == 125)
   {
     Right_temp = ii;
     CCD1_info->RightLossLineFlag = 1;
-  } 
+  }
 
   /*------------------------------移动队列---------------------------------*/
   for (ii = Line_SIZE - 1; ii > 0; ii--)
@@ -623,8 +615,9 @@ void myCCD_CCD2_GetLineError(CCD_Info * CCD2_info)
       break;
     }
   }
-  if (Left_temp == 3)
+  if (ii == 3)
   {
+    Left_temp = 3;
     CCD2_info->LeftLossLineFlag = 1;
   }
 
@@ -638,8 +631,9 @@ void myCCD_CCD2_GetLineError(CCD_Info * CCD2_info)
       break;
     }
   }
-  if (Right_temp == 125)
+  if (ii == 125)
   {
+    Right_temp = 125;
     CCD2_info->RightLossLineFlag = 1;
   }
 
@@ -877,16 +871,23 @@ uint8 myCCD_detect_startline(CCD_Info *CCD1_info, CCD_Info *CCD2_info)
 *********************************************************************************/
 void Queue_Mean(CCD_Info *CCD_info)
 {
-  int16 result_L = 0;
-  int16 result_R = 0;
+  int16 result_L = 0, result_R = 0;
+  int16 ec_L = 0, ec_R = 0;
   uint8 i = 0;
   for (i = 0; i < Line_SIZE; i++)
   {
     result_L += CCD_info->LeftLine[i];
     result_R += CCD_info->RightLine[i];
+    if (i < Line_SIZE - 10)
+    {
+      ec_L += CCD_info->LeftLine[i] - CCD_info->LeftLine[i + 6];
+      ec_R += CCD_info->RightLine[i] - CCD_info->RightLine[i + 6];
+    }
   }
   CCD_info->Left_Mean = result_L / Line_SIZE;
   CCD_info->Right_Mean = result_R / Line_SIZE;
+  CCD_info->Ec_Left_Mean = ec_L / (Line_SIZE - 10);
+  CCD_info->Ec_Right_Mean = ec_R / (Line_SIZE - 10);
 }
 
 

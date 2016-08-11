@@ -11,7 +11,7 @@
 
 #include "include.h"
 
-uint8 Tune_Mode = 1;
+uint8 Tune_Mode = 4;
 uint8 data_to_send[50] = {0};       //发送缓存
 
 uint8   SendBuf[UartDataNum ] = {0};
@@ -69,7 +69,7 @@ void Data_Send(uint8 *pst)
 
 void ANO_Send_Data(uint8 *Buff, uint8 len)
 {
-UART_SendWithDMA(HW_DMA_CH2, Buff, len);
+	UART_SendWithDMA(HW_DMA_CH2, Buff, len);
 
 }
 
@@ -223,26 +223,28 @@ void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num)
 			else CCD1_info.CCD_CrossShift = temp - 100;
 		}
 		temp =  (uint16)(*(data_buf + 8) << 8) | *(data_buf + 9);
-		if (temp != 65535) Tune_Mode = 4;
+		if (temp != 65535)
+		{
+			if (temp < 3000) Parameter_info.Time = temp;
+		}
 
 		//ServoFuzzy
 		temp = ( (uint16)(*(data_buf + 10) << 8) | *(data_buf + 11) );
 		if (temp != 65535)
 		{
-			ServoFuzzy.kp = 0.001 * ( temp - 30000);
-			if (ServoFuzzy.kp < 0) ServoFuzzy.kp = -(30 + ServoFuzzy.kp);
+			if (temp < 3000)Parameter_info.DebugTime = temp;
 		}
 		temp = ( (uint16)(*(data_buf + 10) << 8) | *(data_buf + 11) );
 		if (temp != 65535)
 		{
-			ServoFuzzy.ks = 0.001 * ( temp - 30000);
-			if (ServoFuzzy.ks < 0) ServoFuzzy.ks = -(30 + ServoFuzzy.ks);
+			// ServoFuzzy.ks = 0.001 * ( temp - 30000);
+			// if (ServoFuzzy.ks < 0) ServoFuzzy.ks = -(30 + ServoFuzzy.ks);
 		}
 		temp = ( (uint16)(*(data_buf + 14) << 8) | *(data_buf + 15) );
 		if (temp != 65535)
 		{
-			ServoFuzzy.kd = 0.001 * ( temp - 30000);
-			if (ServoFuzzy.kd < 0) ServoFuzzy.kd = -(30 + ServoFuzzy.kd);
+			// ServoFuzzy.kd = 0.001 * ( temp - 30000);
+			// if (ServoFuzzy.kd < 0) ServoFuzzy.kd = -(30 + ServoFuzzy.kd);
 		}
 		ANO_DT_Send_Check(*(data_buf + 2), sum);
 	}
@@ -289,10 +291,35 @@ void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num)
 		{
 			Speed_info.Into_Cur_Speed = temp;
 		}
-		temp = ((uint16)(*(data_buf + 18) << 8) | *(data_buf + 19));
-		if (temp <= 130)
+		temp = (uint16)(*(data_buf + 11));
+		if (temp <= 100)
 		{
-
+			CCD1_info.Into_Curva_Time = temp;
+		}
+		temp = (uint16)(*(data_buf + 12));
+		if (temp <= 200)
+		{
+			CCD1_info.Little_Thres = temp;
+		}
+		temp = (uint16)(*(data_buf + 13));
+		if (temp <= 200)
+		{
+			CCD1_info.Curva_Thres = temp;
+		}
+		temp = (uint16)(*(data_buf + 14));
+		if (temp <= 200)
+		{
+			CCD1_info.Curva_Thres_Up = temp;
+		}
+		temp = (uint16)(*(data_buf + 15));
+		if (temp <= 200)
+		{
+			CCD1_info.Obstacle_Thres = temp;
+		}
+		temp = (uint16)(*(data_buf + 16));
+		if (temp <= 200)
+		{
+			CCD1_info.Obstacle_Thres_Up = temp;
 		}
 		temp = ((uint16)(*(data_buf + 20) << 8) | *(data_buf + 21));
 		if (temp <= 130)
@@ -303,7 +330,7 @@ void ANO_DT_Data_Receive_Anl(uint8 *data_buf, uint8 num)
 		ANO_DT_Send_Check(*(data_buf + 2), sum);
 	}
 
-	//***********************模糊表*****************************/
+//***********************模糊表*****************************/
 	if (*(data_buf + 2) == 0X13)								//
 	{
 		//h0
@@ -495,7 +522,7 @@ static void ANO_DT_Send_Check(uint8 head, uint8 check_sum)  //发送校验
 }
 
 
-void ANO_DT_Send_Speed()
+void ANO_DT_Send_PID()
 {
 	uint8 _cnt = 0;
 	int16 _temp;
@@ -522,12 +549,15 @@ void ANO_DT_Send_Speed()
 	_temp = (int16)(Speed_Expect);
 	data_to_send[_cnt++] = BYTE1(_temp);
 	data_to_send[_cnt++] = BYTE0(_temp);
-	data_to_send[_cnt++] = 0;
-	data_to_send[_cnt++] = 0;
-	data_to_send[_cnt++] = 0;
-	data_to_send[_cnt++] = 0;
-	data_to_send[_cnt++] = 0;
-	data_to_send[_cnt++] = 0;
+	_temp = (int16)(CCD1_info.CCD_CrossShift);
+	data_to_send[_cnt++] = BYTE1(_temp);
+	data_to_send[_cnt++] = BYTE0(_temp);
+	_temp = (int16)(Parameter_info.Time);
+	data_to_send[_cnt++] = BYTE1(_temp);
+	data_to_send[_cnt++] = BYTE0(_temp);
+	_temp = (int16)(Parameter_info.DebugTime);
+	data_to_send[_cnt++] = BYTE1(_temp);
+	data_to_send[_cnt++] = BYTE0(_temp);
 
 	data_to_send[3] = _cnt - 4;
 
@@ -542,7 +572,7 @@ void ANO_DT_Send_Speed()
 
 
 
-void ANO_DT_Send_PID()
+void ANO_DT_Send_Speed()
 {
 	uint8 _cnt = 0;
 	data_to_send[_cnt++] = 0xAA;
@@ -557,12 +587,12 @@ void ANO_DT_Send_PID()
 	data_to_send[_cnt++] = (uint8)Speed_info.RampUp_Speed;
 	data_to_send[_cnt++] = (uint8)Speed_info.RampDown_Speed;
 	data_to_send[_cnt++] = (uint8)Speed_info.Into_Cur_Speed;
-	data_to_send[_cnt++] = 0;
-	data_to_send[_cnt++] = 0;
-	data_to_send[_cnt++] = 0;
-	data_to_send[_cnt++] = 0;
-	data_to_send[_cnt++] = 0;
-	data_to_send[_cnt++] = 0;
+	data_to_send[_cnt++] = (uint8)CCD1_info.Into_Curva_Time;
+	data_to_send[_cnt++] = (uint8)CCD1_info.Little_Thres;
+	data_to_send[_cnt++] = (uint8)CCD1_info.Curva_Thres;
+	data_to_send[_cnt++] = (uint8)CCD1_info.Curva_Thres_Up;
+	data_to_send[_cnt++] = (uint8)CCD1_info.Obstacle_Thres;
+	data_to_send[_cnt++] = (uint8)CCD1_info.Obstacle_Thres_Up;
 	data_to_send[_cnt++] = 0;
 	data_to_send[_cnt++] = 0;
 	data_to_send[_cnt++] = 0;
