@@ -33,5 +33,5 @@ The code is based on [vcan](http://www.vcan123.com/forum.php)'s K60 Library. We 
 ***
 ### Get Track Information
 We use CCD get gray-scale(8-bit) image, then we gained every row of image(actually this CCD only can get one line for each time). We can find the gray-scale value break position, this is the black line and white track's interface, this process is called *Binaryzation* .Finally average left break and right break we can get center position of the car. Then we can using PID control algorithm to drive steer eliminate car position error.
-
+### Judge Current Status
 In the competition track has 6 status: straight line, big curve, little curve, ramp, obstacle and crossing road, these status are finite and have casual association. So we used all sensors' data implement a state-machine to judge the car ruing status.
