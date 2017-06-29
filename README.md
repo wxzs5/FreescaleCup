@@ -8,8 +8,7 @@ The repository's source code is the 11th(2016) National Undergraduates' Smart Ca
 
 This is our car running video in the Competition:
 
-[![PassCet6Video]](http://v.youku.com/v_show/id_XMTY0NTcyNDgzMg==.html?spm=a2h0k.8191407.0.0&from=s1.8-1-1.2)
-[PassCet6Video]:https://github.com/wxzs5/WesternCom/blob/master/Photos/Running.PNG?raw=true
+[![PassCet6Video](https://github.com/wxzs5/WesternCom/blob/master/Photos/Running.PNG?raw=true)](http://v.youku.com/v_show/id_XMTY0NTcyNDgzMg==.html?spm=a2h0k.8191407.0.0&from=s1.8-1-1.2)
 
 ## Hardware
 ***
