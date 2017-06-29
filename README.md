@@ -8,8 +8,8 @@ The repository's source code is the 11th(2016) National Undergraduates' Smart Ca
 
 This is our car running video in the Competition:
 
-[![PassCet6]](http://v.youku.com/v_show/id_XMTY0NTcyNDgzMg==.html?spm=a2h0k.8191407.0.0&from=s1.8-1-1.2)
-[PassCet6]:https://github.com/wxzs5/WesternCom/blob/master/Photos/Running.PNG?raw=true
+[![PassCet6Video]](http://v.youku.com/v_show/id_XMTY0NTcyNDgzMg==.html?spm=a2h0k.8191407.0.0&from=s1.8-1-1.2)
+[PassCet6Video]:https://github.com/wxzs5/WesternCom/blob/master/Photos/Running.PNG?raw=true
 
 ## Hardware
 ***
@@ -33,6 +33,6 @@ The code is based on [vcan](http://www.vcan123.com/forum.php)'s K60 Library. We 
 ## Mainly Idea
 ***
 ### Get Track Information
-We use CCD get gray-scale(8-bit) image, then we gained every row of image(actually this CCD only can get one line for each time). We can find the gray-scale value break position, this is the black line and white track's interface, this process is called **Binaryzation** .Finally average left break and right break we can get center position of the car. Then we can using PID control algorithm to drive steer eliminate car position error.
+We use CCD get gray-scale(8-bit) image, then we gained every row of image(actually this CCD only can get one line for each time). We can find the gray-scale value break position, this is the black line and white track's interface, this process is called *Binaryzation* .Finally average left break and right break we can get center position of the car. Then we can using PID control algorithm to drive steer eliminate car position error.
 
 In the competition track has 6 status: straight line, big curve, little curve, ramp, obstacle and crossing road, these status are finite and have casual association. So we used all sensors' data implement a state-machine to judge the car ruing status.
