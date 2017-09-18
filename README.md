@@ -29,7 +29,7 @@ We mainly used following hardware build the car:<br>
 
 The code is based on [vcan](http://www.vcan123.com/forum.php)'s K60 Library. We referred some code from LDPY(零度偏移)-a 2014 competition team from UESTC. Our almost written code in the folder /User. I also use Qt wrote a computer GUI program using serial port(Bluetooth) to interact with the car for debugging. You Can see in my other [repository](https://github.com/wxzs5/Car_View).
 
-## Mainly Idea
+## Main Idea
 
 ### Get Track Information
 We use CCD get gray-scale(8-bit) image, then we gained every row of image(actually this CCD only can get one line for each time). We can find the gray-scale value break position, this is the black line and white track's interface, this process is called *Binaryzation* .Finally average left break and right break we can get center position of the car. Then we can using PID control algorithm to drive steer eliminate car position error.
